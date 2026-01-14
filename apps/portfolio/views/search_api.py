@@ -19,7 +19,7 @@ from django.views import View
 from django.views.decorators.http import require_http_methods
 
 from apps.blog.models import Post
-from apps.main.fulltext_search import postgresql_search
+from apps.portfolio.fulltext_search import postgresql_search
 from apps.main.models import AITool
 from apps.main.search import search_engine
 from apps.tools.models import Tool

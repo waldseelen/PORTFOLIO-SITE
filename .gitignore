@@ -36,3 +36,38 @@ logs/
 # OS
 .DS_Store
 Thumbs.db
+
+# Backup and deprecated files (don't commit these)
+*.bak
+*_backup.py
+*_deprecated.py
+*.orig
+*.backup
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Test artifacts
+test-results/
+test-artifacts/
+playwright-report/
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+
+# IDE and editor
+.vscode/settings.json
+.vscode/launch.json
+*.swp
+*.swo
+*~
+
+# Local environment
+.env.local
+.env.*.local
+
+# Performance reports (generated)
+reports/*.json

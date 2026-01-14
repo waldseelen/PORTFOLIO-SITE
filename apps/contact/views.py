@@ -72,21 +72,34 @@ def contact_form(request: HttpRequest) -> HttpResponse:
                     f"Contact message submitted successfully from IP: {client_ip}"
                 )
 
-                # Send email notification (optional)
+                # Send email notification
+                email_sent = False
                 try:
-                    send_mail(
+                    email_sent = send_mail(
                         subject=f"New Contact Message: {contact_message.subject}",
                         message=f"From: {contact_message.name} <{contact_message.email}>\n\nMessage:\n{contact_message.message}",
                         from_email=settings.DEFAULT_FROM_EMAIL,
                         recipient_list=[
                             getattr(settings, "CONTACT_EMAIL", "admin@example.com")
                         ],
-                        fail_silently=True,
+                        fail_silently=False,
                     )
                 except Exception as e:
-                    logger.warning(f"Failed to send contact email: {e}")
+                    logger.error(f"Failed to send contact email: {e}")
+                    email_sent = False
 
-                messages.success(request, "Your message has been sent successfully!")
+                # Always show success for message saved, but warn if email failed
+                if email_sent:
+                    messages.success(request, "Your message has been sent successfully!")
+                else:
+                    # Message was saved but email notification failed
+                    messages.success(
+                        request,
+                        "Your message has been received. We will get back to you soon."
+                    )
+                    logger.warning(
+                        f"Contact form saved but email notification failed for message ID: {contact_message.id}"
+                    )
                 return redirect("contact:success")
 
             except Exception as e:

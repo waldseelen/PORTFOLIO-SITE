@@ -96,15 +96,15 @@ def modern_admin_login(request):
     # Eğer kullanıcı zaten giriş yapmışsa dashboard'a yönlendir
     if request.user.is_authenticated and request.user.is_staff:
         return redirect('modern_admin:dashboard')
-    
+
     error = None
-    
+
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        
+
         user = authenticate(request, username=email, password=password)
-        
+
         if user is not None and user.is_staff:
             login(request, user)
             messages.success(request, f'Hoş geldiniz, {user.name or user.email}!')
@@ -128,7 +128,7 @@ def blog_management(request):
     Blog Yönetim Sayfası
     """
     posts = Post.objects.all().select_related('author').order_by('-created_at')
-    
+
     # İstatistikler
     published_count = posts.filter(status='published').count()
     draft_count = posts.filter(status='draft').count()
@@ -157,7 +157,7 @@ def blog_create(request):
         status = request.POST.get('status', 'draft')
         meta_description = request.POST.get('meta_description')
         tags = request.POST.get('tags', '').split(',')
-        
+
         post = Post.objects.create(
             title=title,
             content=content,
@@ -168,10 +168,10 @@ def blog_create(request):
             tags=[t.strip() for t in tags if t.strip()],
             author=request.user,
         )
-        
+
         messages.success(request, f'"{title}" başlıklı yazı başarıyla oluşturuldu.')
         return redirect('modern_admin:blog')
-    
+
     return render(request, 'admin/modern/blog_form.html', {
         'page_title': 'Yeni Blog Yazısı',
     })
@@ -181,7 +181,7 @@ def blog_create(request):
 def blog_edit(request, post_id):
     """Blog yazısı düzenleme"""
     post = get_object_or_404(Post, id=post_id)
-    
+
     if request.method == 'POST':
         post.title = request.POST.get('title')
         post.content = request.POST.get('content')
@@ -192,10 +192,10 @@ def blog_edit(request, post_id):
         tags = request.POST.get('tags', '').split(',')
         post.tags = [t.strip() for t in tags if t.strip()]
         post.save()
-        
+
         messages.success(request, f'"{post.title}" başlıklı yazı güncellendi.')
         return redirect('modern_admin:blog')
-    
+
     return render(request, 'admin/modern/blog_form.html', {
         'page_title': 'Yazıyı Düzenle',
         'post': post,
@@ -271,10 +271,10 @@ def portfolio_management(request):
         'name': PersonalInfo.objects.filter(key='name').first(),
         'title': PersonalInfo.objects.filter(key='title').first(),
     }
-    
+
     # Sosyal linkler
     social_links = SocialLink.objects.filter(is_visible=True).order_by('order')
-    
+
     context = {
         'page_title': 'Portfolyo Yönetimi',
         'personal_info': {
@@ -288,12 +288,12 @@ def portfolio_management(request):
         'featured_count': 0,
         'skills_count': PersonalInfo.objects.filter(type='skill').count(),
     }
-    
+
     return render(request, 'admin/modern/portfolio.html', context)
 
 
 # ============================================================================
-# Settings & SEO Views  
+# Settings & SEO Views
 # ============================================================================
 
 @staff_member_required
@@ -305,12 +305,12 @@ def settings_management(request):
         # Ayarları kaydet
         messages.success(request, 'Ayarlar başarıyla kaydedildi.')
         return redirect('modern_admin:settings')
-    
+
     context = {
         'page_title': 'Site Ayarları',
         'settings': {},  # Ayarları veritabanından çekin
     }
-    
+
     return render(request, 'admin/modern/settings.html', context)
 
 
@@ -322,7 +322,7 @@ def seo_management(request):
     if request.method == 'POST':
         messages.success(request, 'SEO ayarları başarıyla kaydedildi.')
         return redirect('modern_admin:seo')
-    
+
     # SEO istatistikleri
     context = {
         'page_title': 'SEO Ayarları',
@@ -333,7 +333,7 @@ def seo_management(request):
         'sitemap_urls': Post.objects.filter(status='published').count() + 15,
         'seo': {},  # SEO ayarlarını veritabanından çekin
     }
-    
+
     return render(request, 'admin/modern/seo.html', context)
 
 
@@ -351,12 +351,12 @@ def profile_management(request):
         user.name = request.POST.get('name', user.name)
         user.email = request.POST.get('email', user.email)
         user.username = request.POST.get('username', user.username)
-        
+
         # Şifre değiştirme
         current_password = request.POST.get('current_password')
         new_password = request.POST.get('new_password')
         new_password_confirm = request.POST.get('new_password_confirm')
-        
+
         if current_password and new_password:
             if user.check_password(current_password):
                 if new_password == new_password_confirm:
@@ -366,11 +366,11 @@ def profile_management(request):
                     messages.error(request, 'Yeni şifreler eşleşmiyor.')
             else:
                 messages.error(request, 'Mevcut şifre hatalı.')
-        
+
         user.save()
         messages.success(request, 'Profil bilgileriniz güncellendi.')
         return redirect('modern_admin:profile')
-    
+
     return render(request, 'admin/modern/profile.html', {
         'page_title': 'Profil Ayarları',
     })
@@ -382,7 +382,7 @@ def setup_2fa(request):
     2FA Kurulum Sayfası
     """
     user = request.user
-    
+
     if request.method == 'POST':
         token = request.POST.get('token')
         if user.verify_totp(token):
@@ -392,13 +392,13 @@ def setup_2fa(request):
             return redirect('modern_admin:profile')
         else:
             messages.error(request, 'Geçersiz doğrulama kodu.')
-    
+
     # QR kod oluştur
     if not user.totp_secret:
         user.generate_totp_secret()
-    
+
     qr_code = user.get_qr_code()
-    
+
     return render(request, 'admin/modern/setup_2fa.html', {
         'page_title': '2FA Kurulumu',
         'qr_code': qr_code,
@@ -416,7 +416,7 @@ def tool_create(request):
         # Form işleme
         messages.success(request, 'Araç başarıyla oluşturuldu.')
         return redirect('modern_admin:tools')
-    
+
     return render(request, 'admin/modern/tool_form.html', {
         'page_title': 'Yeni Araç',
     })
@@ -426,11 +426,11 @@ def tool_create(request):
 def tool_edit(request, tool_id):
     """Tool düzenleme"""
     tool = get_object_or_404(Tool, id=tool_id)
-    
+
     if request.method == 'POST':
         messages.success(request, 'Araç güncellendi.')
         return redirect('modern_admin:tools')
-    
+
     return render(request, 'admin/modern/tool_form.html', {
         'page_title': 'Aracı Düzenle',
         'tool': tool,
@@ -479,7 +479,7 @@ def cybersecurity_create(request):
     if request.method == 'POST':
         messages.success(request, 'Siber güvenlik kaynağı oluşturuldu.')
         return redirect('modern_admin:cybersecurity')
-    
+
     return render(request, 'admin/modern/cybersecurity_form.html', {
         'page_title': 'Yeni Siber Güvenlik Kaynağı',
     })
@@ -489,11 +489,11 @@ def cybersecurity_create(request):
 def cybersecurity_edit(request, resource_id):
     """Siber güvenlik kaynağı düzenleme"""
     resource = get_object_or_404(CybersecurityResource, id=resource_id)
-    
+
     if request.method == 'POST':
         messages.success(request, 'Kaynak güncellendi.')
         return redirect('modern_admin:cybersecurity')
-    
+
     return render(request, 'admin/modern/cybersecurity_form.html', {
         'page_title': 'Kaynağı Düzenle',
         'resource': resource,

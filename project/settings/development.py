@@ -30,12 +30,6 @@ TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
 # Enable template debugging
 TEMPLATES[0]["OPTIONS"]["debug"] = True
 
-# Disable template caching for development
-TEMPLATES[0]["OPTIONS"]["loaders"] = [
-    "django.template.loaders.filesystem.Loader",
-    "django.template.loaders.app_directories.Loader",
-]
-
 # Database for development
 DATABASES = {
     "default": {
@@ -48,18 +42,26 @@ DATABASES = {
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     BASE_DIR.parent / "static",
+    BASE_DIR / "static",
 ]
+
+# Use standard static file storage for development (no manifest)
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 # Development email backend
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Development cache
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake",
-    }
-}
+# Use base.py CACHES configuration (which includes api_cache, query_cache, etc.)
+# Override only if needed
+if "api_cache" not in CACHES:
+    CACHES.update({
+        "api_cache": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "api-cache",
+            "TIMEOUT": 300,
+        },
+    })
 
 # Development logging with enhanced error monitoring
 LOGGING = {
@@ -167,5 +169,5 @@ if DEBUG:
         "debug_toolbar.panels.cache.CachePanel",
         "debug_toolbar.panels.signals.SignalsPanel",
         "debug_toolbar.panels.redirects.RedirectsPanel",
-        "debug_toolbar.panels.profiling.ProfilingPanel",
+        # "debug_toolbar.panels.profiling.ProfilingPanel",  # Disabled - conflicts with cProfile
     ]

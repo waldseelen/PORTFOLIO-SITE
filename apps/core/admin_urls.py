@@ -10,18 +10,18 @@ from .admin_views import (
     modern_admin_dashboard,
     modern_admin_login,
     admin_logout,
-    
+
     # Blog Management
     blog_management,
     blog_create,
     blog_edit,
     blog_delete,
-    
+
     # Cybersecurity Management
     cybersecurity_management,
     cybersecurity_create,
     cybersecurity_edit,
-    
+
     # Tools Management
     tools_management,
     tool_create,
@@ -30,7 +30,7 @@ from .admin_views import (
     ai_tool_edit,
     resource_create,
     resource_edit,
-    
+
     # Portfolio Management
     portfolio_management,
     personal_info_edit,
@@ -38,11 +38,11 @@ from .admin_views import (
     project_edit,
     social_link_create,
     social_link_edit,
-    
+
     # Settings & SEO
     settings_management,
     seo_management,
-    
+
     # Profile & Security
     profile_management,
     setup_2fa,
@@ -83,11 +83,11 @@ urlpatterns = [
     path('tools/', tools_management, name='tools'),
     path('tools/create/', tool_create, name='tool_create'),
     path('tools/<int:tool_id>/', tool_edit, name='tool_edit'),
-    
+
     # AI Tools
     path('tools/ai/create/', ai_tool_create, name='ai_tool_create'),
     path('tools/ai/<int:tool_id>/', ai_tool_edit, name='ai_tool_edit'),
-    
+
     # Useful Resources
     path('tools/resources/create/', resource_create, name='resource_create'),
     path('tools/resources/<int:resource_id>/', resource_edit, name='resource_edit'),

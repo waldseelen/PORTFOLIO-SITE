@@ -38,9 +38,9 @@ class SecurityHeadersMiddleware(MiddlewareMixin):
         csp_directives = [
             "default-src 'self'",
             # Script sources - only allow specific CDNs and self with nonce
-            f"script-src 'self' 'nonce-{nonce}' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com https://cdn.tailwindcss.com",
-            # Style sources - only allow specific style sources with nonce and Alpine.js inline styles
-            f"style-src 'self' 'nonce-{nonce}' 'unsafe-inline' 'unsafe-hashes' https://fonts.googleapis.com https://cdn.jsdelivr.net",
+            f"script-src 'self' 'nonce-{nonce}' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com https://cdn.tailwindcss.com",
+            # Style sources - only allow specific style sources with nonce
+            f"style-src 'self' 'nonce-{nonce}' https://fonts.googleapis.com https://cdn.jsdelivr.net",
             # Font sources - restrict to Google Fonts and self
             "font-src 'self' https://fonts.gstatic.com https://r2cdn.perplexity.ai data:",
             # Image sources - restrict to self, data URIs and HTTPS only

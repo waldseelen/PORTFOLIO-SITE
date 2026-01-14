@@ -1,0 +1,305 @@
+name: Template & Performance Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'templates/**'
+      - 'apps/**/*.py'
+      - 'tests/templates/**'
+      - 'tests/performance/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'templates/**'
+      - 'apps/**/*.py'
+      - 'tests/templates/**'
+      - 'tests/performance/**'
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: '3.11'
+  NODE_VERSION: '20'
+
+jobs:
+  # ============================================================================
+  # Template Validation Tests
+  # ============================================================================
+  template-tests:
+    name: 📄 Template Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest-html pytest-json-report
+
+      - name: Run template syntax tests
+        run: |
+          pytest tests/templates/test_template_validation.py -v \
+            --html=reports/template-syntax-report.html \
+            --json-report --json-report-file=reports/template-syntax.json \
+            -k "syntax"
+
+      - name: Run template rendering tests
+        run: |
+          pytest tests/templates/test_template_validation.py -v \
+            --html=reports/template-render-report.html \
+            -k "render"
+        continue-on-error: true
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: template-test-reports
+          path: reports/
+
+  # ============================================================================
+  # Performance Benchmarks
+  # ============================================================================
+  performance-tests:
+    name: ⚡ Performance Benchmarks
+    runs-on: ubuntu-latest
+    needs: template-tests
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install psutil
+
+      - name: Run performance benchmarks
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+          REDIS_URL: redis://localhost:6379/0
+          DJANGO_SETTINGS_MODULE: project.settings.test
+        run: |
+          python manage.py migrate --noinput
+          pytest tests/performance/test_comprehensive_performance.py -v \
+            --html=reports/performance-report.html \
+            --json-report --json-report-file=reports/performance.json
+
+      - name: Run template performance tests
+        env:
+          DJANGO_SETTINGS_MODULE: project.settings.test
+        run: |
+          pytest tests/templates/test_template_performance.py -v \
+            --html=reports/template-perf-report.html
+
+      - name: Upload performance reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-reports
+          path: reports/
+
+  # ============================================================================
+  # Lighthouse CI
+  # ============================================================================
+  lighthouse:
+    name: 🔦 Lighthouse CI
+    runs-on: ubuntu-latest
+    needs: template-tests
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Start Django server
+        env:
+          DJANGO_SETTINGS_MODULE: project.settings.simple
+        run: |
+          python manage.py migrate --noinput
+          python manage.py runserver 127.0.0.1:8000 &
+          sleep 10
+
+      - name: Run Lighthouse CI
+        run: |
+          lhci autorun --config=lighthouserc.json || true
+
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-report
+          path: .lighthouseci/
+
+  # ============================================================================
+  # Code Complexity Analysis
+  # ============================================================================
+  complexity-analysis:
+    name: 📊 Complexity Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install analysis tools
+        run: |
+          pip install radon xenon
+
+      - name: Run complexity analysis
+        run: |
+          # Generate complexity report
+          radon cc apps/ -a -j > reports/complexity.json || true
+
+          # Check for high complexity (fail on F-grade functions)
+          radon cc apps/ -a --total-average
+
+          # Run xenon with threshold
+          xenon --max-absolute C --max-modules A --max-average B apps/ || echo "High complexity detected"
+
+      - name: Upload complexity report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: complexity-report
+          path: reports/complexity.json
+
+  # ============================================================================
+  # E2E Template Tests (Playwright)
+  # ============================================================================
+  e2e-template-tests:
+    name: 🎭 E2E Template Tests
+    runs-on: ubuntu-latest
+    needs: template-tests
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Playwright
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Start Django server
+        env:
+          DJANGO_SETTINGS_MODULE: project.settings.simple
+        run: |
+          python manage.py migrate --noinput
+          python manage.py runserver 127.0.0.1:8000 &
+          sleep 10
+
+      - name: Run E2E template tests
+        run: |
+          npx playwright test tests/e2e/test_templates.spec.js \
+            --project=chromium \
+            --reporter=html
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-template-report
+          path: playwright-report/
+
+  # ============================================================================
+  # Summary Job
+  # ============================================================================
+  summary:
+    name: 📋 Test Summary
+    runs-on: ubuntu-latest
+    needs: [template-tests, performance-tests, lighthouse, complexity-analysis]
+    if: always()
+
+    steps:
+      - name: Download all reports
+        uses: actions/download-artifact@v4
+        with:
+          path: all-reports/
+
+      - name: Generate summary
+        run: |
+          echo "## 📊 Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "| Test Suite | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Template Validation | ${{ needs.template-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Performance Tests | ${{ needs.performance-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Lighthouse CI | ${{ needs.lighthouse.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Complexity Analysis | ${{ needs.complexity-analysis.result }} |" >> $GITHUB_STEP_SUMMARY

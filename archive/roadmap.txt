@@ -42,6 +42,12 @@
 - `apps/core/admin_views.py` - Tüm admin view fonksiyonları
 - `apps/core/admin_urls.py` - Admin panel URL yönlendirmeleri
 
+### 🐛 Bug Düzeltmeleri (2026-01-15)
+- [x] ProfilingPanel hatası düzeltildi (cProfile çakışması)
+- [x] Search API aktifleştirildi ve import hatası düzeltildi
+- [x] Eksik bağımlılıklar yüklendi (django-debug-toolbar, qrcode, tqdm)
+- [x] Tüm ana sayfalar test edildi ve çalışıyor
+
 ---
 
 ## 🔜 Gelecek Geliştirmeler
@@ -82,4 +88,4 @@
 - Frontend: Tailwind CSS (CDN), Alpine.js
 - Editor: SimpleMDE (Markdown)
 - Icons: Font Awesome 6.x
-- Font: Inter (Google Fonts)
+- Font: Inter (Google Fonts)        

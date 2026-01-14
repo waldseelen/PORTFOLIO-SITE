@@ -61,7 +61,16 @@ class CacheControlMiddleware(MiddlewareMixin):
 
 
 class SecurityHeadersMiddleware(MiddlewareMixin):
-    """Add security and performance headers"""
+    """Add security and performance headers with nonce-based CSP"""
+
+    def process_request(self, request):
+        """Generate a unique CSP nonce for each request."""
+        import base64
+        import secrets
+
+        nonce_bytes = secrets.token_bytes(32)
+        request.csp_nonce = base64.b64encode(nonce_bytes).decode("utf-8")
+        return None
 
     def process_response(self, request, response):
         # Security headers
@@ -79,17 +88,25 @@ class SecurityHeadersMiddleware(MiddlewareMixin):
                 "max-age=31536000; includeSubDomains"
             )
 
-        # Content Security Policy (basic)
+        # Get the nonce from request (generated in process_request)
+        nonce = getattr(request, "csp_nonce", "")
+
+        # Content Security Policy with nonce-based inline script/style allowlist
+        # This is more secure than 'unsafe-inline'
         csp_directives = [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com",
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-            "font-src 'self' https://fonts.gstatic.com",
-            "img-src 'self' data: https: http:",
+            f"script-src 'self' 'nonce-{nonce}' https://cdn.tailwindcss.com https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
+            f"style-src 'self' 'nonce-{nonce}' https://fonts.googleapis.com https://cdn.jsdelivr.net",
+            "font-src 'self' https://fonts.gstatic.com data:",
+            "img-src 'self' data: https: blob:",
             "media-src 'self' https:",
+            "connect-src 'self' https://api.github.com https://cdn.jsdelivr.net",
+            "worker-src 'self' blob:",
             "object-src 'none'",
             "base-uri 'self'",
             "frame-ancestors 'none'",
+            "form-action 'self'",
+            "upgrade-insecure-requests",
         ]
         response["Content-Security-Policy"] = "; ".join(csp_directives)
 
@@ -101,6 +118,9 @@ class SecurityHeadersMiddleware(MiddlewareMixin):
             ]
             if preload_links:
                 response["Link"] = ", ".join(preload_links)
+
+        return response
+
 
         return response
 

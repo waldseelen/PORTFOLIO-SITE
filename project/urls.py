@@ -39,6 +39,12 @@ from apps.core.health import (
 )
 from apps.main.views import home, logout_view
 
+# Search API views
+from apps.portfolio.views.search_api import (
+    SearchAutocompleteView, SearchAPIView, SearchFiltersView,
+    SearchAnalyticsView
+)
+
 # Import API views from apps.main.views
 # from apps.main.views import (
 #     collect_performance_metric, performance_dashboard_data, health_check,
@@ -85,12 +91,12 @@ urlpatterns = [
     # path('api/notifications/subscribe/', subscribe_push_notifications, name='api_notifications_subscribe'),
     # path('api/notifications/send/', send_push_notification, name='api_notifications_send'),
     # path('api/errors/log/', log_error, name='api_error_log'),
-    # Search API endpoints (commented out temporarily)
-    # path('api/search/autocomplete/', SearchAutocompleteView.as_view(), name='api_search_autocomplete'),
-    # path('api/search/', SearchAPIView.as_view(), name='api_search'),
-    # path('api/search/filters/', SearchFiltersView.as_view(), name='api_search_filters'),
-    # path('api/search/analytics/', SearchAnalyticsView.as_view(), name='api_search_analytics'),
-    # path('api/search/popular/', popular_searches_api, name='api_popular_searches'),
+    # Search API endpoints
+    path('api/search/autocomplete/', SearchAutocompleteView.as_view(), name='api_search_autocomplete'),
+    path('api/search/suggest/', SearchAutocompleteView.as_view(), name='api_search_suggest'),
+    path('api/search/', SearchAPIView.as_view(), name='api_search'),
+    path('api/search/filters/', SearchFiltersView.as_view(), name='api_search_filters'),
+    path('api/search/analytics/', SearchAnalyticsView.as_view(), name='api_search_analytics'),
     # Log monitoring API endpoints (commented out temporarily)
     # path('api/logs/data/', log_data_api, name='api_log_data'),
     # path('api/logs/alerts/', log_alerts_api, name='api_log_alerts'),

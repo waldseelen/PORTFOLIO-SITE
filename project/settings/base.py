@@ -40,14 +40,29 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY", default="your-secret-key-here")
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
+# SECURITY WARNING: keep the secret key used in production secret!
+# Generate a secure key with: python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+_default_secret_key = "django-insecure-change-me-in-production"
+SECRET_KEY = config("SECRET_KEY", default=_default_secret_key)
+
+# Warn if using default secret key in production
+if not DEBUG and SECRET_KEY == _default_secret_key:
+    import warnings
+    warnings.warn(
+        "SECURITY WARNING: You are using the default SECRET_KEY in production! "
+        "Set the SECRET_KEY environment variable to a secure random value.",
+        RuntimeWarning
+    )
+
+# ALLOWED_HOSTS - restrict in production, allow all in development
+_allowed_hosts_default = "localhost,127.0.0.1" if not DEBUG else "*"
 ALLOWED_HOSTS = config(
-    "ALLOWED_HOSTS", default="*", cast=lambda v: [s.strip() for s in v.split(",")]
+    "ALLOWED_HOSTS",
+    default=_allowed_hosts_default,
+    cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
 )
 
 # Application definition
@@ -121,9 +136,13 @@ ROOT_URLCONF = "project.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
-        "APP_DIRS": True,
+        "DIRS": [BASE_DIR / "templates", BASE_DIR.parent / "templates"],
+        "APP_DIRS": False,
         "OPTIONS": {
+            "loaders": [
+                "django.template.loaders.filesystem.Loader",
+                "django.template.loaders.app_directories.Loader",
+            ],
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
@@ -247,7 +266,7 @@ WHITENOISE_SKIP_COMPRESS_EXTENSIONS = (
     "woff",
     "woff2",
 )
-WHITENOISE_ADD_HEADERS_FUNCTION = "whitenoise.middleware.add_headers_function"
+# WHITENOISE_ADD_HEADERS_FUNCTION should be a callable, not a string - removing
 WHITENOISE_AUTOREFRESH = False  # Disable in production
 WHITENOISE_USE_FINDERS = False  # Use STATIC_ROOT only
 WHITENOISE_INDEX_FILE = True  # Serve index.html for directories
@@ -319,12 +338,7 @@ CSRF_COOKIE_HTTPONLY = True
 # Basic logging removed - using advanced configuration below
 
 # Cache configuration
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake",
-    }
-}
+# CACHES will be configured later based on Redis availability
 
 # Email configuration (for contact forms, etc.)
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
@@ -493,11 +507,9 @@ LOGGING = {
         "json": {
             "format": '{"level": "%(levelname)s", "time": "%(asctime)s", "module": "%(module)s", "message": "%(message)s"}',
         },
-        "structured_json": {
-            "()": "apps.main.logging.json_formatter.StructuredJSONFormatter",
-            "service_name": config("SERVICE_NAME", default="portfolio_site"),
-            "environment": config("ENVIRONMENT", default="development"),
-            "include_extra_fields": True,
+        "cloud_json": {
+            "format": '{"severity": "%(levelname)s", "timestamp": "%(asctime)s", "module": "%(module)s", "message": "%(message)s", "logger": "%(name)s"}',
+            "datefmt": "%Y-%m-%dT%H:%M:%S%z",
         },
     },
     "filters": {
@@ -507,111 +519,59 @@ LOGGING = {
         "require_debug_true": {
             "()": "django.utils.log.RequireDebugTrue",
         },
-        "request_context": {
-            "()": "apps.main.logging.json_formatter.RequestContextFilter",
-        },
-        "performance_filter": {
-            "()": "apps.main.logging.json_formatter.PerformanceFilter",
-        },
-        "security_filter": {
-            "()": "apps.main.logging.json_formatter.SecurityFilter",
-        },
     },
     "handlers": {
-        "console": {
-            "level": "INFO",
+        # Development handler - simple console output
+        "console_dev": {
+            "level": "DEBUG",
             "class": "logging.StreamHandler",
             "formatter": "simple",
             "filters": ["require_debug_true"],
+            "stream": "ext://sys.stdout",
         },
-        "file": {
+        # Production handler - JSON formatted stdout for cloud logging
+        "console_prod": {
             "level": "INFO",
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "logs" / "django.log",
-            "maxBytes": 1024 * 1024 * 10,  # 10 MB
-            "backupCount": 10,
-            "formatter": "verbose",
+            "class": "logging.StreamHandler",
+            "formatter": "cloud_json",
             "filters": ["require_debug_false"],
+            "stream": "ext://sys.stdout",
         },
-        "structured_json_file": {
-            "level": "INFO",
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": BASE_DIR / "logs" / "structured.log",
-            "when": "midnight",
-            "interval": 1,
-            "backupCount": 30,  # Keep 30 days
-            "formatter": "structured_json",
-            "filters": ["request_context", "performance_filter"],
-        },
-        "performance_file": {
-            "level": "INFO",
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "logs" / "performance.log",
-            "maxBytes": 1024 * 1024 * 5,  # 5 MB
-            "backupCount": 5,
-            "formatter": "structured_json",
-            "filters": ["performance_filter"],
-        },
-        "error_file": {
+        # Error handler - stderr for production
+        "console_error": {
             "level": "ERROR",
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "logs" / "errors.log",
-            "maxBytes": 1024 * 1024 * 10,  # 10 MB
-            "backupCount": 15,  # Keep more error logs
-            "formatter": "structured_json",
-            "filters": ["request_context"],
-        },
-        "security_file": {
-            "level": "WARNING",
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "logs" / "security.log",
-            "maxBytes": 1024 * 1024 * 5,  # 5 MB
-            "backupCount": 20,  # Keep security logs longer
-            "formatter": "structured_json",
-            "filters": ["security_filter", "request_context"],
-        },
-        "aggregated_json": {
-            "level": "DEBUG",
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": BASE_DIR / "logs" / "aggregated.jsonl",
-            "when": "H",  # Hourly rotation
-            "interval": 1,
-            "backupCount": 24 * 7,  # Keep 1 week of hourly logs
-            "formatter": "structured_json",
-            "filters": ["request_context", "performance_filter", "security_filter"],
+            "class": "logging.StreamHandler",
+            "formatter": "cloud_json",
+            "stream": "ext://sys.stderr",
         },
     },
     "root": {
-        "handlers": ["console", "file"],
+        "handlers": ["console_dev", "console_prod"],
         "level": "INFO",
     },
     "loggers": {
         "django": {
-            "handlers": ["console", "file"],
+            "handlers": ["console_dev", "console_prod"],
             "level": config("DJANGO_LOG_LEVEL", default="INFO"),
             "propagate": False,
         },
         "django.request": {
-            "handlers": ["error_file"],
+            "handlers": ["console_error"],
             "level": "ERROR",
             "propagate": True,
         },
-        "main.performance": {
-            "handlers": ["performance_file"],
+        "performance": {
+            "handlers": ["console_dev", "console_prod"],
             "level": "INFO",
             "propagate": False,
         },
-        "main.security": {
-            "handlers": ["error_file"],
+        "security": {
+            "handlers": ["console_error"],
             "level": "WARNING",
             "propagate": True,
         },
     },
 }
-
-# Create logs directory if it doesn't exist
-logs_dir = BASE_DIR / "logs"
-logs_dir.mkdir(exist_ok=True)
 
 # ==========================================================================
 # PUSH NOTIFICATIONS CONFIGURATION
@@ -747,13 +707,24 @@ except ImportError:
 
 REDIS_URL = config("REDIS_URL", default="redis://localhost:6379/1")
 
+redis_available = False
 if REDIS_URL and DJANGO_REDIS_AVAILABLE:
     try:
         # Test Redis connection
         import redis
 
-        r = redis.from_url(REDIS_URL)
+        r = redis.from_url(REDIS_URL, socket_connect_timeout=1)
         r.ping()
+        redis_available = True
+    except Exception as e:
+        import warnings
+
+        warnings.warn(
+            f"Redis connection failed ({e}), falling back to local memory cache"
+        )
+        redis_available = False
+
+    if redis_available:
 
         # Multi-tier cache configuration
         CACHES = {
@@ -842,16 +813,8 @@ if REDIS_URL and DJANGO_REDIS_AVAILABLE:
         CACHE_MIDDLEWARE_SECONDS = 600
         CACHE_MIDDLEWARE_KEY_PREFIX = "middleware"
 
-    except Exception as e:
-        import warnings
-
-        warnings.warn(
-            f"Redis connection failed ({e}), falling back to local memory cache"
-        )
-        DJANGO_REDIS_AVAILABLE = False
-
 # Fallback to local memory cache if Redis is not available
-if not DJANGO_REDIS_AVAILABLE or not REDIS_URL:
+if not redis_available:
     CACHES = {
         "default": {
             "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
