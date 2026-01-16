@@ -1,0 +1,44 @@
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'tr' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% trans 'Portfolio' %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/consolidated.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <a class="skip-link" href="#main-content">{% trans 'Skip to content' %}</a>
+    <div class="site-shell">
+        <header class="site-header" role="banner">
+            <div class="container site-header__inner">
+                <a class="site-logo" href="{% url 'home' %}">{% trans 'Portfolio' %}</a>
+                <nav class="site-nav" aria-label="{% trans 'Primary navigation' %}">
+                    <ul class="site-nav__list">
+                        <li><a class="site-nav__link" href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+                        <li><a class="site-nav__link" href="{% url 'playground:index' %}">{% trans 'Playground' %}</a></li>
+                        <li><a class="site-nav__link" href="{% url 'blog:list' %}">{% trans 'Blog' %}</a></li>
+                        <li><a class="site-nav__link" href="{% url 'tools:list' %}">{% trans 'Tools' %}</a></li>
+                        <li><a class="site-nav__link" href="{% url 'main:ai' %}">{% trans 'AI Tools' %}</a></li>
+                        <li><a class="site-nav__link" href="{% url 'main:cybersecurity' %}">{% trans 'Cybersecurity' %}</a></li>
+                        <li><a class="site-nav__link" href="{% url 'contact:form' %}">{% trans 'Contact' %}</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main id="main-content" class="site-main" role="main">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="site-footer" role="contentinfo">
+            <div class="container site-footer__inner">
+                <p>&copy; {{ now|date:'Y' }} {% trans 'Portfolio. All rights reserved.' %}</p>
+                <p class="text-muted">{% trans 'Focused on modern web development, AI, and cybersecurity innovation.' %}</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Admin Girisi" %}{% endblock %}
+{% block bodyclass %}login-page{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="content" class="login-layout" data-admin-screen="login">
+  <section class="login-card" aria-labelledby="admin-login-title">
+    <header class="login-card__header">
+      <div class="login-card__badge">BA</div>
+      <div>
+        <p id="admin-login-title" class="login-card__title">Yonetim Girisi</p>
+        <p class="login-card__subtitle">Yetkili hesaplarla devam edin. Tum aktiviteler kaydedilir.</p>
+      </div>
+    </header>
+
+    {% if form.errors %}
+      <div class="alert alert--danger" role="alert">Yetkisiz giris. Lutfen bilgilerinizi kontrol edin.</div>
+    {% endif %}
+
+    <form action="{{ app_path }}" method="post" novalidate class="login-form">
+      {% csrf_token %}
+      <div class="form-field">
+        <label for="id_username">Kullanıcı Adı veya E-posta</label>
+        <input type="text" name="username" id="id_username" autofocus required placeholder="admin" value="{{ form.username.value|default:'' }}" autocomplete="username" />
+      </div>
+      <div class="form-field">
+        <label for="id_password">Sifre</label>
+        <input type="password" name="password" id="id_password" required placeholder="********" autocomplete="current-password" />
+      </div>
+      {% if next %}
+        <input type="hidden" name="next" value="{{ next }}" />
+      {% endif %}
+      <button type="submit" class="button button--primary">Giris Yap</button>
+    </form>
+
+    <footer class="login-card__footer">
+      <p>Destek gerektiriyorsa <a href="mailto:hello@bugraakin.com">hello@bugraakin.com</a> uzerinden ulasin.</p>
+    </footer>
+  </section>
+</div>
+{% endblock %}

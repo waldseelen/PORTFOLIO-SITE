@@ -1,0 +1,19 @@
+
+{% extends 'base/base.html' %}
+{% load i18n %}
+
+{% block title %}400 – {% trans "Bad Request" %}{% endblock %}
+
+{% block content %}
+<section class="page-section">
+  <div class="ds-container stack" style="gap: var(--space-6); text-align: center;">
+    <span class="text-eyebrow">{% trans "Client Error" %}</span>
+    <h1 class="heading-display-lg">{% trans "The request could not be understood." %}</h1>
+    <p class="section-subheading">{% trans "Please verify the URL or try submitting the form again." %}</p>
+    <div class="cluster" style="justify-content: center;">
+      <a href="{% url 'home' %}" class="btn btn--primary">{% trans "Back to homepage" %}</a>
+      <a href="javascript:history.back()" class="btn btn--secondary">{% trans "Go back" %}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

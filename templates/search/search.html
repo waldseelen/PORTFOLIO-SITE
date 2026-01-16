@@ -1,0 +1,124 @@
+
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}
+  {% if query %}
+    {% blocktrans with q=query %}Search results for "{{ q }}"{% endblocktrans %}
+  {% else %}
+    {% trans "Search" %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="page-section">
+  <div class="ds-container stack" style="gap: var(--space-6);">
+    <header class="stack" style="gap: var(--space-2); text-align: center;">
+      <span class="text-eyebrow">{% trans "Search" %}</span>
+      {% if query %}
+        <h1 class="heading-display-lg">{% blocktrans with q=query %}Results for "{{ q }}"{% endblocktrans %}</h1>
+      {% else %}
+        <h1 class="heading-display-lg">{% trans "Search the portfolio" %}</h1>
+      {% endif %}
+      <p class="section-subheading">{% trans "Find blog posts, projects, tools and resources." %}</p>
+    </header>
+
+    <form method="get" action="{% url 'main:search' %}" class="surface stack" style="gap: var(--space-4);">
+      <label class="stack" style="gap: var(--space-2);">
+        <span class="metric-label">{% trans "Search query" %}</span>
+        <input type="text" name="q" value="{{ query }}" placeholder="{% trans 'Search for anything…' %}" class="input" autocomplete="off">
+      </label>
+
+      {% if search_categories %}
+        <fieldset class="stack" style="gap: var(--space-2);">
+          <legend class="metric-label">{% trans "Filter by category" %}</legend>
+          <div class="cluster" style="gap: var(--space-2);">
+            {% for category in search_categories %}
+              {% with active=category.key|default:'' %}
+              <label class="badge" style="cursor: pointer;">
+                <input type="checkbox" name="category" value="{{ category.key }}" class="visually-hidden"
+                       {% if category.key in selected_categories %}checked{% endif %}>
+                <span>{{ category.icon }} {{ category.name }}</span>
+              </label>
+              {% endwith %}
+            {% endfor %}
+          </div>
+        </fieldset>
+      {% endif %}
+
+      <div class="cluster" style="justify-content: flex-end;">
+        <button type="submit" class="btn btn--primary">{% trans "Search" %}</button>
+      </div>
+    </form>
+
+    {% if query %}
+      {% if has_results %}
+        <div class="stack" style="gap: var(--space-5);">
+          <div class="cluster" style="justify-content: space-between;">
+            <p class="text-muted">
+              {% blocktrans with total=search_results.total_count %}Found {{ total }} result(s){% endblocktrans %}
+              {% if page_obj.paginator.num_pages > 1 %}
+                {% blocktrans with page=page_obj.number pages=page_obj.paginator.num_pages %}(page {{ page }} of {{ pages }}){% endblocktrans %}
+              {% endif %}
+            </p>
+            <div>
+              <label class="visually-hidden" for="sortSelect">{% trans "Sort order" %}</label>
+              <select id="sortSelect" name="sort" class="select">
+                <option value="relevance">{% trans "Most relevant" %}</option>
+                <option value="-created_at">{% trans "Newest first" %}</option>
+                <option value="created_at">{% trans "Oldest first" %}</option>
+                <option value="title">{% trans "Title A–Z" %}</option>
+                <option value="-title">{% trans "Title Z–A" %}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="stack" style="gap: var(--space-4);">
+            {% for result in page_obj %}
+              <article class="surface surface--elevated stack" style="gap: var(--space-2);">
+                <div class="cluster" style="justify-content: space-between; align-items: flex-start;">
+                  <div class="stack" style="gap: var(--space-1);">
+                    <h2 class="heading-title">
+                      {% if result.url %}
+                        <a href="{{ result.url }}" class="text-gradient-primary">{{ result.title }}</a>
+                      {% else %}
+                        {{ result.title }}
+                      {% endif %}
+                    </h2>
+                    <p class="text-muted" style="font-size: var(--font-size-sm);">
+                      {{ result.category_name }}
+                      {% if result.metadata.date %}
+                        • {{ result.metadata.date }}
+                      {% endif %}
+                    </p>
+                  </div>
+                  <span class="badge">{% trans "Score" %}: {{ result.relevance_score }}</span>
+                </div>
+                {% if result.snippet %}
+                  <p class="text-muted">{{ result.snippet|truncatechars:180 }}</p>
+                {% endif %}
+              </article>
+            {% endfor %}
+          </div>
+
+          {% if page_obj.has_other_pages %}
+            <nav class="cluster" style="justify-content: center; gap: var(--space-2);" aria-label="{% trans 'Pagination' %}">
+              {% if page_obj.has_previous %}
+                <a class="btn btn--secondary" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
+              {% endif %}
+              <span class="badge">{% blocktrans with page=page_obj.number pages=page_obj.paginator.num_pages %}Page {{ page }} of {{ pages }}{% endblocktrans %}</span>
+              {% if page_obj.has_next %}
+                <a class="btn btn--secondary" href="?q={{ query }}&page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
+              {% endif %}
+            </nav>
+          {% endif %}
+        </div>
+      {% else %}
+        <div class="surface" role="status">
+          <p class="text-muted">{% trans "No results found. Try adjusting your query or filters." %}</p>
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

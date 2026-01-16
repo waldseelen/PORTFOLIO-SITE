@@ -1,0 +1,86 @@
+
+{% extends 'base/base.html' %}
+{% load i18n %}
+
+{% block title %}{% blocktrans %}Tag: {{ tag }}{% endblocktrans %}{% endblock %}
+
+{% block content %}
+<section class="page-section">
+  <div class="ds-container stack" style="gap: var(--space-6);">
+    <header class="stack" style="gap: var(--space-2); text-align: center;">
+      <span class="text-eyebrow">{% trans "Search" %}</span>
+      <h1 class="heading-display-lg">{% blocktrans %}Tag: {{ tag }}{% endblocktrans %}</h1>
+      <p class="section-subheading">
+        {% if has_results %}
+          {% blocktrans with total=search_results.total_count %}Found {{ total }} item(s) using this tag.{% endblocktrans %}
+        {% else %}
+          {% trans "No content found for this tag yet." %}
+        {% endif %}
+      </p>
+    </header>
+
+    <nav class="cluster" aria-label="{% trans 'Breadcrumb' %}" style="justify-content: center;">
+      <a href="{% url 'home' %}" class="btn btn--secondary">{% trans "Home" %}</a>
+      <a href="{% url 'main:tag_cloud' %}" class="btn btn--secondary">{% trans "All tags" %}</a>
+    </nav>
+
+    {% if has_results %}
+      <div class="stack" style="gap: var(--space-5);">
+        <div class="cluster" style="justify-content: space-between;">
+          <h2 class="heading-title">{% trans "Results" %}</h2>
+          {% if page_obj.paginator.num_pages > 1 %}
+            <span class="badge">{% blocktrans with page=page_obj.number pages=page_obj.paginator.num_pages %}Page {{ page }} of {{ pages }}{% endblocktrans %}</span>
+          {% endif %}
+        </div>
+
+        <div class="stack" style="gap: var(--space-4);">
+          {% for result in page_obj %}
+            <article class="surface surface--elevated stack" style="gap: var(--space-2);">
+              <div class="cluster" style="justify-content: space-between; align-items: flex-start;">
+                <div class="stack" style="gap: var(--space-1);">
+                  <h2 class="heading-title">
+                    {% if result.url %}
+                      <a href="{{ result.url }}" class="text-gradient-primary">{{ result.title }}</a>
+                    {% else %}
+                      {{ result.title }}
+                    {% endif %}
+                  </h2>
+                  <p class="text-muted" style="font-size: var(--font-size-sm);">
+                    {{ result.category_name }}
+                    {% if result.metadata.date %}
+                      • {{ result.metadata.date }}
+                    {% endif %}
+                  </p>
+                </div>
+                <span class="badge">{% trans "Score" %}: {{ result.relevance_score }}</span>
+              </div>
+              {% if result.description %}
+                <p class="text-muted">{{ result.description|truncatechars:180 }}</p>
+              {% endif %}
+              {% if result.tags %}
+                <div class="cluster" style="gap: var(--space-2);">
+                  {% for related in result.tags %}
+                    <a href="{% url 'main:search_by_tag' related %}" class="badge">#{{ related }}</a>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </article>
+          {% endfor %}
+        </div>
+
+        {% if page_obj.has_other_pages %}
+          <nav class="cluster" style="justify-content: center; gap: var(--space-2);" aria-label="{% trans 'Pagination' %}">
+            {% if page_obj.has_previous %}
+              <a class="btn btn--secondary" href="?tag={{ tag }}&page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
+            {% endif %}
+            <span class="badge">{% blocktrans with page=page_obj.number pages=page_obj.paginator.num_pages %}Page {{ page }} of {{ pages }}{% endblocktrans %}</span>
+            {% if page_obj.has_next %}
+              <a class="btn btn--secondary" href="?tag={{ tag }}&page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
+            {% endif %}
+          </nav>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

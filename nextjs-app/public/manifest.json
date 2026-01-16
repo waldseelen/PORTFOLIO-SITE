@@ -1,0 +1,98 @@
+{
+    "name": "Portfolio",
+    "short_name": "Portfolio",
+    "description": "Modern portfolio website built with Next.js and Sanity",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#0ea5e9",
+    "orientation": "portrait-primary",
+    "scope": "/",
+    "lang": "tr",
+    "dir": "ltr",
+    "categories": [
+        "portfolio",
+        "personal",
+        "blog"
+    ],
+    "icons": [
+        {
+            "src": "/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/screenshots/home.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Ana Sayfa"
+        },
+        {
+            "src": "/screenshots/mobile.png",
+            "sizes": "750x1334",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Mobil Görünüm"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Blog",
+            "short_name": "Blog",
+            "description": "Blog yazılarına git",
+            "url": "/blog",
+            "icons": [
+                {
+                    "src": "/shortcuts/blog.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Projeler",
+            "short_name": "Projeler",
+            "description": "Projelere git",
+            "url": "/projects",
+            "icons": [
+                {
+                    "src": "/shortcuts/projects.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "İletişim",
+            "short_name": "İletişim",
+            "description": "İletişim formuna git",
+            "url": "/contact",
+            "icons": [
+                {
+                    "src": "/shortcuts/contact.png",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ]
+}

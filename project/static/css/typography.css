@@ -1,0 +1,539 @@
+/*
+ * Typography System - Modern Fluid Typography
+ * ===========================================
+ * Space Grotesk (headings) + Inter (body) kombinasyonu
+ * Clamp() ile responsive font boyutları
+ */
+
+/* =============================================================================
+   FONT IMPORTS
+   ============================================================================= */
+
+/* Space Grotesk - Karakterli Serif (Başlıklar) */
+@font-face {
+    font-family: 'Space Grotesk';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Space Grotesk';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Space Grotesk';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Space Grotesk';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Inter - Yüksek Okunurluk Sans-serif (Gövde) */
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* =============================================================================
+   CSS CUSTOM PROPERTIES
+   ============================================================================= */
+
+:root {
+    /* Font Families */
+    --font-heading: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+    --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+    /* Font Weights */
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    /* Line Heights */
+    --leading-none: 1;
+    --leading-tight: 1.25;
+    --leading-snug: 1.375;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.625;
+    --leading-loose: 2;
+
+    /* Letter Spacing */
+    --tracking-tighter: -0.05em;
+    --tracking-tight: -0.025em;
+    --tracking-normal: 0;
+    --tracking-wide: 0.025em;
+    --tracking-wider: 0.05em;
+    --tracking-widest: 0.1em;
+
+    /* Fluid Font Sizes */
+    --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+    --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+    --text-base: clamp(1rem, 0.925rem + 0.375vw, 1.125rem);
+    --text-lg: clamp(1.125rem, 1rem + 0.5vw, 1.25rem);
+    --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+    --text-2xl: clamp(1.5rem, 1.25rem + 1.25vw, 2rem);
+    --text-3xl: clamp(1.875rem, 1.5rem + 1.875vw, 2.5rem);
+    --text-4xl: clamp(2.25rem, 1.75rem + 2.5vw, 3rem);
+    --text-5xl: clamp(3rem, 2.25rem + 3.75vw, 4rem);
+    --text-6xl: clamp(3.75rem, 2.75rem + 5vw, 5rem);
+    --text-7xl: clamp(4.5rem, 3.25rem + 6.25vw, 6rem);
+}
+
+/* =============================================================================
+   BASE TYPOGRAPHY
+   ============================================================================= */
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: var(--weight-normal);
+    line-height: var(--leading-relaxed);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+/* =============================================================================
+   HEADINGS
+   ============================================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    color: white;
+    margin-bottom: 0.5em;
+}
+
+h1,
+.h1 {
+    font-size: var(--text-5xl);
+    letter-spacing: var(--tracking-tighter);
+}
+
+h2,
+.h2 {
+    font-size: var(--text-4xl);
+}
+
+h3,
+.h3 {
+    font-size: var(--text-3xl);
+}
+
+h4,
+.h4 {
+    font-size: var(--text-2xl);
+}
+
+h5,
+.h5 {
+    font-size: var(--text-xl);
+}
+
+h6,
+.h6 {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+}
+
+/* =============================================================================
+   DISPLAY HEADINGS - Extra Large
+   ============================================================================= */
+
+.display-1 {
+    font-family: var(--font-heading);
+    font-size: var(--text-7xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-none);
+    letter-spacing: var(--tracking-tighter);
+}
+
+.display-2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-6xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-none);
+    letter-spacing: var(--tracking-tighter);
+}
+
+.display-3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-5xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tighter);
+}
+
+/* =============================================================================
+   BODY TEXT
+   ============================================================================= */
+
+p {
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    margin-bottom: 1em;
+}
+
+.lead {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-normal);
+    line-height: var(--leading-relaxed);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.small,
+small {
+    font-size: var(--text-sm);
+}
+
+.tiny {
+    font-size: var(--text-xs);
+}
+
+/* =============================================================================
+   TEXT UTILITIES
+   ============================================================================= */
+
+/* Weights */
+.font-normal {
+    font-weight: var(--weight-normal);
+}
+
+.font-medium {
+    font-weight: var(--weight-medium);
+}
+
+.font-semibold {
+    font-weight: var(--weight-semibold);
+}
+
+.font-bold {
+    font-weight: var(--weight-bold);
+}
+
+/* Families */
+.font-heading {
+    font-family: var(--font-heading);
+}
+
+.font-body {
+    font-family: var(--font-body);
+}
+
+.font-mono {
+    font-family: var(--font-mono);
+}
+
+/* Sizes */
+.text-xs {
+    font-size: var(--text-xs);
+}
+
+.text-sm {
+    font-size: var(--text-sm);
+}
+
+.text-base {
+    font-size: var(--text-base);
+}
+
+.text-lg {
+    font-size: var(--text-lg);
+}
+
+.text-xl {
+    font-size: var(--text-xl);
+}
+
+.text-2xl {
+    font-size: var(--text-2xl);
+}
+
+.text-3xl {
+    font-size: var(--text-3xl);
+}
+
+.text-4xl {
+    font-size: var(--text-4xl);
+}
+
+.text-5xl {
+    font-size: var(--text-5xl);
+}
+
+.text-6xl {
+    font-size: var(--text-6xl);
+}
+
+/* Line Heights */
+.leading-none {
+    line-height: var(--leading-none);
+}
+
+.leading-tight {
+    line-height: var(--leading-tight);
+}
+
+.leading-snug {
+    line-height: var(--leading-snug);
+}
+
+.leading-normal {
+    line-height: var(--leading-normal);
+}
+
+.leading-relaxed {
+    line-height: var(--leading-relaxed);
+}
+
+.leading-loose {
+    line-height: var(--leading-loose);
+}
+
+/* Letter Spacing */
+.tracking-tighter {
+    letter-spacing: var(--tracking-tighter);
+}
+
+.tracking-tight {
+    letter-spacing: var(--tracking-tight);
+}
+
+.tracking-normal {
+    letter-spacing: var(--tracking-normal);
+}
+
+.tracking-wide {
+    letter-spacing: var(--tracking-wide);
+}
+
+.tracking-wider {
+    letter-spacing: var(--tracking-wider);
+}
+
+.tracking-widest {
+    letter-spacing: var(--tracking-widest);
+}
+
+/* =============================================================================
+   SPECIAL TEXT STYLES
+   ============================================================================= */
+
+/* Gradient Text */
+.text-gradient {
+    background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-gradient-gold {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-gradient-cyan {
+    background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 50%, #0891b2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Animated gradient text */
+.text-gradient-animated {
+    background: linear-gradient(90deg,
+            #818cf8 0%,
+            #c084fc 25%,
+            #f472b6 50%,
+            #c084fc 75%,
+            #818cf8 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-shift 3s linear infinite;
+}
+
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+/* Highlight/Mark */
+.highlight {
+    background: linear-gradient(180deg, transparent 60%, rgba(99, 102, 241, 0.3) 60%);
+    padding: 0 0.25em;
+}
+
+/* Text Shadow for Headings */
+.text-glow {
+    text-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+}
+
+/* =============================================================================
+   LINKS
+   ============================================================================= */
+
+a {
+    color: #818cf8;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #a5b4fc;
+}
+
+.link-underline {
+    position: relative;
+}
+
+.link-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: currentColor;
+    transition: width 0.3s ease;
+}
+
+.link-underline:hover::after {
+    width: 100%;
+}
+
+/* =============================================================================
+   LISTS
+   ============================================================================= */
+
+ul,
+ol {
+    padding-left: 1.5em;
+    margin-bottom: 1em;
+}
+
+li {
+    margin-bottom: 0.5em;
+}
+
+/* Custom list styles */
+.list-check li::marker {
+    content: '✓ ';
+    color: #22c55e;
+}
+
+.list-arrow li::marker {
+    content: '→ ';
+    color: #818cf8;
+}
+
+/* =============================================================================
+   BLOCKQUOTES
+   ============================================================================= */
+
+blockquote {
+    font-size: var(--text-lg);
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.7);
+    border-left: 4px solid #818cf8;
+    padding-left: 1.5em;
+    margin: 1.5em 0;
+}
+
+blockquote cite {
+    display: block;
+    font-size: var(--text-sm);
+    font-style: normal;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 0.5em;
+}
+
+/* =============================================================================
+   CODE
+   ============================================================================= */
+
+code,
+kbd,
+pre,
+samp {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+}
+
+code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    color: #f472b6;
+}
+
+pre {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1.5em;
+    border-radius: 12px;
+    overflow-x: auto;
+    margin: 1.5em 0;
+}
+
+pre code {
+    background: none;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.87);
+}
+
+kbd {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    padding: 0.2em 0.5em;
+    font-size: 0.85em;
+}

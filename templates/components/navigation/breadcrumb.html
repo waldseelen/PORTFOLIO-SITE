@@ -1,0 +1,41 @@
+
+{% load static %}
+{% load i18n %}
+{% if breadcrumbs|length > 1 %}
+<nav class="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700 breadcrumb-fade" aria-label="Breadcrumb">
+  <div class="container mx-auto px-8">
+    <ol class="flex items-center space-x-2 py-3 text-sm" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <div class="flex items-center">
+          <a href="{% url 'home' %}" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors flex items-center" itemprop="item" aria-label="{% trans 'Home' %}">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+            </svg>
+            <span itemprop="name" class="ml-1 hidden">{% trans 'Home' %}</span>
+          </a>
+          <meta itemprop="position" content="1" />
+        </div>
+      </li>
+      {% for crumb in breadcrumbs %}
+        {% if not forloop.first %}
+          <li class="flex items-center">
+            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+            </svg>
+          </li>
+          <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            {% if crumb.active %}
+              <span class="text-gray-900 dark:text-white font-medium truncate max-w-xs" itemprop="name" title="{{ crumb.name }}">{{ crumb.name|truncatechars:30 }}</span>
+            {% else %}
+              <a href="{{ crumb.url }}" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors truncate max-w-xs" itemprop="item" title="{{ crumb.name }}">
+                <span itemprop="name">{{ crumb.name|truncatechars:30 }}</span>
+              </a>
+            {% endif %}
+            <meta itemprop="position" content="{{ forloop.counter|add:1 }}" />
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ol>
+  </div>
+</nav>
+{% endif %}

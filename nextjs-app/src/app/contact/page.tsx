@@ -1,0 +1,208 @@
+'use client';
+
+import { useState } from 'react';
+
+// Note: metadata export doesn't work in client components
+// This page is client-side due to form state management
+
+export default function ContactPage() {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+    });
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        setFormData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatus('loading');
+
+        try {
+            // TODO: API endpoint'e form verisi gönderilecek
+            // const response = await fetch('/api/contact', {
+            //   method: 'POST',
+            //   headers: { 'Content-Type': 'application/json' },
+            //   body: JSON.stringify(formData),
+            // });
+
+            // Simulated success
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            setStatus('success');
+            setFormData({ name: '', email: '', subject: '', message: '' });
+        } catch {
+            setStatus('error');
+        }
+    };
+
+    return (
+        <div className="section">
+            <div className="container-custom">
+                <div className="mx-auto max-w-2xl">
+                    {/* Page Header */}
+                    <div className="mb-12 text-center">
+                        <h1 className="heading-1">İletişim</h1>
+                        <p className="mt-4 text-lg text-neutral-600 dark:text-neutral-400">
+                            Bir proje veya iş birliği için benimle iletişime geçebilirsiniz.
+                        </p>
+                    </div>
+
+                    {/* Contact Form */}
+                    <div className="card">
+                        {status === 'success' ? (
+                            <div className="py-8 text-center">
+                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
+                                    <svg className="h-8 w-8 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <h2 className="heading-3">Mesajınız Gönderildi!</h2>
+                                <p className="mt-2 text-neutral-600 dark:text-neutral-400">
+                                    En kısa sürede size geri dönüş yapacağım.
+                                </p>
+                                <button
+                                    onClick={() => setStatus('idle')}
+                                    className="btn-primary mt-6"
+                                >
+                                    Yeni Mesaj Gönder
+                                </button>
+                            </div>
+                        ) : (
+                            <form onSubmit={handleSubmit} className="space-y-6">
+                                {/* Name */}
+                                <div>
+                                    <label htmlFor="name" className="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-50">
+                                        İsim <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        required
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        className="block w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-neutral-900 transition-colors focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50"
+                                        placeholder="Adınız Soyadınız"
+                                    />
+                                </div>
+
+                                {/* Email */}
+                                <div>
+                                    <label htmlFor="email" className="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-50">
+                                        E-posta <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        required
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        className="block w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-neutral-900 transition-colors focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50"
+                                        placeholder="ornek@email.com"
+                                    />
+                                </div>
+
+                                {/* Subject */}
+                                <div>
+                                    <label htmlFor="subject" className="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-50">
+                                        Konu <span className="text-red-500">*</span>
+                                    </label>
+                                    <select
+                                        id="subject"
+                                        name="subject"
+                                        required
+                                        value={formData.subject}
+                                        onChange={handleChange}
+                                        className="block w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-neutral-900 transition-colors focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50"
+                                    >
+                                        <option value="">Konu Seçin</option>
+                                        <option value="project">Proje Teklifi</option>
+                                        <option value="collaboration">İş Birliği</option>
+                                        <option value="question">Soru</option>
+                                        <option value="other">Diğer</option>
+                                    </select>
+                                </div>
+
+                                {/* Message */}
+                                <div>
+                                    <label htmlFor="message" className="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-50">
+                                        Mesaj <span className="text-red-500">*</span>
+                                    </label>
+                                    <textarea
+                                        id="message"
+                                        name="message"
+                                        required
+                                        rows={6}
+                                        value={formData.message}
+                                        onChange={handleChange}
+                                        className="block w-full resize-none rounded-lg border border-neutral-300 bg-white px-4 py-3 text-neutral-900 transition-colors focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50"
+                                        placeholder="Mesajınızı buraya yazın..."
+                                    />
+                                </div>
+
+                                {/* Error message */}
+                                {status === 'error' && (
+                                    <div className="rounded-lg bg-red-50 p-4 text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                                        Bir hata oluştu. Lütfen tekrar deneyin.
+                                    </div>
+                                )}
+
+                                {/* Submit Button */}
+                                <button
+                                    type="submit"
+                                    disabled={status === 'loading'}
+                                    className="btn-primary w-full py-3 text-base disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    {status === 'loading' ? (
+                                        <span className="flex items-center justify-center gap-2">
+                                            <svg className="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                            </svg>
+                                            Gönderiliyor...
+                                        </span>
+                                    ) : (
+                                        'Mesaj Gönder'
+                                    )}
+                                </button>
+                            </form>
+                        )}
+                    </div>
+
+                    {/* Contact Info */}
+                    <div className="mt-12 grid gap-6 md:grid-cols-2">
+                        <div className="card text-center">
+                            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900">
+                                <svg className="h-6 w-6 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <h3 className="font-semibold text-neutral-900 dark:text-neutral-50">E-posta</h3>
+                            <a href="mailto:email@example.com" className="mt-1 text-primary-600 hover:text-primary-700 dark:text-primary-400">
+                                email@example.com
+                            </a>
+                        </div>
+                        <div className="card text-center">
+                            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900">
+                                <svg className="h-6 w-6 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <h3 className="font-semibold text-neutral-900 dark:text-neutral-50">Konum</h3>
+                            <p className="mt-1 text-neutral-600 dark:text-neutral-400">İstanbul, Türkiye</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}

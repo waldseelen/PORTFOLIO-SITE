@@ -1,0 +1,5 @@
+# Project requirements - inherits from root requirements
+# This file exists for backward compatibility
+# Canonical requirements are in: requirements/base.txt, requirements/development.txt, requirements/production.txt
+
+-r ../requirements/base.txt

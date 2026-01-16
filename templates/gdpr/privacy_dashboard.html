@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans 'Privacy Dashboard - Portfolio' %}{% endblock %}
+
+{% block extra_head %}
+<meta name="description" content="Manage your personal data and exercise your privacy rights." />
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-6xl">
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent mb-4">
+            {% trans 'Privacy Dashboard' %}
+        </h1>
+        <p class="text-gray-300 text-lg">
+            {% trans 'Control how your information is stored, delivered, and removed according to GDPR requirements.' %}
+        </p>
+        <div class="w-24 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full mt-4"></div>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-8">
+            <div class="bg-gray-800/50 backdrop-blur-md rounded-xl shadow-2xl border border-gray-700/50 p-6">
+                <h2 class="text-2xl font-semibold text-white mb-6 flex items-center">
+                    <svg class="w-6 h-6 text-primary-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    {% trans 'Data overview' %}
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-gray-700/30 rounded-lg p-4">
+                        <h3 class="font-semibold text-white mb-3">{% trans 'Account information' %}</h3>
+                        <div class="space-y-2 text-sm text-gray-300">
+                            <div class="flex justify-between">
+                                <span>{% trans 'Username' %}</span>
+                                <span class="text-white">{{ user.username }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>{% trans 'Email' %}</span>
+                                <span class="text-white">{{ user.email }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>{% trans 'Member since' %}</span>
+                                <span class="text-white">{{ data_summary.date_joined|date:"M d, Y" }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>{% trans 'Last login' %}</span>
+                                <span class="text-white">
+                                    {% if data_summary.last_login %}
+                                        {{ data_summary.last_login|date:"M d, Y H:i" }}
+                                    {% else %}
+                                        {% trans 'No login activity yet' %}
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>{% trans 'Account status' %}</span>
+                                <span class="text-green-400">{{ data_summary.account_status }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-700/30 rounded-lg p-4">
+                        <h3 class="font-semibold text-white mb-3">{% trans 'Data statistics' %}</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                    </svg>
+                                    <span class="text-gray-300 text-sm">{% trans 'Contact messages' %}</span>
+                                </div>
+                                <span class="bg-blue-600 text-white px-2 py-1 rounded-full text-xs">{{ data_summary.contact_messages }}</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-green-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+                                    </svg>
+                                    <span class="text-gray-300 text-sm">{% trans 'Saved snippets' %}</span>
+                                </div>
+                                <span class="bg-green-600 text-white px-2 py-1 rounded-full text-xs">{{ data_summary.saved_snippets }}</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-purple-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="text-gray-300 text-sm">{% trans 'Notifications' %}</span>
+                                </div>
+                                <span class="bg-purple-600 text-white px-2 py-1 rounded-full text-xs">{{ data_summary.notifications }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800/50 backdrop-blur-md rounded-xl shadow-2xl border border-gray-700/50 p-6">
+                <h2 class="text-2xl font-semibold text-white mb-6 flex items-center">
+                    <svg class="w-6 h-6 text-primary-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.1 0-2 .9-2 2v4a2 2 0 104 0v-4c0-1.1-.9-2-2-2z"/>
+                    </svg>
+                    {% trans 'Manage your data' %}
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="privacy-card">
+                        <div>
+                            <h3 class="text-xl font-semibold text-white mb-1">{% trans 'Review personal data' %}</h3>
+                            <p class="text-gray-300 text-sm">{% trans 'Request a full export of the information we store about your account.' %}</p>
+                        </div>
+                        <a href="{% url 'gdpr:data_export' %}" class="btn btn--secondary" data-cursor-interactive>
+                            {% trans 'Export data' %}
+                        </a>
+                    </div>
+
+                    <div class="privacy-card">
+                        <div>
+                            <h3 class="text-xl font-semibold text-white mb-1">{% trans 'Erase personal data' %}</h3>
+                            <p class="text-gray-300 text-sm">{% trans 'Start a removal request to delete your account and associated records.' %}</p>
+                        </div>
+                        <a href="{% url 'gdpr:account_deletion' %}" class="btn btn--ghost" data-cursor-interactive>
+                            {% trans 'Request deletion' %}
+                        </a>
+                    </div>
+
+                    <div class="privacy-card">
+                        <div>
+                            <h3 class="text-xl font-semibold text-white mb-1">{% trans 'Update cookie preferences' %}</h3>
+                            <p class="text-gray-300 text-sm">{% trans 'Adjust analytics, functional, or marketing cookies at any time.' %}</p>
+                        </div>
+                        <button type="button" class="btn btn--secondary" data-cursor-interactive data-open-privacy>
+                            {% trans 'Open cookie settings' %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-gray-800/30 backdrop-blur-md rounded-xl border border-gray-700/50 p-6">
+                <h3 class="text-lg font-semibold text-white mb-4">{% trans 'Your privacy requests' %}</h3>
+                <ul class="space-y-3 text-sm text-gray-300">
+                    <li class="flex justify-between">
+                        <span>{% trans 'Export requests performed' %}</span>
+                        <span class="text-white">{{ data_summary.export_requests }}</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>{% trans 'Pending deletion requests' %}</span>
+                        <span class="text-white">{{ data_summary.pending_deletions }}</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>{% trans 'Cookie consent status' %}</span>
+                        <span class="text-white">{{ data_summary.cookie_status }}</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-gray-800/30 backdrop-blur-md rounded-xl border border-gray-700/50 p-6">
+                <h3 class="text-lg font-semibold text-white mb-4">{% trans 'Need assistance?' %}</h3>
+                <p class="text-gray-300 text-sm mb-4">{% trans 'If you have any questions or would like to submit a manual request, contact our privacy team.' %}</p>
+                <a href="mailto:privacy@bugraak.in" class="btn btn--primary w-full" data-cursor-interactive>privacy@bugraak.in</a>
+                <p class="text-xs text-gray-500 mt-3">{% trans 'Response time is typically under 3 business days.' %}</p>
+            </div>
+
+            <div class="bg-gray-800/30 backdrop-blur-md rounded-xl border border-gray-700/50 p-6">
+                <h3 class="text-lg font-semibold text-white mb-4">{% trans 'Helpful resources' %}</h3>
+                <ul class="space-y-3 text-sm text-primary-300">
+                    <li><a href="{% url 'gdpr:privacy_policy' %}" class="hover:text-white transition-colors">{% trans 'Read the full privacy policy' %}</a></li>
+                    <li><a href="{% url 'gdpr:data_export' %}" class="hover:text-white transition-colors">{% trans 'Download your data export' %}</a></li>
+                    <li><a href="{% url 'gdpr:account_deletion' %}" class="hover:text-white transition-colors">{% trans 'Request account deletion' %}</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

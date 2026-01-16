@@ -1,0 +1,19 @@
+
+{% extends 'base/base.html' %}
+{% load i18n %}
+
+{% block title %}403 – {% trans "Access denied" %}{% endblock %}
+
+{% block content %}
+<section class="page-section">
+  <div class="ds-container stack" style="gap: var(--space-6); text-align: center;">
+    <span class="text-eyebrow">{% trans "Permissions" %}</span>
+    <h1 class="heading-display-lg">{% trans "You do not have permission to view this page." %}</h1>
+    <p class="section-subheading">{% trans "If you believe this is a mistake, contact the administrator or sign in with proper access." %}</p>
+    <div class="cluster" style="justify-content: center;">
+      <a href="{% url 'home' %}" class="btn btn--primary">{% trans "Back to homepage" %}</a>
+      <a href="{% url 'contact:form' %}" class="btn btn--secondary">{% trans "Contact support" %}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

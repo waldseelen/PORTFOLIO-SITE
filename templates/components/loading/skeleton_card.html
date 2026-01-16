@@ -1,0 +1,124 @@
+{% load i18n %}
+{#
+Skeleton Loading Components
+============================
+Placeholder skeletons for loading states.
+
+Usage:
+    {% include 'components/loading/skeleton_card.html' %}
+    {% include 'components/loading/skeleton_card.html' with variant='horizontal' %}
+#}
+
+{% if variant == 'horizontal' %}
+{# Horizontal Skeleton Card #}
+<div class="skeleton-card flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
+    <div class="skeleton skeleton-avatar w-16 h-16 flex-shrink-0"></div>
+    <div class="flex-1 space-y-2">
+        <div class="skeleton skeleton-title w-3/4"></div>
+        <div class="skeleton skeleton-text w-full"></div>
+        <div class="skeleton skeleton-text w-2/3"></div>
+    </div>
+</div>
+
+{% elif variant == 'compact' %}
+{# Compact Skeleton Card #}
+<div class="skeleton-card p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+    <div class="skeleton skeleton-title w-2/3"></div>
+    <div class="skeleton skeleton-text w-full"></div>
+    <div class="flex gap-2">
+        <div class="skeleton h-6 w-16 rounded-full"></div>
+        <div class="skeleton h-6 w-20 rounded-full"></div>
+    </div>
+</div>
+
+{% elif variant == 'profile' %}
+{# Profile Skeleton #}
+<div class="skeleton-card p-6 rounded-2xl bg-white/5 border border-white/10">
+    <div class="flex items-center gap-4 mb-4">
+        <div class="skeleton skeleton-avatar w-20 h-20"></div>
+        <div class="space-y-2 flex-1">
+            <div class="skeleton skeleton-title w-1/2"></div>
+            <div class="skeleton skeleton-text w-3/4"></div>
+        </div>
+    </div>
+    <div class="space-y-2">
+        <div class="skeleton skeleton-text w-full"></div>
+        <div class="skeleton skeleton-text w-5/6"></div>
+        <div class="skeleton skeleton-text w-4/6"></div>
+    </div>
+</div>
+
+{% elif variant == 'blog' %}
+{# Blog Post Skeleton #}
+<div class="skeleton-card rounded-2xl bg-white/5 border border-white/10 overflow-hidden">
+    <div class="skeleton skeleton-image"></div>
+    <div class="p-5 space-y-3">
+        <div class="flex items-center gap-2">
+            <div class="skeleton h-5 w-20 rounded-full"></div>
+            <div class="skeleton h-4 w-24 rounded"></div>
+        </div>
+        <div class="skeleton skeleton-title"></div>
+        <div class="space-y-2">
+            <div class="skeleton skeleton-text w-full"></div>
+            <div class="skeleton skeleton-text w-5/6"></div>
+        </div>
+        <div class="flex items-center justify-between pt-2">
+            <div class="flex items-center gap-2">
+                <div class="skeleton skeleton-avatar w-8 h-8"></div>
+                <div class="skeleton h-4 w-24 rounded"></div>
+            </div>
+            <div class="skeleton h-8 w-24 rounded-lg"></div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+{# Default Project Card Skeleton #}
+<div class="skeleton-project-card">
+    {# Image Placeholder #}
+    <div class="skeleton skeleton-image"></div>
+
+    {# Content #}
+    <div class="skeleton-content">
+        {# Status Badge #}
+        <div class="flex items-center justify-between mb-3">
+            <div class="skeleton h-5 w-24 rounded-full"></div>
+            <div class="skeleton skeleton-avatar w-8 h-8"></div>
+        </div>
+
+        {# Title #}
+        <div class="skeleton skeleton-title mb-2"></div>
+
+        {# Description #}
+        <div class="space-y-2 mb-4">
+            <div class="skeleton skeleton-text w-full"></div>
+            <div class="skeleton skeleton-text w-4/5"></div>
+        </div>
+
+        {# Tags #}
+        <div class="flex gap-2 mb-4">
+            <div class="skeleton h-6 w-16 rounded-full"></div>
+            <div class="skeleton h-6 w-20 rounded-full"></div>
+            <div class="skeleton h-6 w-14 rounded-full"></div>
+        </div>
+
+        {# Progress Bar #}
+        <div class="space-y-1 mb-4">
+            <div class="flex justify-between">
+                <div class="skeleton h-3 w-16 rounded"></div>
+                <div class="skeleton h-3 w-8 rounded"></div>
+            </div>
+            <div class="skeleton h-2 w-full rounded-full"></div>
+        </div>
+
+        {# Actions #}
+        <div class="flex items-center justify-between pt-2 border-t border-white/5">
+            <div class="flex gap-2">
+                <div class="skeleton h-8 w-8 rounded-lg"></div>
+                <div class="skeleton h-8 w-8 rounded-lg"></div>
+            </div>
+            <div class="skeleton h-9 w-24 rounded-lg"></div>
+        </div>
+    </div>
+</div>
+{% endif %}

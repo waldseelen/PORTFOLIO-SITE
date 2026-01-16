@@ -1,0 +1,129 @@
+{% extends 'base/base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans 'Contact' %} - {% trans 'Portfolio' %}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/pages/contact.css' %}?v={% now 'U' %}">
+{% endblock %}
+
+{% block content %}
+<section class="contact-landing" data-animate="fade">
+    <div class="ds-container contact-landing__inner">
+        <div class="contact-hero">
+            <span class="hero-kicker">{% trans 'Let’s build something remarkable' %}</span>
+            <h1 class="hero-title">{% trans 'Tell me about your next big move.' %}</h1>
+            <p class="hero-lead">
+                {% trans 'I collaborate with teams to ship resilient products, harden security posture, and unlock growth. Drop a note—48 saat içinde geri dönerim.' %}
+            </p>
+            <div class="hero-badges">
+                <span class="badge">{% trans 'Full-stack leadership' %}</span>
+                <span class="badge">{% trans 'Security reviews' %}</span>
+                <span class="badge">{% trans 'AI tooling strategy' %}</span>
+            </div>
+        </div>
+
+        <div class="contact-grid">
+            <article class="contact-card contact-card--form" aria-labelledby="contact-form-heading">
+                <header class="contact-card__header">
+                    <h2 id="contact-form-heading">{% trans 'Let’s talk' %}</h2>
+                    <p>{% trans 'Fill the form and I’ll reply with concrete next steps.' %}</p>
+                </header>
+                <form method="post" class="contact-form" data-validate novalidate>
+                    {% csrf_token %}
+
+                    {# Display non-field errors #}
+                    {% if form.non_field_errors %}
+                    <div class="alert alert--error" role="alert">
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+
+                    <input type="text" name="website" style="display:none !important;" tabindex="-1" autocomplete="off">
+                    <div class="form-grid">
+                        <label class="form-field {% if form.name.errors %}form-field--error{% endif %}">
+                            <span>{% trans 'Name' %} *</span>
+                            <input type="text" name="name" required placeholder="{% trans 'Adınız Soyadınız' %}" value="{{ form.name.value|default_if_none:'' }}" {% if form.name.errors %}aria-invalid="true" aria-describedby="name-error"{% endif %}>
+                            {% if form.name.errors %}
+                            <span class="form-error" id="name-error">{{ form.name.errors.0 }}</span>
+                            {% endif %}
+                        </label>
+                        <label class="form-field {% if form.email.errors %}form-field--error{% endif %}">
+                            <span>{% trans 'Email' %} *</span>
+                            <input type="email" name="email" required placeholder="name@example.com" value="{{ form.email.value|default_if_none:'' }}" {% if form.email.errors %}aria-invalid="true" aria-describedby="email-error"{% endif %}>
+                            {% if form.email.errors %}
+                            <span class="form-error" id="email-error">{{ form.email.errors.0 }}</span>
+                            {% endif %}
+                        </label>
+                    </div>
+                    <label class="form-field {% if form.subject.errors %}form-field--error{% endif %}">
+                        <span>{% trans 'Project headline' %} *</span>
+                        <input type="text" name="subject" required placeholder="{% trans 'Örn. Fintech platformu için güvenlik denetimi' %}" value="{{ form.subject.value|default_if_none:'' }}" {% if form.subject.errors %}aria-invalid="true" aria-describedby="subject-error"{% endif %}>
+                        {% if form.subject.errors %}
+                        <span class="form-error" id="subject-error">{{ form.subject.errors.0 }}</span>
+                        {% endif %}
+                    </label>
+                    <label class="form-field {% if form.message.errors %}form-field--error{% endif %}">
+                        <span>{% trans 'How can I help?' %} *</span>
+                        <textarea name="message" rows="6" required placeholder="{% trans 'Ekibiniz, ürününüz veya hedefiniz hakkında birkaç paragraf paylaşın.' %}" {% if form.message.errors %}aria-invalid="true" aria-describedby="message-error"{% endif %}>{{ form.message.value|default_if_none:'' }}</textarea>
+                        {% if form.message.errors %}
+                        <span class="form-error" id="message-error">{{ form.message.errors.0 }}</span>
+                        {% endif %}
+                    </label>
+                    <label class="form-field {% if form.preferred_channel.errors %}form-field--error{% endif %}">
+                        <span>{% trans 'Preferred response channel' %}</span>
+                        <select name="preferred_channel" {% if form.preferred_channel.errors %}aria-invalid="true" aria-describedby="channel-error"{% endif %}>
+                            <option value="email" {% if form.preferred_channel.value == 'email' or not form.preferred_channel.value %}selected{% endif %}>{% trans 'Email' %}</option>
+                            <option value="calendly" {% if form.preferred_channel.value == 'calendly' %}selected{% endif %}>{% trans 'Plan a call' %}</option>
+                            <option value="slack" {% if form.preferred_channel.value == 'slack' %}selected{% endif %}>{% trans 'Slack / Teams invite' %}</option>
+                        </select>
+                        {% if form.preferred_channel.errors %}
+                        <span class="form-error" id="channel-error">{{ form.preferred_channel.errors.0 }}</span>
+                        {% endif %}
+                    </label>
+                    <div class="form-footer">
+                        <p>{% trans 'Replies within 2 business days. Gizlilik garantili.' %}</p>
+                        <button type="submit" class="btn btn--primary">
+                            {% trans 'Send message' %}
+                        </button>
+                    </div>
+                </form>
+            </article>
+
+            <aside class="contact-card contact-card--meta">
+                <header class="contact-card__header">
+                    <h2>{% trans 'Ways we can collaborate' %}</h2>
+                </header>
+                <ul class="contact-meta__list">
+                    <li>
+                        <h3>{% trans 'Fractional leadership' %}</h3>
+                        <p>{% trans 'CTO/Lead Engineer desteği, sprint planlama, teknik vizyon ve ekip mentorlüğü.' %}</p>
+                    </li>
+                    <li>
+                        <h3>{% trans 'Security diagnostics' %}</h3>
+                        <p>{% trans 'Sistem taramaları, tehdit modelleme, SOC2/ISO hazırlığı ve devam eden izleme.' %}</p>
+                    </li>
+                    <li>
+                        <h3>{% trans 'Product acceleration' %}</h3>
+                        <p>{% trans 'MVP doğrulaması, tasarım sistemi aktivasyonu ve performans odaklı teslimatlar.' %}</p>
+                    </li>
+                </ul>
+                <div class="contact-cta">
+                    <span class="contact-status">
+                        <span class="dot dot--active"></span>
+                        {% trans 'Yeni projeler için uygun' %}
+                    </span>
+                    <a class="btn btn--ghost" href="https://cal.com/bugraakin" target="_blank" rel="noopener noreferrer">
+                        {% trans 'Hızlı bir görüşme planla' %}
+                    </a>
+                </div>
+                <div class="contact-links">
+                    <a href="mailto:hello@bugraak.in">hello@bugraak.in</a>
+                    <a href="https://github.com/bugraakin" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a href="https://linkedin.com/in/bugraak" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}
