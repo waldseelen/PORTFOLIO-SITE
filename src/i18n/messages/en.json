@@ -1,0 +1,159 @@
+{
+    "common": {
+        "siteName": "Portfolio",
+        "loading": "Loading...",
+        "error": "An error occurred",
+        "retry": "Try Again",
+        "backToHome": "Back to Home",
+        "readMore": "Read More",
+        "viewAll": "View All",
+        "search": "Search",
+        "searchPlaceholder": "Search blog posts and projects...",
+        "noResults": "No results found",
+        "close": "Close",
+        "or": "or"
+    },
+    "navigation": {
+        "home": "Home",
+        "blog": "Blog",
+        "projects": "Projects",
+        "about": "About",
+        "contact": "Contact",
+        "skipToContent": "Skip to main content",
+        "openMenu": "Open menu",
+        "closeMenu": "Close menu"
+    },
+    "home": {
+        "hero": {
+            "greeting": "Hi, I'm",
+            "name": "Buğra",
+            "title": "Full-Stack Developer",
+            "description": "I develop creative and performant solutions using modern web technologies.",
+            "cta": {
+                "primary": "View My Projects",
+                "secondary": "Get in Touch"
+            }
+        },
+        "featuredProjects": {
+            "title": "Featured Projects",
+            "subtitle": "Projects I've been working on recently",
+            "viewAll": "All Projects"
+        },
+        "featuredPosts": {
+            "title": "Latest Blog Posts",
+            "subtitle": "My thoughts on software development, technology, and more",
+            "viewAll": "All Posts"
+        },
+        "skills": {
+            "title": "Skills",
+            "subtitle": "Technologies and tools I specialize in"
+        }
+    },
+    "blog": {
+        "title": "Blog",
+        "subtitle": "Articles about software development, technology trends, and personal experiences",
+        "categories": "Categories",
+        "allCategories": "All",
+        "publishedAt": "Published on",
+        "author": "Author",
+        "readTime": "{minutes} min read",
+        "share": "Share",
+        "tableOfContents": "Table of Contents",
+        "comments": {
+            "title": "Comments",
+            "placeholder": "Write your comment...",
+            "submit": "Submit",
+            "login": "Login to comment",
+            "empty": "No comments yet. Be the first to comment!"
+        },
+        "relatedPosts": "Related Posts"
+    },
+    "projects": {
+        "title": "Projects",
+        "subtitle": "Projects and works I've developed",
+        "technologies": "Technologies",
+        "viewProject": "View Project",
+        "viewCode": "View Code",
+        "liveDemo": "Live Demo",
+        "github": "GitHub",
+        "details": "Details"
+    },
+    "about": {
+        "title": "About Me",
+        "subtitle": "Who am I, what do I do?",
+        "bio": "Bio",
+        "experience": "Experience",
+        "education": "Education",
+        "skills": "Skills",
+        "interests": "Interests",
+        "downloadCV": "Download CV"
+    },
+    "contact": {
+        "title": "Contact",
+        "subtitle": "Get in touch with me",
+        "form": {
+            "name": "Your Name",
+            "namePlaceholder": "Enter your name",
+            "email": "Email",
+            "emailPlaceholder": "example@email.com",
+            "subject": "Subject",
+            "subjectPlaceholder": "Subject of your message",
+            "message": "Message",
+            "messagePlaceholder": "Write your message here...",
+            "submit": "Send",
+            "sending": "Sending...",
+            "success": "Your message has been sent successfully!",
+            "error": "An error occurred while sending your message.",
+            "validation": {
+                "nameRequired": "Name is required",
+                "emailRequired": "Email is required",
+                "emailInvalid": "Enter a valid email address",
+                "subjectRequired": "Subject is required",
+                "messageRequired": "Message is required",
+                "messageTooShort": "Message must be at least 10 characters"
+            }
+        },
+        "info": {
+            "title": "Contact Information",
+            "email": "Email",
+            "location": "Location",
+            "social": "Social Media"
+        }
+    },
+    "offline": {
+        "title": "You're Offline",
+        "description": "Your internet connection appears to be down. Please check your connection and try again.",
+        "refresh": "Refresh Page"
+    },
+    "notFound": {
+        "title": "Page Not Found",
+        "description": "The page you're looking for doesn't exist or may have been moved.",
+        "backHome": "Back to Home"
+    },
+    "footer": {
+        "copyright": "© {year} {name}. All rights reserved.",
+        "builtWith": "Built with {framework}",
+        "privacyPolicy": "Privacy Policy",
+        "termsOfService": "Terms of Service"
+    },
+    "theme": {
+        "toggle": "Toggle theme",
+        "light": "Light theme",
+        "dark": "Dark theme",
+        "system": "System theme"
+    },
+    "language": {
+        "toggle": "Change language",
+        "tr": "Türkçe",
+        "en": "English",
+        "current": "English"
+    },
+    "pwa": {
+        "installPrompt": "Install App",
+        "installDescription": "Add this site to your home screen for faster access.",
+        "installButton": "Install",
+        "dismissButton": "Maybe Later",
+        "updateAvailable": "Update available",
+        "updateButton": "Update"
+    }
+}

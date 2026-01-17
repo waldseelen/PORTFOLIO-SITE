@@ -1,43 +1,50 @@
-# Node.js
-node_modules/
-.next/
-out/
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Environment
-.env
+# Local env files
+.env*.local
 .env.local
-.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Logs
-*.log
-
-# IDE
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Build artifacts
-dist/
-build/
-
-# Test artifacts
-test-results/
-test-artifacts/
-playwright-report/
-.lighthouseci/
-coverage/
+# Vercel
+.vercel
 
 # TypeScript
 *.tsbuildinfo
+next-env.d.ts
 
-# Sanity
-.sanity/
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
 
-# PWA
+# Serwist
+public/sw.js
 public/sw.js.map
+public/workbox-*.js
+public/workbox-*.js.map

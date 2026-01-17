@@ -1,0 +1,159 @@
+{
+    "common": {
+        "siteName": "Portfolio",
+        "loading": "Yükleniyor...",
+        "error": "Bir hata oluştu",
+        "retry": "Tekrar Dene",
+        "backToHome": "Ana Sayfaya Dön",
+        "readMore": "Devamını Oku",
+        "viewAll": "Tümünü Gör",
+        "search": "Ara",
+        "searchPlaceholder": "Blog yazıları ve projeler arasında ara...",
+        "noResults": "Sonuç bulunamadı",
+        "close": "Kapat",
+        "or": "veya"
+    },
+    "navigation": {
+        "home": "Ana Sayfa",
+        "blog": "Blog",
+        "projects": "Projeler",
+        "about": "Hakkımda",
+        "contact": "İletişim",
+        "skipToContent": "Ana içeriğe geç",
+        "openMenu": "Menüyü aç",
+        "closeMenu": "Menüyü kapat"
+    },
+    "home": {
+        "hero": {
+            "greeting": "Merhaba, Ben",
+            "name": "Buğra",
+            "title": "Full-Stack Developer",
+            "description": "Modern web teknolojileri ile yaratıcı ve performanslı çözümler geliştiriyorum.",
+            "cta": {
+                "primary": "Projelerimi Gör",
+                "secondary": "İletişime Geç"
+            }
+        },
+        "featuredProjects": {
+            "title": "Öne Çıkan Projeler",
+            "subtitle": "Son dönemde üzerinde çalıştığım projeler",
+            "viewAll": "Tüm Projeler"
+        },
+        "featuredPosts": {
+            "title": "Son Blog Yazıları",
+            "subtitle": "Yazılım geliştirme, teknoloji ve daha fazlası hakkında düşüncelerim",
+            "viewAll": "Tüm Yazılar"
+        },
+        "skills": {
+            "title": "Yetenekler",
+            "subtitle": "Uzmanlaştığım teknolojiler ve araçlar"
+        }
+    },
+    "blog": {
+        "title": "Blog",
+        "subtitle": "Yazılım geliştirme, teknoloji trendleri ve kişisel deneyimlerim hakkında yazılar",
+        "categories": "Kategoriler",
+        "allCategories": "Tümü",
+        "publishedAt": "Yayınlanma Tarihi",
+        "author": "Yazar",
+        "readTime": "{minutes} dk okuma",
+        "share": "Paylaş",
+        "tableOfContents": "İçindekiler",
+        "comments": {
+            "title": "Yorumlar",
+            "placeholder": "Yorumunuzu yazın...",
+            "submit": "Gönder",
+            "login": "Yorum yapmak için giriş yapın",
+            "empty": "Henüz yorum yapılmamış. İlk yorumu siz yapın!"
+        },
+        "relatedPosts": "İlgili Yazılar"
+    },
+    "projects": {
+        "title": "Projeler",
+        "subtitle": "Geliştirdiğim projeler ve çalışmalar",
+        "technologies": "Teknolojiler",
+        "viewProject": "Projeyi Gör",
+        "viewCode": "Kodu Gör",
+        "liveDemo": "Canlı Demo",
+        "github": "GitHub",
+        "details": "Detaylar"
+    },
+    "about": {
+        "title": "Hakkımda",
+        "subtitle": "Ben kimim, ne yapıyorum?",
+        "bio": "Kısa Biyografi",
+        "experience": "Deneyim",
+        "education": "Eğitim",
+        "skills": "Yetenekler",
+        "interests": "İlgi Alanları",
+        "downloadCV": "CV İndir"
+    },
+    "contact": {
+        "title": "İletişim",
+        "subtitle": "Benimle iletişime geçin",
+        "form": {
+            "name": "Adınız",
+            "namePlaceholder": "Adınızı girin",
+            "email": "E-posta",
+            "emailPlaceholder": "ornek@email.com",
+            "subject": "Konu",
+            "subjectPlaceholder": "Mesajınızın konusu",
+            "message": "Mesaj",
+            "messagePlaceholder": "Mesajınızı buraya yazın...",
+            "submit": "Gönder",
+            "sending": "Gönderiliyor...",
+            "success": "Mesajınız başarıyla gönderildi!",
+            "error": "Mesaj gönderilirken bir hata oluştu.",
+            "validation": {
+                "nameRequired": "Ad alanı zorunludur",
+                "emailRequired": "E-posta alanı zorunludur",
+                "emailInvalid": "Geçerli bir e-posta adresi girin",
+                "subjectRequired": "Konu alanı zorunludur",
+                "messageRequired": "Mesaj alanı zorunludur",
+                "messageTooShort": "Mesaj en az 10 karakter olmalıdır"
+            }
+        },
+        "info": {
+            "title": "İletişim Bilgileri",
+            "email": "E-posta",
+            "location": "Konum",
+            "social": "Sosyal Medya"
+        }
+    },
+    "offline": {
+        "title": "Çevrimdışısınız",
+        "description": "İnternet bağlantınız görünmüyor. Lütfen bağlantınızı kontrol edin ve tekrar deneyin.",
+        "refresh": "Sayfayı Yenile"
+    },
+    "notFound": {
+        "title": "Sayfa Bulunamadı",
+        "description": "Aradığınız sayfa mevcut değil veya taşınmış olabilir.",
+        "backHome": "Ana Sayfaya Dön"
+    },
+    "footer": {
+        "copyright": "© {year} {name}. Tüm hakları saklıdır.",
+        "builtWith": "{framework} ile geliştirildi",
+        "privacyPolicy": "Gizlilik Politikası",
+        "termsOfService": "Kullanım Koşulları"
+    },
+    "theme": {
+        "toggle": "Tema değiştir",
+        "light": "Açık tema",
+        "dark": "Koyu tema",
+        "system": "Sistem teması"
+    },
+    "language": {
+        "toggle": "Dil değiştir",
+        "tr": "Türkçe",
+        "en": "English",
+        "current": "Türkçe"
+    },
+    "pwa": {
+        "installPrompt": "Uygulamayı yükle",
+        "installDescription": "Bu siteyi ana ekranınıza ekleyerek daha hızlı erişebilirsiniz.",
+        "installButton": "Yükle",
+        "dismissButton": "Daha sonra",
+        "updateAvailable": "Yeni güncelleme mevcut",
+        "updateButton": "Güncelle"
+    }
+}
