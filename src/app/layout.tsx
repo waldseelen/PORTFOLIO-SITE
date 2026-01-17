@@ -9,20 +9,22 @@ import '@/styles/globals.css';
 import type { Metadata, Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+// import { Inter, JetBrains_Mono } from 'next/font/google';
 
-// Font configurations
-const inter = Inter({
-    subsets: ['latin', 'latin-ext'],
-    display: 'swap',
-    variable: '--font-inter',
-});
+// Font configurations - temporarily using system fonts due to Google Fonts connection issues
+// const inter = Inter({
+//     subsets: ['latin', 'latin-ext'],
+//     display: 'swap',
+//     variable: '--font-inter',
+//     fallback: ['system-ui', 'arial'],
+// });
 
-const jetbrainsMono = JetBrains_Mono({
-    subsets: ['latin'],
-    display: 'swap',
-    variable: '--font-jetbrains-mono',
-});
+// const jetbrainsMono = JetBrains_Mono({
+//     subsets: ['latin'],
+//     display: 'swap',
+//     variable: '--font-jetbrains-mono',
+//     fallback: ['monospace'],
+// });
 
 // Metadata configuration
 export const metadata: Metadata = {
@@ -101,13 +103,13 @@ export default async function RootLayout({
     const messages = await getMessages();
 
     return (
-        <html lang={locale} className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
-            <body className="flex min-h-screen flex-col font-sans antialiased">
+        <html lang={locale} className="font-sans" suppressHydrationWarning>
+            <body className="flex min-h-screen flex-col font-sans antialiased">{/*className={`${inter.variable} ${jetbrainsMono.variable}`}*/}
                 <NextIntlClientProvider messages={messages}>
                     <Providers>
                         {/* Analytics */}
                         <GoogleAnalytics />
-                        <VercelAnalytics />
+                        <VercelAnalytics />{' '}
 
                         {/* Skip to main content link for accessibility */}
                         <a href="#main-content" className="skip-link">

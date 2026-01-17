@@ -101,3 +101,19 @@ Bu doküment, tamamlanmamış görevleri ve eksik özellikleri listeler.
 - [ ] Component documentation (Storybook)
 
 ---
+# Sanity Project ID
+NEXT_PUBLIC_SANITY_PROJECT_ID=dm8h1ap8
+
+# Sanity Dataset
+NEXT_PUBLIC_SANITY_DATASET=production
+
+# Sanity Write Token (Editor - NextJS Write)
+SANITY_API_WRITE_TOKEN=[skzQiKKhMnSyPgColIPiw2ZUtfw4ADIPEyQuoWIfSOxfWQ6BduX2B9PyaicDlfowouzyV6XMxxv0KUhBjDtWWOnhvEVFFKZsyPge4JFz2kTJYLlQpzINkmGM0QT4YNzuNfqzBe5sio86HqrfopqJwMVJgMFVPKQkmvSGzng00h5sW29C0wGN]
+
+# Sanity Read Token (Viewer - NextJS Read) - Opsiyonel
+SANITY_API_READ_TOKEN=[sk1tU7qJ02st5VdPP5f2cf4ltyNIHFjVoJd6CPAbCKrdNoSQlZAyqW6Xe2AaWTcP0lPlppSIHV4T0QwRApbtXt74Vpt4d7jXyJfWJ0OobJeCmZieLhYzYYspIQrIj2XIzc39nt4fbM8lz54yil4tp1vg4fPVG28mtO02pCoAZOSSwm3rtaXw]
+
+
+
+
+

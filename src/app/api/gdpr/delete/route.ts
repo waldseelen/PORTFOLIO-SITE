@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
         // 2. Delete from any other data stores
         // 3. Log the deletion request for compliance
 
-        console.log('GDPR deletion requested for:', session.user.email);
+        console.error('GDPR deletion requested for:', session.user.email);
 
         return NextResponse.json({
             success: true,

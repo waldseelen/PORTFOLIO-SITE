@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
         // });
 
         // For now, just log it
-        console.log('Search analytics:', {
+        console.error('Search analytics:', {
             query,
             resultsCount,
             clickedResult,

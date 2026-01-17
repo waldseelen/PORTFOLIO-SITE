@@ -3,13 +3,13 @@ import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
 // Initialize Sanity Client with Write Token
-const client = createClient({
+const client = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ? createClient({
     projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
     dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
     apiVersion: '2024-01-01',
     token: process.env.SANITY_API_WRITE_TOKEN,
     useCdn: false, // We need fresh data for writes
-});
+}) : null;
 
 // Initialize Resend
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
         }
 
         // 4. Save to Sanity
-        if (process.env.SANITY_API_WRITE_TOKEN) {
+        if (client && process.env.SANITY_API_WRITE_TOKEN) {
             await client.create({
                 _type: 'contactMessage',
                 name,
