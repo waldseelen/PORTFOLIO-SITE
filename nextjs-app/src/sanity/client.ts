@@ -6,8 +6,11 @@ import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
 
-// Only create client if projectId is configured
-const isSanityConfigured = !!projectId;
+// Validate projectId format (a-z, 0-9, and dashes only)
+const isValidProjectId = projectId ? /^[a-z0-9-]+$/.test(projectId) : false;
+
+// Only create client if projectId is configured and valid
+const isSanityConfigured = isValidProjectId;
 
 // Sanity client configuration
 export const client: SanityClient | null = isSanityConfigured

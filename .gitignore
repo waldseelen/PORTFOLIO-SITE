@@ -1,17 +1,7 @@
-# Python/Django
-__pycache__/
-*.pyc
-.venv/
-venv/
-*.egg-info/
-db.sqlite3
-db.sqlite3.backup
-staticfiles/
-media/
-
 # Node.js
 node_modules/
 .next/
+out/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -22,52 +12,32 @@ yarn-error.log*
 .env.*.local
 
 # Logs
-logs/
 *.log
 
 # IDE
 .vscode/
 .idea/
 
-# Caches
-.pytest_cache/
-.ruff_cache/
-
 # OS
 .DS_Store
 Thumbs.db
 
-# Backup and deprecated files (don't commit these)
-*.bak
-*_backup.py
-*_deprecated.py
-*.orig
-*.backup
-
 # Build artifacts
 dist/
 build/
-*.egg-info/
 
 # Test artifacts
 test-results/
 test-artifacts/
 playwright-report/
-.coverage
-coverage.xml
-htmlcov/
-.pytest_cache/
+.lighthouseci/
+coverage/
 
-# IDE and editor
-.vscode/settings.json
-.vscode/launch.json
-*.swp
-*.swo
-*~
+# TypeScript
+*.tsbuildinfo
 
-# Local environment
-.env.local
-.env.*.local
+# Sanity
+.sanity/
 
-# Performance reports (generated)
-reports/*.json
+# PWA
+public/sw.js.map

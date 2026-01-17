@@ -58,16 +58,7 @@ const nextConfig: NextConfig = {
         ];
     },
 
-    // Rewrites for Django API proxy (development)
-    async rewrites() {
-        const djangoApiUrl = process.env.DJANGO_API_URL || 'http://localhost:8000';
-        return [
-            {
-                source: '/api/django/:path*',
-                destination: `${djangoApiUrl}/api/:path*`,
-            },
-        ];
-    },
+
 };
 
 export default withSerwist(nextConfig);

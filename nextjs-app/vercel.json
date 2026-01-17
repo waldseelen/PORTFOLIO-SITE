@@ -70,10 +70,5 @@
             ]
         }
     ],
-    "rewrites": [
-        {
-            "source": "/api/django/:path*",
-            "destination": "https://api.bugragormus.com/:path*"
-        }
-    ]
+    "rewrites": []
 }

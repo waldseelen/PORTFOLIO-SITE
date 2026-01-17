@@ -2,6 +2,7 @@ import { GoogleAnalytics, VercelAnalytics } from '@/components/analytics';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { siteConfig } from '@/lib/constants';
+import { Providers } from '@/providers/ThemeProvider';
 import '@/styles/globals.css';
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
@@ -95,25 +96,27 @@ export default function RootLayout({
     return (
         <html lang="tr" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
             <body className="flex min-h-screen flex-col font-sans antialiased">
-                {/* Analytics */}
-                <GoogleAnalytics />
-                <VercelAnalytics />
+                <Providers>
+                    {/* Analytics */}
+                    <GoogleAnalytics />
+                    <VercelAnalytics />
 
-                {/* Skip to main content link for accessibility */}
-                <a href="#main-content" className="skip-link">
-                    Ana içeriğe geç
-                </a>
+                    {/* Skip to main content link for accessibility */}
+                    <a href="#main-content" className="skip-link">
+                        Ana içeriğe geç
+                    </a>
 
-                {/* Header */}
-                <Header />
+                    {/* Header */}
+                    <Header />
 
-                {/* Main content */}
-                <main id="main-content" className="flex-1">
-                    {children}
-                </main>
+                    {/* Main content */}
+                    <main id="main-content" className="flex-1">
+                        {children}
+                    </main>
 
-                {/* Footer */}
-                <Footer />
+                    {/* Footer */}
+                    <Footer />
+                </Providers>
             </body>
         </html>
     );

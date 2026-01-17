@@ -1,170 +1,86 @@
-# Makefile for Django Portfolio Project
-# Automates code quality, testing, and development tasks
+# Makefile for Next.js Portfolio Project
+# Automates development, testing, and deployment tasks
 
-.PHONY: help install format lint test clean build deploy
+.PHONY: help install dev build start lint test clean type-check sanity
 
 # Default target
 help:
 	@echo "Available commands:"
-	@echo "  install        Install dependencies and setup development environment"
-	@echo "  format         Format code with Black and isort"
-	@echo "  lint           Run linting with flake8 and mypy"
-	@echo "  test           Run tests with pytest"
-	@echo "  test-ui        Run UI/UX specific tests"
-	@echo "  test-coverage  Run tests with coverage report"
-	@echo "  clean          Clean temporary files and caches"
-	@echo "  build          Build CSS and collect static files"
-	@echo "  pre-commit     Setup and run pre-commit hooks"
-	@echo "  security       Run security checks"
-	@echo "  check-all      Run all quality checks (format, lint, test, security)"
+	@echo "  install        Install dependencies for all workspaces"
+	@echo "  dev            Start Next.js development server"
+	@echo "  build          Build Next.js for production"
+	@echo "  start          Start production server"
+	@echo "  lint           Run ESLint"
+	@echo "  type-check     Run TypeScript type checking"
+	@echo "  test           Run Playwright tests"
+	@echo "  clean          Clean build artifacts and caches"
+	@echo "  sanity-dev     Start Sanity Studio development server"
 
 # Development setup
 install:
-	pip install -r requirements.txt
 	npm install
-	python manage.py migrate
-	pre-commit install
-	@echo "Development environment setup complete"
+	cd nextjs-app && npm install
+	cd portfolio && npm install
+	@echo "✅ Dependencies installed"
 
-# Code formatting
-format:
-	@echo "🎨 Formatting code with Black..."
-	black . --exclude="migrations|staticfiles|node_modules"
-	@echo "📦 Sorting imports with isort..."
-	isort . --skip migrations --skip staticfiles --skip node_modules
-	@echo "Code formatting complete"
+# Development server
+dev:
+	cd nextjs-app && npm run dev
+
+# Production build
+build:
+	cd nextjs-app && npm run build
+
+# Start production server
+start:
+	cd nextjs-app && npm run start
 
 # Linting
 lint:
-	@echo "🔍 Running flake8..."
-	flake8 --exclude=migrations,staticfiles,node_modules .
-	@echo "🔍 Running mypy..."
-	mypy . --exclude migrations --exclude staticfiles --exclude node_modules
-	@echo "Linting complete"
+	cd nextjs-app && npm run lint
+
+# Type checking
+type-check:
+	cd nextjs-app && npm run type-check
 
 # Testing
 test:
-	@echo "🧪 Running tests..."
-	pytest -v
-	@echo "Tests complete"
+	cd nextjs-app && npm run test
 
 test-ui:
-	@echo "🎨 Running UI/UX tests..."
-	pytest -v -m "ui or visual or theme or animation or responsive or accessibility"
-	@echo "UI/UX tests complete"
+	cd nextjs-app && npm run test:ui
 
-test-coverage:
-	@echo "📊 Running tests with coverage..."
-	pytest --cov=apps --cov-report=html --cov-report=term-missing
-	@echo "Coverage report generated in htmlcov/"
+test-headed:
+	cd nextjs-app && npm run test:headed
 
-test-integration:
-	@echo "🔗 Running integration tests..."
-	pytest -v -m "integration"
-	@echo "Integration tests complete"
+# Lighthouse
+lighthouse:
+	cd nextjs-app && npm run lighthouse
 
-test-visual:
-	@echo "👁️ Running visual regression tests..."
-	pytest -v -m "visual" --tb=short
-	@echo "Visual regression tests complete"
-
-# Security checks
-security:
-	@echo "🔒 Running security checks with bandit..."
-	bandit -r . -x tests,migrations,staticfiles,node_modules
-	@echo "Security checks complete"
-
-# Pre-commit
-pre-commit:
-	@echo "🔧 Setting up pre-commit hooks..."
-	pre-commit install
-	@echo "🔧 Running pre-commit on all files..."
-	pre-commit run --all-files
-	@echo "Pre-commit setup complete"
-
-# Build
-build:
-	@echo "🏗️ Building CSS..."
-	npm run build:css
-	@echo "📦 Collecting static files..."
-	python manage.py collectstatic --noinput
-	@echo "Build complete"
-
-build-production:
-	@echo "🏭 Building for production..."
-	npm run build:all
-	python manage.py collectstatic --noinput --clear
-	@echo "Production build complete"
+# Sanity Studio
+sanity-dev:
+	cd portfolio && npm run dev
 
 # Cleanup
 clean:
-	@echo "🧹 Cleaning temporary files..."
-	find . -type f -name "*.pyc" -delete
-	find . -type d -name "__pycache__" -delete
-	find . -type f -name "*.pyo" -delete
-	find . -type f -name ".coverage" -delete
-	find . -type d -name "htmlcov" -exec rm -rf {} +
-	find . -type d -name ".pytest_cache" -exec rm -rf {} +
-	find . -type d -name ".mypy_cache" -exec rm -rf {} +
-	@echo "Cleanup complete"
+	@echo "🧹 Cleaning build artifacts..."
+	cd nextjs-app && rm -rf .next out node_modules/.cache
+	@echo "✅ Cleanup complete"
 
-# Django management
-migrate:
-	@echo "🗃️ Running migrations..."
-	python manage.py migrate
-	@echo "Migrations complete"
+clean-all:
+	@echo "🧹 Cleaning all artifacts and node_modules..."
+	rm -rf node_modules
+	cd nextjs-app && rm -rf .next out node_modules
+	cd portfolio && rm -rf node_modules
+	@echo "✅ Full cleanup complete"
 
-makemigrations:
-	@echo "🗃️ Creating migrations..."
-	python manage.py makemigrations
-	@echo "Migrations created"
+# Quality checks
+check: lint type-check
+	@echo "✅ All quality checks passed!"
 
-runserver:
-	@echo "🚀 Starting development server..."
-	python manage.py runserver
+# Format code
+format:
+	cd nextjs-app && npm run format
 
-shell:
-	@echo "🐚 Opening Django shell..."
-	python manage.py shell
-
-# Complete quality check
-check-all: format lint test security
-	@echo "All quality checks passed!"
-
-# UI/UX specific quality checks
-check-ui: format lint test-ui
-	@echo "🎨 UI/UX quality checks complete!"
-
-# Quick development check
-check-quick: format lint
-	@echo "⚡ Quick quality checks complete!"
-
-# Documentation
-docs:
-	@echo "📚 Generating documentation..."
-	@echo "UI Kit available at: /ui-kit/"
-	@echo "Test coverage report: htmlcov/index.html"
-	@echo "Documentation links provided"
-
-# Development helpers
-reset-db:
-	@echo "⚠️ Resetting database..."
-	rm -f db.sqlite3
-	python manage.py migrate
-	@echo "Database reset complete"
-
-create-superuser:
-	@echo "👤 Creating superuser..."
-	python manage.py createsuperuser
-
-# Performance testing
-test-performance:
-	@echo "⚡ Running performance tests..."
-	pytest -v -m "performance"
-	@echo "Performance tests complete"
-
-# Accessibility testing
-test-accessibility:
-	@echo "♿ Running accessibility tests..."
-	pytest -v -m "accessibility"
-	@echo "Accessibility tests complete"
+format-check:
+	cd nextjs-app && npm run format:check

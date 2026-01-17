@@ -1,5 +1,6 @@
 'use client';
 
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { navItems, siteConfig } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
@@ -59,21 +60,7 @@ export function Header() {
 
                     {/* Desktop Actions */}
                     <div className="hidden items-center gap-4 md:flex">
-                        {/* Theme Toggle (placeholder) */}
-                        <button
-                            type="button"
-                            className="rounded-lg p-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800"
-                            aria-label="Tema değiştir"
-                        >
-                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                                />
-                            </svg>
-                        </button>
+                        <ThemeToggle />
                     </div>
 
                     {/* Mobile Menu Button */}
