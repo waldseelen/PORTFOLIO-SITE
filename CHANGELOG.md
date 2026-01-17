@@ -1,54 +1,18 @@
-# Changelog
+# 1.0.0 (2026-01-17)
 
-All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+### Bug Fixes
 
-## [1.0.0] - 2026-01-18
+* stabilize studio route and lock node version ([f181038](https://github.com/waldseelen/Personal/commit/f181038913f13d97691ccee4a00487a973432778))
+* Vercel deploy hatalarını düzelt - Sanity client ve console.log uyarıları ([dd0b05e](https://github.com/waldseelen/Personal/commit/dd0b05ee058d09cbb9ce7260362a2ccd270921d7))
+* vercel.json - env alanını kaldır ([3695ced](https://github.com/waldseelen/Personal/commit/3695cede9ad7a9e95b2641b073418d8ccaf8def6))
+* vercel.json - routes ve headers çakışmasını kaldır ([e133587](https://github.com/waldseelen/Personal/commit/e133587d51625dd0a193822c226871e180d2b6f0))
 
-### Added
-- 🚀 Initial release of Portfolio website
-- 📝 Blog system with Sanity CMS integration
-- 📁 Projects showcase with filtering
-- 📧 Contact form with email notifications (Resend)
-- 🌐 Multi-language support (Turkish/English) with next-intl
-- 🌙 Dark/Light theme toggle
-- 📱 Progressive Web App (PWA) support
-- 🔔 Browser notifications system
-- 📲 Push notifications for new content
-- 💬 Blog comment system with moderation
-- 🔍 Site-wide search functionality
-- 📊 Analytics integration (Vercel Analytics)
-- ♿ Accessibility optimized (WCAG 2.1)
-- 🔒 Security headers and spam protection
-- ⚡ Performance optimized (Lighthouse 90+)
 
-### Technical Features
-- Next.js 15 with App Router
-- TypeScript 5.7 strict mode
-- Tailwind CSS 3.4 with typography plugin
-- Framer Motion animations
-- Sanity CMS v3 for content management
-- Serwist for service worker management
-- Playwright for E2E testing
-- GitHub Actions CI/CD pipeline
-- Lighthouse CI for performance monitoring
-- Conventional Commits with auto-changelog
+### Features
 
-### Security
-- Rate limiting on API endpoints
-- Honeypot spam protection
-- CSRF protection
-- XSS prevention headers
-- Content Security Policy
+* add push notifications, blog comments, and comment moderation system ([59485cb](https://github.com/waldseelen/Personal/commit/59485cbc31c6f030e7c71a4a5a4f356528af1eef))
+* **setup:** Install dependencies and create environment configuration ([c198f61](https://github.com/waldseelen/Personal/commit/c198f61425a701d18f30364a2f47b476f2a34192))
 
----
 
-## [Unreleased]
 
-### Planned
-- Visual regression testing (Chromatic/Percy)
-- Component documentation (Storybook)
-- Automated backup strategy
-- Advanced analytics dashboard
