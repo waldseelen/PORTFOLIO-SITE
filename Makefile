@@ -24,7 +24,7 @@ install:
 	npm install
 	python manage.py migrate
 	pre-commit install
-	@echo "✅ Development environment setup complete"
+	@echo "Development environment setup complete"
 
 # Code formatting
 format:
@@ -32,7 +32,7 @@ format:
 	black . --exclude="migrations|staticfiles|node_modules"
 	@echo "📦 Sorting imports with isort..."
 	isort . --skip migrations --skip staticfiles --skip node_modules
-	@echo "✅ Code formatting complete"
+	@echo "Code formatting complete"
 
 # Linting
 lint:
@@ -40,39 +40,39 @@ lint:
 	flake8 --exclude=migrations,staticfiles,node_modules .
 	@echo "🔍 Running mypy..."
 	mypy . --exclude migrations --exclude staticfiles --exclude node_modules
-	@echo "✅ Linting complete"
+	@echo "Linting complete"
 
 # Testing
 test:
 	@echo "🧪 Running tests..."
 	pytest -v
-	@echo "✅ Tests complete"
+	@echo "Tests complete"
 
 test-ui:
 	@echo "🎨 Running UI/UX tests..."
 	pytest -v -m "ui or visual or theme or animation or responsive or accessibility"
-	@echo "✅ UI/UX tests complete"
+	@echo "UI/UX tests complete"
 
 test-coverage:
 	@echo "📊 Running tests with coverage..."
 	pytest --cov=apps --cov-report=html --cov-report=term-missing
-	@echo "✅ Coverage report generated in htmlcov/"
+	@echo "Coverage report generated in htmlcov/"
 
 test-integration:
 	@echo "🔗 Running integration tests..."
 	pytest -v -m "integration"
-	@echo "✅ Integration tests complete"
+	@echo "Integration tests complete"
 
 test-visual:
 	@echo "👁️ Running visual regression tests..."
 	pytest -v -m "visual" --tb=short
-	@echo "✅ Visual regression tests complete"
+	@echo "Visual regression tests complete"
 
 # Security checks
 security:
 	@echo "🔒 Running security checks with bandit..."
 	bandit -r . -x tests,migrations,staticfiles,node_modules
-	@echo "✅ Security checks complete"
+	@echo "Security checks complete"
 
 # Pre-commit
 pre-commit:
@@ -80,7 +80,7 @@ pre-commit:
 	pre-commit install
 	@echo "🔧 Running pre-commit on all files..."
 	pre-commit run --all-files
-	@echo "✅ Pre-commit setup complete"
+	@echo "Pre-commit setup complete"
 
 # Build
 build:
@@ -88,13 +88,13 @@ build:
 	npm run build:css
 	@echo "📦 Collecting static files..."
 	python manage.py collectstatic --noinput
-	@echo "✅ Build complete"
+	@echo "Build complete"
 
 build-production:
 	@echo "🏭 Building for production..."
 	npm run build:all
 	python manage.py collectstatic --noinput --clear
-	@echo "✅ Production build complete"
+	@echo "Production build complete"
 
 # Cleanup
 clean:
@@ -106,18 +106,18 @@ clean:
 	find . -type d -name "htmlcov" -exec rm -rf {} +
 	find . -type d -name ".pytest_cache" -exec rm -rf {} +
 	find . -type d -name ".mypy_cache" -exec rm -rf {} +
-	@echo "✅ Cleanup complete"
+	@echo "Cleanup complete"
 
 # Django management
 migrate:
 	@echo "🗃️ Running migrations..."
 	python manage.py migrate
-	@echo "✅ Migrations complete"
+	@echo "Migrations complete"
 
 makemigrations:
 	@echo "🗃️ Creating migrations..."
 	python manage.py makemigrations
-	@echo "✅ Migrations created"
+	@echo "Migrations created"
 
 runserver:
 	@echo "🚀 Starting development server..."
@@ -129,7 +129,7 @@ shell:
 
 # Complete quality check
 check-all: format lint test security
-	@echo "✅ All quality checks passed!"
+	@echo "All quality checks passed!"
 
 # UI/UX specific quality checks
 check-ui: format lint test-ui
@@ -144,14 +144,14 @@ docs:
 	@echo "📚 Generating documentation..."
 	@echo "UI Kit available at: /ui-kit/"
 	@echo "Test coverage report: htmlcov/index.html"
-	@echo "✅ Documentation links provided"
+	@echo "Documentation links provided"
 
 # Development helpers
 reset-db:
 	@echo "⚠️ Resetting database..."
 	rm -f db.sqlite3
 	python manage.py migrate
-	@echo "✅ Database reset complete"
+	@echo "Database reset complete"
 
 create-superuser:
 	@echo "👤 Creating superuser..."
@@ -161,10 +161,10 @@ create-superuser:
 test-performance:
 	@echo "⚡ Running performance tests..."
 	pytest -v -m "performance"
-	@echo "✅ Performance tests complete"
+	@echo "Performance tests complete"
 
 # Accessibility testing
 test-accessibility:
 	@echo "♿ Running accessibility tests..."
 	pytest -v -m "accessibility"
-	@echo "✅ Accessibility tests complete"
+	@echo "Accessibility tests complete"

@@ -14,6 +14,9 @@
         "lint": "eslint . --ext js --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview --host 0.0.0.0 --port 8080",
         "start": "vite preview --host 0.0.0.0 --port 8080",
+        "test": "playwright test",
+        "test:ui": "playwright test --ui",
+        "test:headed": "playwright test --headed",
         "lighthouse": "lhci autorun",
         "test:a11y": "axe http://localhost:8000 --rules wcag2a,wcag2aa"
     },

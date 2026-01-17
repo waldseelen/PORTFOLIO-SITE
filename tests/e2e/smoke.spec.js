@@ -6,7 +6,7 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Smoke Tests @smoke', () => {
-    const BASE_URL = process.env.BASE_URL || 'http://127.0.0.1:8001';
+    const BASE_URL = process.env.BASE_URL || 'http://127.0.0.1:8000';
 
     test('Homepage loads successfully', async ({ page }) => {
         await page.goto(BASE_URL);
