@@ -1,14 +1,6 @@
 {
     "$schema": "https://opentelemetry.io/otelcol/receiver/hostmetrics",
     "version": 2,
-    "env": {
-        "NEXT_PUBLIC_SITE_URL": "@site_url",
-        "NEXT_PUBLIC_GA_ID": "@ga_id",
-        "NEXT_PUBLIC_SANITY_PROJECT_ID": "@sanity_project_id",
-        "NEXT_PUBLIC_SANITY_DATASET": "@sanity_dataset",
-        "SANITY_API_TOKEN": "@sanity_api_token",
-        "NEXT_PUBLIC_API_URL": "@api_url"
-    },
     "headers": [
         {
             "source": "/(.*)",
