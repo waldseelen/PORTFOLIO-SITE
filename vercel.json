@@ -1,7 +1,4 @@
 {
-    "$schema": "https://opentelemetry.io/otelcol/receiver/hostmetrics",
-    "version": 2,
-    "nodejs": "20.x",
     "headers": [
         {
             "source": "/(.*)",
