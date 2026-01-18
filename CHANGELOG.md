@@ -1,4 +1,4 @@
-# 1.0.0 (2026-01-17)
+# 1.0.0 (2026-01-18)
 
 
 ### Bug Fixes
@@ -12,6 +12,7 @@
 
 ### Features
 
+* add geoIP-based automatic language detection with manual toggle support ([0b0426e](https://github.com/waldseelen/Personal/commit/0b0426ef8bf82017604806cd54b96fc18b5c8c3d))
 * add push notifications, blog comments, and comment moderation system ([59485cb](https://github.com/waldseelen/Personal/commit/59485cbc31c6f030e7c71a4a5a4f356528af1eef))
 * **setup:** Install dependencies and create environment configuration ([c198f61](https://github.com/waldseelen/Personal/commit/c198f61425a701d18f30364a2f47b476f2a34192))
 
