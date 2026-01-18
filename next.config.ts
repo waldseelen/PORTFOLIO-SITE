@@ -45,7 +45,16 @@ const nextConfig: NextConfig = {
     // Experimental features for better performance
     experimental: {
         // Optimize package imports
-        optimizePackageImports: ['framer-motion', '@sanity/client', 'next-intl'],
+        optimizePackageImports: [
+            'framer-motion',
+            '@sanity/client',
+            'next-intl',
+            'sanity',
+            'next-sanity',
+            'react-icons',
+            '@sanity/vision',
+            '@portabletext/react'
+        ],
     },
 
     // Headers for security and caching

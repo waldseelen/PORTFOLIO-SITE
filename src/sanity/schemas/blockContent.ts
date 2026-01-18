@@ -1,40 +1,40 @@
 import { defineArrayMember, defineType } from 'sanity';
 
 /**
- * Block Content schema for rich text editing
- * Used for blog posts, project descriptions, and page content
+ * Medium-style Block Content Schema
+ * Rich text editing with advanced features
  */
 export const blockContent = defineType({
     title: 'Block Content',
     name: 'blockContent',
     type: 'array',
     of: [
+        // === TEXT BLOCKS ===
         defineArrayMember({
             title: 'Block',
             type: 'block',
             styles: [
                 { title: 'Normal', value: 'normal' },
-                { title: 'H1', value: 'h1' },
-                { title: 'H2', value: 'h2' },
-                { title: 'H3', value: 'h3' },
-                { title: 'H4', value: 'h4' },
-                { title: 'Quote', value: 'blockquote' },
+                { title: 'Başlık 2', value: 'h2' },
+                { title: 'Başlık 3', value: 'h3' },
+                { title: 'Başlık 4', value: 'h4' },
+                { title: 'Alıntı', value: 'blockquote' },
             ],
             lists: [
-                { title: 'Bullet', value: 'bullet' },
-                { title: 'Numbered', value: 'number' },
+                { title: 'Madde', value: 'bullet' },
+                { title: 'Numara', value: 'number' },
             ],
             marks: {
                 decorators: [
-                    { title: 'Strong', value: 'strong' },
-                    { title: 'Emphasis', value: 'em' },
-                    { title: 'Underline', value: 'underline' },
-                    { title: 'Strike', value: 'strike-through' },
-                    { title: 'Code', value: 'code' },
+                    { title: 'Kalın', value: 'strong' },
+                    { title: 'İtalik', value: 'em' },
+                    { title: 'Altı Çizili', value: 'underline' },
+                    { title: 'Üzeri Çizili', value: 'strike-through' },
+                    { title: 'Kod', value: 'code' },
                 ],
                 annotations: [
                     {
-                        title: 'URL',
+                        title: 'Link',
                         name: 'link',
                         type: 'object',
                         fields: [
@@ -48,7 +48,7 @@ export const blockContent = defineType({
                                     }),
                             },
                             {
-                                title: 'Open in new tab',
+                                title: 'Yeni sekmede aç',
                                 name: 'blank',
                                 type: 'boolean',
                                 initialValue: true,
@@ -56,14 +56,14 @@ export const blockContent = defineType({
                         ],
                     },
                     {
-                        title: 'Internal Link',
+                        title: 'İç Link',
                         name: 'internalLink',
                         type: 'object',
                         fields: [
                             {
                                 name: 'reference',
                                 type: 'reference',
-                                title: 'Reference',
+                                title: 'Referans',
                                 to: [
                                     { type: 'post' },
                                     { type: 'project' },
@@ -75,6 +75,8 @@ export const blockContent = defineType({
                 ],
             },
         }),
+
+        // === IMAGES ===
         defineArrayMember({
             type: 'image',
             options: { hotspot: true },
@@ -82,24 +84,26 @@ export const blockContent = defineType({
                 {
                     name: 'alt',
                     type: 'string',
-                    title: 'Alternative Text',
-                    description: 'Important for SEO and accessibility',
+                    title: 'Alt Metin',
+                    description: 'SEO ve erişilebilirlik için önemli',
                 },
                 {
                     name: 'caption',
                     type: 'string',
-                    title: 'Caption',
+                    title: 'Açıklama',
                 },
             ],
         }),
+
+        // === CODE BLOCK ===
         defineArrayMember({
             type: 'object',
             name: 'codeBlock',
-            title: 'Code Block',
+            title: 'Kod Bloğu',
             fields: [
                 {
                     name: 'language',
-                    title: 'Language',
+                    title: 'Dil',
                     type: 'string',
                     options: {
                         list: [
@@ -111,21 +115,28 @@ export const blockContent = defineType({
                             { title: 'JSON', value: 'json' },
                             { title: 'Bash', value: 'bash' },
                             { title: 'SQL', value: 'sql' },
-                            { title: 'GraphQL', value: 'graphql' },
-                            { title: 'Markdown', value: 'markdown' },
+                            { title: 'React JSX', value: 'jsx' },
+                            { title: 'React TSX', value: 'tsx' },
                         ],
                     },
+                    initialValue: 'javascript',
                 },
                 {
                     name: 'filename',
-                    title: 'Filename',
+                    title: 'Dosya Adı',
                     type: 'string',
                 },
                 {
                     name: 'code',
-                    title: 'Code',
+                    title: 'Kod',
                     type: 'text',
-                    rows: 10,
+                    rows: 15,
+                },
+                {
+                    name: 'showLineNumbers',
+                    title: 'Satır Numaraları',
+                    type: 'boolean',
+                    initialValue: true,
                 },
             ],
             preview: {
@@ -135,21 +146,134 @@ export const blockContent = defineType({
                 },
                 prepare({ language, filename }) {
                     return {
-                        title: filename || 'Code Block',
-                        subtitle: language,
+                        title: filename || 'Kod Bloğu',
+                        subtitle: language?.toUpperCase(),
                     };
                 },
             },
         }),
+
+        // === PULL QUOTE (Medium-style) ===
+        defineArrayMember({
+            type: 'object',
+            name: 'pullQuote',
+            title: 'Öne Çıkan Alıntı',
+            fields: [
+                {
+                    name: 'quote',
+                    title: 'Alıntı',
+                    type: 'text',
+                    rows: 3,
+                    validation: (Rule) => Rule.required(),
+                },
+                {
+                    name: 'attribution',
+                    title: 'Kaynak',
+                    type: 'string',
+                },
+            ],
+            preview: {
+                select: { quote: 'quote' },
+                prepare({ quote }) {
+                    return {
+                        title: quote?.substring(0, 50) + '...',
+                        subtitle: 'Öne Çıkan Alıntı',
+                    };
+                },
+            },
+        }),
+
+        // === DIVIDER ===
+        defineArrayMember({
+            type: 'object',
+            name: 'divider',
+            title: 'Bölüm Ayırıcı',
+            fields: [
+                {
+                    name: 'style',
+                    title: 'Stil',
+                    type: 'string',
+                    options: {
+                        list: [
+                            { title: 'Üç Nokta (• • •)', value: 'dots' },
+                            { title: 'Çizgi (—)', value: 'line' },
+                            { title: 'Yıldızlar (* * *)', value: 'stars' },
+                        ],
+                    },
+                    initialValue: 'dots',
+                },
+            ],
+            preview: {
+                prepare() {
+                    return {
+                        title: '• • •',
+                        subtitle: 'Bölüm Ayırıcı',
+                    };
+                },
+            },
+        }),
+
+        // === CALLOUT / TIP BOX ===
+        defineArrayMember({
+            type: 'object',
+            name: 'callout',
+            title: 'Bilgi Kutusu',
+            fields: [
+                {
+                    name: 'type',
+                    title: 'Tür',
+                    type: 'string',
+                    options: {
+                        list: [
+                            { title: 'İpucu', value: 'tip' },
+                            { title: 'Bilgi', value: 'info' },
+                            { title: 'Uyarı', value: 'warning' },
+                            { title: 'Hata', value: 'error' },
+                            { title: 'Başarı', value: 'success' },
+                        ],
+                    },
+                    initialValue: 'info',
+                },
+                {
+                    name: 'title',
+                    title: 'Başlık',
+                    type: 'string',
+                },
+                {
+                    name: 'text',
+                    title: 'Metin',
+                    type: 'text',
+                    rows: 3,
+                    validation: (Rule) => Rule.required(),
+                },
+            ],
+            preview: {
+                select: { type: 'type', title: 'title', text: 'text' },
+                prepare({ type, title, text }) {
+                    return {
+                        title: title || `${type?.toUpperCase()} Bilgi Kutusu`,
+                        subtitle: text?.substring(0, 50),
+                    };
+                },
+            },
+        }),
+
+        // === YOUTUBE EMBED ===
         defineArrayMember({
             type: 'object',
             name: 'youtube',
-            title: 'YouTube Embed',
+            title: 'YouTube Video',
             fields: [
                 {
                     name: 'url',
                     title: 'YouTube URL',
                     type: 'url',
+                    validation: (Rule) => Rule.required(),
+                },
+                {
+                    name: 'caption',
+                    title: 'Açıklama',
+                    type: 'string',
                 },
             ],
             preview: {
@@ -162,42 +286,26 @@ export const blockContent = defineType({
                 },
             },
         }),
+
+        // === TWITTER/X EMBED ===
         defineArrayMember({
             type: 'object',
-            name: 'callout',
-            title: 'Callout',
+            name: 'tweet',
+            title: 'Tweet',
             fields: [
                 {
-                    name: 'type',
-                    title: 'Type',
-                    type: 'string',
-                    options: {
-                        list: [
-                            { title: 'Info', value: 'info' },
-                            { title: 'Warning', value: 'warning' },
-                            { title: 'Success', value: 'success' },
-                            { title: 'Error', value: 'error' },
-                            { title: 'Tip', value: 'tip' },
-                        ],
-                    },
-                    initialValue: 'info',
-                },
-                {
-                    name: 'text',
-                    title: 'Text',
-                    type: 'text',
-                    rows: 3,
+                    name: 'url',
+                    title: 'Tweet URL',
+                    type: 'url',
+                    validation: (Rule) => Rule.required(),
                 },
             ],
             preview: {
-                select: {
-                    type: 'type',
-                    text: 'text',
-                },
-                prepare({ type, text }) {
+                select: { url: 'url' },
+                prepare({ url }) {
                     return {
-                        title: `${type?.toUpperCase()} Callout`,
-                        subtitle: text,
+                        title: 'Tweet',
+                        subtitle: url,
                     };
                 },
             },
