@@ -110,6 +110,7 @@ const nextConfig: NextConfig = {
             },
         ];
     },
+    outputFileTracingRoot: __dirname,
 };
 
 // Chain the plugins

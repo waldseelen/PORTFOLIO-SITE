@@ -16,12 +16,12 @@
         "test:headed": "playwright test --headed",
         "lighthouse": "lhci autorun",
         "analyze": "ANALYZE=true next build",
-        "clean": "rm -rf .next out node_modules/.cache"
+        "clean": "rd /s /q .next 2>nul || exit 0 && rd /s /q out 2>nul || exit 0 && rd /s /q node_modules\\.cache 2>nul || exit 0"
     },
     "dependencies": {
         "@giscus/react": "^3.1.0",
         "@portabletext/react": "^3.2.0",
-        "@sanity/client": "^6.24.0",
+        "@sanity/client": "^7.12.0",
         "@sanity/image-url": "^1.2.0",
         "@sanity/vision": "^3.68.3",
         "@serwist/next": "^9.0.10",
@@ -31,7 +31,7 @@
         "clsx": "^2.1.1",
         "cmdk": "^1.1.1",
         "framer-motion": "^12.26.2",
-        "next": "^15.1.0",
+        "next": "^16.1.6",
         "next-auth": "^4.24.13",
         "next-intl": "^4.7.0",
         "next-sanity": "^9.8.0",
@@ -58,7 +58,7 @@
         "@typescript-eslint/parser": "^8.18.0",
         "autoprefixer": "^10.4.20",
         "eslint": "^9.17.0",
-        "eslint-config-next": "^15.1.0",
+        "eslint-config-next": "^16.1.6",
         "postcss": "^8.4.49",
         "prettier": "^3.4.2",
         "prettier-plugin-tailwindcss": "^0.6.9",
@@ -66,6 +66,13 @@
         "typescript": "^5.7.0"
     },
     "engines": {
-        "node": "20.x"
+        "node": ">=20"
+    },
+    "overrides": {
+        "cookie": ">=0.7.0",
+        "glob": ">=10.4.5",
+        "undici": ">=6.23.0",
+        "tmp": ">=0.2.4",
+        "prismjs": ">=1.30.0"
     }
 }

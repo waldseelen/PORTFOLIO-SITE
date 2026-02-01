@@ -7,15 +7,22 @@ import { navItems, siteConfig } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function Header() {
     const pathname = usePathname();
+    const [mounted, setMounted] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const toggleMobileMenu = () => {
         setMobileMenuOpen(!mobileMenuOpen);
     };
+
+    if (!mounted) return <div className="h-16 w-full border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950" />;
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-neutral-200 glass dark:border-neutral-800">
