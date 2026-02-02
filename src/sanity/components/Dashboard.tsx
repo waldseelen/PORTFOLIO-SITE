@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useClient } from 'sanity';
 
 export function Dashboard() {
-    const client = useClient({ apiVersion: '2024-01-01' });
+    const client = useClient({ apiVersion: '2026-01-18' });
     const [stats, setStats] = useState({
         posts: 0,
         projects: 0,

@@ -17,7 +17,7 @@ export const client: SanityClient | null = isSanityConfigured
     ? createClient({
         projectId: projectId!,
         dataset,
-        apiVersion: '2024-01-01',
+        apiVersion: '2026-01-18',
         useCdn: process.env.NODE_ENV === 'production',
         token: process.env.SANITY_API_TOKEN,
     })
