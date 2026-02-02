@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { defaultLocale, locales } from './i18n/config';
+import { defaultLocale, locales, type Locale } from './i18n/config';
 
 // Middleware to ensure NEXT_LOCALE cookie exists
 export function middleware(request: NextRequest) {
@@ -19,7 +19,7 @@ export function middleware(request: NextRequest) {
     const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value;
 
     // If cookie is missing or invalid, set default or detect from header
-    if (!cookieLocale || !locales.includes(cookieLocale as any)) {
+    if (!cookieLocale || !locales.includes(cookieLocale as Locale)) {
         // Simple detection: check accept-language
         const acceptLanguage = request.headers.get('accept-language');
         let detectedLocale = defaultLocale;

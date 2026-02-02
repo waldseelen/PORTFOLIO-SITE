@@ -2,7 +2,6 @@
 
 import { localeFlags, localeNames, locales, type Locale } from '@/i18n/config';
 import { cn } from '@/lib/utils';
-import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
 
 interface LanguageToggleProps {
@@ -18,9 +17,7 @@ export function LanguageToggle({
     showName = false,
     variant = 'button',
 }: LanguageToggleProps) {
-    const router = useRouter();
-    const pathname = usePathname();
-    const [isPending, startTransition] = useTransition();
+    const [isPending] = useTransition();
     const [currentLocale, setCurrentLocale] = useState<Locale>('tr');
     const [isOpen, setIsOpen] = useState(false);
     const [mounted, setMounted] = useState(false);

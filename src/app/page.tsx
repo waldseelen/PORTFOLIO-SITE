@@ -13,7 +13,6 @@ export const revalidate = 21600;
 // Featured Projects Component
 async function FeaturedProjects() {
     let projects: Project[] = [];
-    const t = await getTranslations('common');
     const locale = await getLocale();
 
     try {
@@ -30,24 +29,16 @@ async function FeaturedProjects() {
                 title: 'RAG Tabanlı AI Asistanı',
                 slug: { current: 'rag-ai-assistant' },
                 excerpt: 'Kurumsal dokümanlar üzerinde soru-cevap yapabilen, LLM destekli akıllı asistan.',
-                mainImage: { asset: { url: '', _ref: '' } },
+                mainImage: { asset: { _id: '', url: '' } },
                 technologies: ['Python', 'LangChain', 'OpenAI', 'Next.js'],
-                _createdAt: new Date().toISOString(),
-                _updatedAt: new Date().toISOString(),
-                _rev: '1',
-                _type: 'project'
             },
             {
                 _id: 'demo-2',
                 title: 'Siber Güvenlik Dashboard',
                 slug: { current: 'cybersec-dashboard' },
                 excerpt: 'Gerçek zamanlı tehdit izleme ve analiz platformu. SOC operasyonları için tasarlandı.',
-                mainImage: { asset: { url: '', _ref: '' } },
+                mainImage: { asset: { _id: '', url: '' } },
                 technologies: ['React', 'D3.js', 'Socket.io', 'Node.js'],
-                _createdAt: new Date().toISOString(),
-                _updatedAt: new Date().toISOString(),
-                _rev: '1',
-                _type: 'project'
             }
         ] : [
             {
@@ -55,24 +46,16 @@ async function FeaturedProjects() {
                 title: 'RAG Based AI Assistant',
                 slug: { current: 'rag-ai-assistant' },
                 excerpt: 'LLM-powered smart assistant capable of Q&A on corporate documents.',
-                mainImage: { asset: { url: '', _ref: '' } },
+                mainImage: { asset: { _id: '', url: '' } },
                 technologies: ['Python', 'LangChain', 'OpenAI', 'Next.js'],
-                _createdAt: new Date().toISOString(),
-                _updatedAt: new Date().toISOString(),
-                _rev: '1',
-                _type: 'project'
             },
             {
                 _id: 'demo-2',
                 title: 'Cybersecurity Dashboard',
                 slug: { current: 'cybersec-dashboard' },
                 excerpt: 'Real-time threat monitoring and analysis platform. Designed for SOC operations.',
-                mainImage: { asset: { url: '', _ref: '' } },
+                mainImage: { asset: { _id: '', url: '' } },
                 technologies: ['React', 'D3.js', 'Socket.io', 'Node.js'],
-                _createdAt: new Date().toISOString(),
-                _updatedAt: new Date().toISOString(),
-                _rev: '1',
-                _type: 'project'
             }
         ];
 
@@ -113,14 +96,10 @@ async function FeaturedPosts() {
                 title: 'LLM Fine-Tuning Rehberi',
                 slug: { current: 'llm-fine-tuning-guide' },
                 excerpt: 'Açık kaynaklı modelleri kendi verilerinizle nasıl eğitebilirsiniz? Adım adım rehber.',
-                mainImage: { asset: { url: '', _ref: '' } },
+                mainImage: { asset: { _id: '', url: '' } },
                 categories: [{ title: 'Yapay Zeka', slug: { current: 'ai' } }],
                 author: { name: 'Buğra Akın', image: '' },
                 publishedAt: new Date().toISOString(),
-                _createdAt: new Date().toISOString(),
-                _updatedAt: new Date().toISOString(),
-                _rev: '1',
-                _type: 'post',
                 body: []
             },
             {
@@ -128,14 +107,10 @@ async function FeaturedPosts() {
                 title: 'Modern Web Güvenliği',
                 slug: { current: 'modern-web-security' },
                 excerpt: 'Next.js uygulamalarında güvenlik en iyi pratikleri ve yaygın açıklardan korunma yöntemleri.',
-                mainImage: { asset: { url: '', _ref: '' } },
+                mainImage: { asset: { _id: '', url: '' } },
                 categories: [{ title: 'Siber Güvenlik', slug: { current: 'security' } }],
                 author: { name: 'Buğra Akın', image: '' },
                 publishedAt: new Date().toISOString(),
-                _createdAt: new Date().toISOString(),
-                _updatedAt: new Date().toISOString(),
-                _rev: '1',
-                _type: 'post',
                 body: []
             }
         ] : [
@@ -144,14 +119,10 @@ async function FeaturedPosts() {
                 title: 'LLM Fine-Tuning Guide',
                 slug: { current: 'llm-fine-tuning-guide' },
                 excerpt: 'How to train open-source models with your own data? Step-by-step guide.',
-                mainImage: { asset: { url: '', _ref: '' } },
+                mainImage: { asset: { _id: '', url: '' } },
                 categories: [{ title: 'Artificial Intelligence', slug: { current: 'ai' } }],
                 author: { name: 'Buğra Akın', image: '' },
                 publishedAt: new Date().toISOString(),
-                _createdAt: new Date().toISOString(),
-                _updatedAt: new Date().toISOString(),
-                _rev: '1',
-                _type: 'post',
                 body: []
             },
             {
@@ -159,14 +130,10 @@ async function FeaturedPosts() {
                 title: 'Modern Web Security',
                 slug: { current: 'modern-web-security' },
                 excerpt: 'Security best practices and prevention methods for common vulnerabilities in Next.js apps.',
-                mainImage: { asset: { url: '', _ref: '' } },
+                mainImage: { asset: { _id: '', url: '' } },
                 categories: [{ title: 'Cybersecurity', slug: { current: 'security' } }],
                 author: { name: 'Buğra Akın', image: '' },
                 publishedAt: new Date().toISOString(),
-                _createdAt: new Date().toISOString(),
-                _updatedAt: new Date().toISOString(),
-                _rev: '1',
-                _type: 'post',
                 body: []
             }
         ];
