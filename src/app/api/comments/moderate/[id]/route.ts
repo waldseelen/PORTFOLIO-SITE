@@ -1,10 +1,14 @@
 import { createClient } from '@sanity/client';
 import { NextResponse } from 'next/server';
 
+// Validate projectId (only a-z, 0-9, and dashes)
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+const isValidProjectId = projectId && /^[a-z0-9-]+$/.test(projectId);
+
 // Sanity client with write access
-const client = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
+const client = isValidProjectId
     ? createClient({
-        projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+        projectId,
         dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
         apiVersion: '2026-01-18',
         token: process.env.SANITY_API_WRITE_TOKEN,
