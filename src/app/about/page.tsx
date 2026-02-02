@@ -1,12 +1,15 @@
+import { FadeInUp } from '@/components/animations/MotionComponents';
 import { siteConfig } from '@/lib/constants';
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
 export const metadata: Metadata = {
     title: 'Hakkımda',
     description: 'Yapay Zeka, Siber Güvenlik ve Modern Web Teknolojileri üzerine çalışan Elektrik-Elektronik Mühendisliği öğrencisi.',
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+    const t = await getTranslations('about');
     const skills = {
         aiLlm: ['RAG Mimarisi', 'Doküman Embedding', 'Vektör Veritabanları', 'LORA/QLORA Fine-tuning', 'Prompt Mühendisliği'],
         cybersecurity: ['Fortigate Firewall (IPS, SSL VPN)', 'Penetrasyon Testleri (Burp Suite, SQLMap)', 'SOC Operasyonları (QRadar, CrowdStrike)', 'Linux Sistem Yönetimi'],
@@ -36,147 +39,148 @@ export default function AboutPage() {
     ];
 
     return (
-        <div className="section">
+        <div className="pt-28 pb-16">
             <div className="container-custom">
-                {/* Hero Section */}
-                <div className="mb-16 grid gap-12 lg:grid-cols-2 lg:items-center">
-                    {/* Image */}
-                    <div className="relative">
-                        <div className="aspect-square overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800">
-                            {/* TODO: Gerçek resim eklenecek */}
-                            <div className="flex h-full items-center justify-center text-neutral-400">
-                                <svg className="h-32 w-32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={1}
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                    />
-                                </svg>
+                <FadeInUp>
+                    {/* Hero Section */}
+                    <div className="glass-panel p-8 md:p-12 mb-12">
+                        <div className="max-w-4xl">
+                            <h1 className="heading-1 mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-primary-200 to-primary-400">
+                                {t('title')}
+                            </h1>
+                            <div className="prose prose-invert max-w-none">
+                                <p className="text-lg text-neutral-300 leading-relaxed">
+                                    {t('intro', { name: siteConfig.author.name })}
+                                </p>
+                                <p className="text-lg text-neutral-300 leading-relaxed mt-4">
+                                    {t('bio')}
+                                </p>
+                            </div>
+
+                            {/* Key Metrics */}
+                            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="rounded-xl bg-white/5 p-4 border border-white/10">
+                                    <h3 className="text-xs font-semibold uppercase tracking-wider text-secondary-400 mb-1">{t('focus')}</h3>
+                                    <p className="text-sm text-neutral-300">{t('focusDesc')}</p>
+                                </div>
+                                <div className="rounded-xl bg-white/5 p-4 border border-white/10">
+                                    <h3 className="text-xs font-semibold uppercase tracking-wider text-secondary-400 mb-1">{t('approach')}</h3>
+                                    <p className="text-sm text-neutral-300">{t('approachDesc')}</p>
+                                </div>
+                                <div className="rounded-xl bg-white/5 p-4 border border-white/10">
+                                    <h3 className="text-xs font-semibold uppercase tracking-wider text-secondary-400 mb-1">{t('target')}</h3>
+                                    <p className="text-sm text-neutral-300">{t('targetDesc')}</p>
+                                </div>
+                            </div>
+
+                            <div className="mt-8 flex gap-4">
+                                <a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer" className="btn-primary">
+                                    {t('githubProfile')}
+                                </a>
+                                <a href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer" className="btn-secondary">
+                                    {t('linkedIn')}
+                                </a>
                             </div>
                         </div>
-                        {/* Decorative element */}
-                        <div className="absolute -bottom-4 -right-4 -z-10 h-full w-full rounded-2xl bg-primary-100 dark:bg-primary-900/30" />
                     </div>
 
-                    {/* Content */}
-                    <div>
-                        <h1 className="heading-1">Hakkımda</h1>
-                        <p className="mt-6 text-lg text-neutral-600 dark:text-neutral-400">
-                            Merhaba! Ben {siteConfig.author.name}, Elektrik-Elektronik Mühendisliği öğrencisi ve
-                            Yapay Zeka & Siber Güvenlik araştırmacısıyım. Geleceğin teknolojilerini güvenle
-                            inşa etmeye tutkuyla bağlıyım.
-                        </p>
-                        <p className="mt-4 text-neutral-600 dark:text-neutral-400">
-                            Özellikle Üretken Yapay Zeka (Generative AI), RAG mimarisi, Model Fine-tuning ve
-                            Siber Güvenlik operasyonları üzerine çalışıyorum. GPT, Claude, Gemini gibi LLM&apos;ler
-                            ile prompt mühendisliği deneyimim bulunuyor.
-                        </p>
-                        <div className="mt-8 flex flex-wrap gap-4">
-                            <a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                                GitHub
-                            </a>
-                            <a href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer" className="btn-outline">
-                                LinkedIn
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Skills Section */}
-                <section className="mb-16">
-                    <h2 className="heading-2 mb-8">Uzmanlık Alanları</h2>
-                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                        <div className="card">
-                            <h3 className="mb-4 text-lg font-semibold text-primary-600 dark:text-primary-400">
-                                Yapay Zeka & LLM
+                    {/* Skills Grid */}
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12">
+                        {/* AI & LLM */}
+                        <div className="glass-panel p-6 hover:border-primary-500/30 transition-colors">
+                            <h3 className="text-lg font-bold text-primary-400 mb-4 flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-primary-500" />
+                                {t('aiLlm')}
                             </h3>
                             <ul className="space-y-2">
                                 {skills.aiLlm.map((skill) => (
-                                    <li key={skill} className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
-                                        <svg className="h-4 w-4 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
+                                    <li key={skill} className="text-sm text-neutral-400 flex items-start gap-2">
+                                        <span className="text-primary-500/50 mt-1">›</span>
                                         {skill}
                                     </li>
                                 ))}
                             </ul>
                         </div>
-                        <div className="card">
-                            <h3 className="mb-4 text-lg font-semibold text-accent-600 dark:text-accent-400">
-                                Siber Güvenlik
+
+                        {/* Cyber Security */}
+                        <div className="glass-panel p-6 hover:border-accent-500/30 transition-colors">
+                            <h3 className="text-lg font-bold text-accent-400 mb-4 flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-accent-500" />
+                                {t('cybersecurity')}
                             </h3>
                             <ul className="space-y-2">
                                 {skills.cybersecurity.map((skill) => (
-                                    <li key={skill} className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
-                                        <svg className="h-4 w-4 text-accent-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
+                                    <li key={skill} className="text-sm text-neutral-400 flex items-start gap-2">
+                                        <span className="text-accent-500/50 mt-1">›</span>
                                         {skill}
                                     </li>
                                 ))}
                             </ul>
                         </div>
-                        <div className="card">
-                            <h3 className="mb-4 text-lg font-semibold text-green-600 dark:text-green-400">
-                                Yazılım & Web
+
+                        {/* Software */}
+                        <div className="glass-panel p-6 hover:border-secondary-500/30 transition-colors">
+                            <h3 className="text-lg font-bold text-secondary-400 mb-4 flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-secondary-500" />
+                                {t('software')}
                             </h3>
                             <ul className="space-y-2">
                                 {skills.software.map((skill) => (
-                                    <li key={skill} className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
-                                        <svg className="h-4 w-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
+                                    <li key={skill} className="text-sm text-neutral-400 flex items-start gap-2">
+                                        <span className="text-secondary-500/50 mt-1">›</span>
                                         {skill}
                                     </li>
                                 ))}
                             </ul>
                         </div>
-                        <div className="card">
-                            <h3 className="mb-4 text-lg font-semibold text-neutral-900 dark:text-neutral-50">
+
+                        {/* Tools */}
+                        <div className="glass-panel p-6 hover:border-white/30 transition-colors">
+                            <h3 className="text-lg font-bold text-neutral-200 mb-4 flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-neutral-500" />
                                 Araçlar
                             </h3>
                             <ul className="space-y-2">
                                 {skills.tools.map((skill) => (
-                                    <li key={skill} className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
-                                        <svg className="h-4 w-4 text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
+                                    <li key={skill} className="text-sm text-neutral-400 flex items-start gap-2">
+                                        <span className="text-neutral-500/50 mt-1">›</span>
                                         {skill}
                                     </li>
                                 ))}
                             </ul>
                         </div>
                     </div>
-                </section>
 
-                {/* Experience Section */}
-                <section>
-                    <h2 className="heading-2 mb-8">Deneyim</h2>
-                    <div className="space-y-8">
-                        {experiences.map((exp, index) => (
-                            <div key={index} className="relative pl-8 before:absolute before:left-0 before:top-2 before:h-full before:w-px before:bg-neutral-200 dark:before:bg-neutral-800">
-                                {/* Timeline dot */}
-                                <div className="absolute left-0 top-2 -translate-x-1/2 h-3 w-3 rounded-full bg-primary-600" />
+                    {/* Experience Section */}
+                    <div className="glass-panel p-8">
+                        <h2 className="heading-2 mb-8 flex items-center gap-3">
+                            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-sm">EXP</span>
+                            {t('experience')}
+                        </h2>
+                        <div className="space-y-8">
+                            {experiences.map((exp, index) => (
+                                <div key={index} className="relative pl-8 border-l border-white/10 last:border-0 pb-8 last:pb-0">
+                                    <div className="absolute left-0 top-0 -translate-x-1/2 h-3 w-3 rounded-full bg-primary-500 ring-4 ring-[#030014]" />
 
-                                <div className="card">
-                                    <div className="flex flex-wrap items-start justify-between gap-4">
-                                        <div>
-                                            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-50">
+                                    <div className="group">
+                                        <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                            <h3 className="text-lg font-bold text-white group-hover:text-primary-400 transition-colors">
                                                 {exp.title}
                                             </h3>
-                                            <p className="text-primary-600 dark:text-primary-400">{exp.company}</p>
+                                            <span className="text-xs font-mono py-1 px-2 rounded bg-white/5 text-neutral-400 border border-white/5">
+                                                {exp.period}
+                                            </span>
                                         </div>
-                                        <span className="rounded-full bg-neutral-100 px-3 py-1 text-sm text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400">
-                                            {exp.period}
-                                        </span>
+                                        <p className="text-secondary-400 text-sm font-medium mb-2">{exp.company}</p>
+                                        <p className="text-neutral-400 text-sm leading-relaxed">
+                                            {exp.description}
+                                        </p>
                                     </div>
-                                    <p className="mt-4 text-neutral-600 dark:text-neutral-400">{exp.description}</p>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </section>
+                </FadeInUp>
             </div>
         </div>
     );

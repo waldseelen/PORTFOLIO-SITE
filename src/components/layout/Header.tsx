@@ -1,54 +1,68 @@
 'use client';
 
 import { LanguageToggle } from '@/components/i18n';
-import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { SearchButton } from '@/components/search/SearchCommand';
-import { navItems, siteConfig } from '@/lib/constants';
+import { siteConfig } from '@/lib/constants';
 import { cn } from '@/lib/utils';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export function Header() {
+    const t = useTranslations('navigation');
     const pathname = usePathname();
     const [mounted, setMounted] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    const navItems = [
+        { label: t('home'), href: '/' },
+        { label: t('blog'), href: '/blog' },
+        { label: t('projects'), href: '/projects' },
+        { label: t('about'), href: '/about' },
+        { label: t('contact'), href: '/contact' },
+    ];
 
     useEffect(() => {
         setMounted(true);
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const toggleMobileMenu = () => {
-        setMobileMenuOpen(!mobileMenuOpen);
-    };
-
-    if (!mounted) return <div className="h-16 w-full border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950" />;
+    if (!mounted) return null;
 
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-neutral-200 glass dark:border-neutral-800">
+        <header className={cn(
+            "fixed top-0 z-50 w-full transition-all duration-300",
+            scrolled ? "pt-4" : "pt-0"
+        )}>
             <div className="container-custom">
-                <nav className="flex h-16 items-center justify-between" aria-label="Ana navigasyon">
+                <motion.nav
+                    initial={{ y: -100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className={cn(
+                        "relative mx-auto flex h-16 items-center justify-between rounded-full px-6 transition-all duration-300",
+                        scrolled
+                            ? "glass-panel bg-[#030014]/80 shadow-[0_0_20px_rgba(0,0,0,0.5)] max-w-5xl mt-4"
+                            : "bg-transparent max-w-full mt-0"
+                    )}
+                >
                     {/* Logo */}
                     <Link
                         href="/"
-                        className="flex items-center gap-2 text-xl font-bold text-neutral-900 transition-colors hover:text-primary-600 dark:text-neutral-50 dark:hover:text-primary-400"
+                        className="group flex items-center gap-2 text-xl font-bold text-white transition-colors"
                     >
-                        <span className="sr-only">{siteConfig.name} Ana Sayfa</span>
-                        <svg
-                            className="h-8 w-8 text-primary-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            aria-hidden="true"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-                            />
-                        </svg>
-                        <span>{siteConfig.name}</span>
+                        <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-primary-600/10 ring-1 ring-primary-600/50 transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(0,240,255,0.5)]">
+                            <span className="font-mono text-lg text-primary-500">&gt;</span>
+                        </div>
+                        <span className="font-mono tracking-tight group-hover:text-primary-400">
+                            {siteConfig.name}
+                        </span>
                     </Link>
 
                     {/* Desktop Navigation */}
@@ -58,74 +72,78 @@ export function Header() {
                                 key={item.href}
                                 href={item.href}
                                 className={cn(
-                                    'nav-link',
-                                    pathname === item.href && 'active'
+                                    'relative px-4 py-1.5 text-sm font-medium transition-colors hover:text-primary-400',
+                                    pathname === item.href ? 'text-primary-400' : 'text-neutral-400'
                                 )}
                             >
                                 {item.label}
+                                {pathname === item.href && (
+                                    <motion.div
+                                        layoutId="navbar-indicator"
+                                        className="absolute inset-0 -z-10 rounded-full bg-white/5 ring-1 ring-white/10"
+                                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                    />
+                                )}
                             </Link>
                         ))}
                     </div>
 
                     {/* Desktop Actions */}
-                    <div className="hidden items-center gap-2 md:flex">
+                    <div className="hidden items-center gap-3 md:flex">
+                        <div className="h-4 w-px bg-white/10" />
                         <SearchButton />
                         <LanguageToggle />
-                        <ThemeToggle />
+                        {/* <ThemeToggle /> - Theme is now forced dark/cyber */}
                     </div>
 
                     {/* Mobile Menu Button */}
                     <button
                         type="button"
-                        className="rounded-lg p-2 text-neutral-600 hover:bg-neutral-100 md:hidden dark:text-neutral-400 dark:hover:bg-neutral-800"
-                        onClick={toggleMobileMenu}
-                        aria-expanded={mobileMenuOpen}
-                        aria-controls="mobile-menu"
-                        aria-label={mobileMenuOpen ? 'Menüyü kapat' : 'Menüyü aç'}
+                        className="relative z-50 rounded-lg p-2 text-neutral-400 hover:bg-white/5 md:hidden"
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                     >
-                        {mobileMenuOpen ? (
-                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        ) : (
-                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        )}
-                    </button>
-                </nav>
-
-                {/* Mobile Menu */}
-                <div
-                    id="mobile-menu"
-                    className={cn(
-                        'overflow-hidden border-t border-neutral-200 transition-all duration-300 md:hidden dark:border-neutral-800',
-                        mobileMenuOpen ? 'max-h-96 pb-4' : 'max-h-0'
-                    )}
-                >
-                    <div className="flex flex-col gap-1 pt-4">
-                        <div className="flex items-center gap-2 px-4 pb-2">
-                            <SearchButton />
-                            <LanguageToggle />
-                            <ThemeToggle />
+                        <span className="sr-only">{mobileMenuOpen ? t('closeMenu') : t('openMenu')}</span>
+                        <div className="flex flex-col gap-1.5">
+                            <span className={cn("h-0.5 w-6 bg-current transition-all", mobileMenuOpen && "rotate-45 translate-y-2")} />
+                            <span className={cn("h-0.5 w-6 bg-current transition-all", mobileMenuOpen && "opacity-0")} />
+                            <span className={cn("h-0.5 w-6 bg-current transition-all", mobileMenuOpen && "-rotate-45 -translate-y-2")} />
                         </div>
-                        {navItems.map((item) => (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                className={cn(
-                                    'rounded-lg px-4 py-3 text-base font-medium transition-colors',
-                                    pathname === item.href
-                                        ? 'bg-primary-50 text-primary-600 dark:bg-primary-950 dark:text-primary-400'
-                                        : 'text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800'
-                                )}
-                                onClick={() => setMobileMenuOpen(false)}
+                    </button>
+
+                    {/* Mobile Menu Overlay */}
+                    <AnimatePresence>
+                        {mobileMenuOpen && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                className="absolute left-0 right-0 top-full mt-4 overflow-hidden rounded-2xl border border-white/10 bg-[#030014]/95 p-4 shadow-2xl backdrop-blur-xl md:hidden"
                             >
-                                {item.label}
-                            </Link>
-                        ))}
-                    </div>
-                </div>
+                                <div className="flex flex-col gap-2">
+                                    {navItems.map((item) => (
+                                        <Link
+                                            key={item.href}
+                                            href={item.href}
+                                            className={cn(
+                                                'rounded-lg px-4 py-3 text-base font-medium transition-colors',
+                                                pathname === item.href
+                                                    ? 'bg-primary-500/10 text-primary-400'
+                                                    : 'text-neutral-400 hover:bg-white/5'
+                                            )}
+                                            onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    ))}
+                                    <div className="mt-2 flex items-center gap-4 border-t border-white/10 px-4 pt-4">
+                                        <SearchButton />
+                                        <LanguageToggle />
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </motion.nav>
             </div>
         </header>
     );

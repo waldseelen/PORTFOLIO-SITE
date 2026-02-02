@@ -11,7 +11,10 @@
         "searchPlaceholder": "Search blog posts and projects...",
         "noResults": "No results found",
         "close": "Close",
-        "or": "or"
+        "or": "or",
+        "yearsExp": "Years Exp.",
+        "projects": "Projects",
+        "profile": "Profile"
     },
     "navigation": {
         "home": "Home",
@@ -51,7 +54,13 @@
     },
     "blog": {
         "title": "Blog",
-        "subtitle": "Articles about artificial intelligence, cybersecurity, technology trends, and personal experiences",
+        "subtitle": "My thoughts and experiences on technology, software development, and web.",
+        "focus": "Focus",
+        "focusDesc": "Artificial intelligence, cybersecurity, product development",
+        "format": "Format",
+        "formatDesc": "Notes, guides, case studies",
+        "goal": "Goal",
+        "goalDesc": "Making information clear and applicable",
         "categories": "Categories",
         "allCategories": "All",
         "publishedAt": "Published on",
@@ -70,7 +79,13 @@
     },
     "projects": {
         "title": "Projects",
-        "subtitle": "Projects in artificial intelligence, security, and web technologies",
+        "subtitle": "My developed projects and works. Each project includes different technologies and solutions.",
+        "focus": "Focus",
+        "focusDesc": "Applied solutions and prototypes",
+        "tech": "Technology",
+        "techDesc": "Next.js, Python, LLM tools",
+        "output": "Output",
+        "outputDesc": "Scalable and secure products",
         "technologies": "Technologies",
         "viewProject": "View Project",
         "viewCode": "View Code",
@@ -81,29 +96,46 @@
     "about": {
         "title": "About Me",
         "subtitle": "AI & Cybersecurity Researcher",
-        "bio": "Bio",
+        "intro": "Hello! I'm {name}. I combine my Electrical-Electronics Engineering background with the dynamics of modern software world. I focus on technologies at the intersection of Artificial Intelligence and Cybersecurity.",
+        "bio": "I work not just to use future technologies, but to build them securely and effectively. RAG architectures, LLM fine-tuning processes, and cybersecurity operations are my main areas of interest.",
+        "focus": "Focus",
+        "focusDesc": "Artificial intelligence, cybersecurity, product development",
+        "approach": "Approach",
+        "approachDesc": "Analytical thinking, rapid prototyping",
+        "target": "Target",
+        "targetDesc": "Secure and scalable systems",
+        "aiLlm": "Artificial Intelligence & LLM",
+        "cybersecurity": "Cybersecurity",
+        "software": "Software & Web",
+        "tools": "Tools",
         "experience": "Experience",
-        "education": "Education",
-        "skills": "Skills",
-        "interests": "Interests",
-        "downloadCV": "Download CV"
+        "githubProfile": "GitHub Profile",
+        "linkedIn": "LinkedIn"
     },
     "contact": {
         "title": "Contact",
-        "subtitle": "Get in touch with me",
+        "subtitle": "You can contact me for a project or collaboration.",
         "form": {
             "name": "Your Name",
             "namePlaceholder": "Enter your name",
             "email": "Email",
             "emailPlaceholder": "example@email.com",
             "subject": "Subject",
-            "subjectPlaceholder": "Subject of your message",
+            "subjectPlaceholder": "Select Subject",
+            "subjectOptions": {
+                "project": "Project Proposal",
+                "collaboration": "Collaboration",
+                "question": "Question",
+                "other": "Other"
+            },
             "message": "Message",
             "messagePlaceholder": "Write your message here...",
-            "submit": "Send",
+            "submit": "Send Message",
             "sending": "Sending...",
-            "success": "Your message has been sent successfully!",
-            "error": "An error occurred while sending your message.",
+            "success": "Your Message Has Been Sent!",
+            "successDesc": "I will get back to you as soon as possible.",
+            "newMessage": "Send New Message",
+            "error": "An error occurred. Please try again.",
             "validation": {
                 "nameRequired": "Name is required",
                 "emailRequired": "Email is required",
@@ -117,6 +149,7 @@
             "title": "Contact Information",
             "email": "Email",
             "location": "Location",
+            "locationValue": "Gaziantep, Turkey",
             "social": "Social Media"
         }
     },
@@ -134,7 +167,8 @@
         "copyright": "© {year} {name}. All rights reserved.",
         "builtWith": "Built with {framework}",
         "privacyPolicy": "Privacy Policy",
-        "termsOfService": "Terms of Service"
+        "termsOfService": "Terms of Service",
+        "navigation": "Navigation"
     },
     "theme": {
         "toggle": "Toggle theme",

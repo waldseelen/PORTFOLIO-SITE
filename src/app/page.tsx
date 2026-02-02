@@ -1,62 +1,103 @@
+import { FadeInUp, StaggerChildren } from '@/components/animations/MotionComponents';
 import { BlogCard, BlogCardSkeleton } from '@/components/blog/BlogCard';
 import { ProjectCard, ProjectCardSkeleton } from '@/components/projects/ProjectCard';
 import { getFeaturedPosts, getFeaturedProjects } from '@/lib/data';
 import type { BlogPost, Project } from '@/types';
+import { getLocale, getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
-// ISR: Revalidate every 6 hours (low frequency as per roadmap)
+// ISR: Revalidate every 6 hours
 export const revalidate = 21600;
 
 // Featured Projects Component
 async function FeaturedProjects() {
     let projects: Project[] = [];
+    const t = await getTranslations('common');
+    const locale = await getLocale();
 
     try {
-        projects = await getFeaturedProjects(3);
+        projects = await getFeaturedProjects(4);
     } catch (error) {
         console.error('Error fetching featured projects:', error);
     }
 
-    // Fallback demo data if no projects from Sanity
     if (!projects || projects.length === 0) {
+        // Demo Projects for Initial State
+        const demoProjects: Project[] = locale === 'tr' ? [
+            {
+                _id: 'demo-1',
+                title: 'RAG Tabanlı AI Asistanı',
+                slug: { current: 'rag-ai-assistant' },
+                excerpt: 'Kurumsal dokümanlar üzerinde soru-cevap yapabilen, LLM destekli akıllı asistan.',
+                mainImage: { asset: { url: '', _ref: '' } },
+                technologies: ['Python', 'LangChain', 'OpenAI', 'Next.js'],
+                _createdAt: new Date().toISOString(),
+                _updatedAt: new Date().toISOString(),
+                _rev: '1',
+                _type: 'project'
+            },
+            {
+                _id: 'demo-2',
+                title: 'Siber Güvenlik Dashboard',
+                slug: { current: 'cybersec-dashboard' },
+                excerpt: 'Gerçek zamanlı tehdit izleme ve analiz platformu. SOC operasyonları için tasarlandı.',
+                mainImage: { asset: { url: '', _ref: '' } },
+                technologies: ['React', 'D3.js', 'Socket.io', 'Node.js'],
+                _createdAt: new Date().toISOString(),
+                _updatedAt: new Date().toISOString(),
+                _rev: '1',
+                _type: 'project'
+            }
+        ] : [
+            {
+                _id: 'demo-1',
+                title: 'RAG Based AI Assistant',
+                slug: { current: 'rag-ai-assistant' },
+                excerpt: 'LLM-powered smart assistant capable of Q&A on corporate documents.',
+                mainImage: { asset: { url: '', _ref: '' } },
+                technologies: ['Python', 'LangChain', 'OpenAI', 'Next.js'],
+                _createdAt: new Date().toISOString(),
+                _updatedAt: new Date().toISOString(),
+                _rev: '1',
+                _type: 'project'
+            },
+            {
+                _id: 'demo-2',
+                title: 'Cybersecurity Dashboard',
+                slug: { current: 'cybersec-dashboard' },
+                excerpt: 'Real-time threat monitoring and analysis platform. Designed for SOC operations.',
+                mainImage: { asset: { url: '', _ref: '' } },
+                technologies: ['React', 'D3.js', 'Socket.io', 'Node.js'],
+                _createdAt: new Date().toISOString(),
+                _updatedAt: new Date().toISOString(),
+                _rev: '1',
+                _type: 'project'
+            }
+        ];
+
         return (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {[1, 2, 3].map((i) => (
-                    <div key={i} className="card">
-                        <div className="mb-4 aspect-video rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
-                            <span className="text-neutral-400">Demo Proje {i}</span>
-                        </div>
-                        <h3 className="heading-3">Örnek Proje {i}</h3>
-                        <p className="mt-2 text-neutral-600 dark:text-neutral-400">
-                            Sanity CMS&apos;den gerçek projeler yüklenecek. İçerik eklemek için Sanity Studio&apos;yu kullanın.
-                        </p>
-                        <div className="mt-4 flex flex-wrap gap-2">
-                            <span className="rounded-full bg-primary-100 px-3 py-1 text-xs font-medium text-primary-700 dark:bg-primary-900 dark:text-primary-300">
-                                Next.js
-                            </span>
-                            <span className="rounded-full bg-accent-100 px-3 py-1 text-xs font-medium text-accent-700 dark:bg-accent-900 dark:text-accent-300">
-                                TypeScript
-                            </span>
-                        </div>
-                    </div>
+            <StaggerChildren className="grid gap-6 md:grid-cols-2">
+                {demoProjects.map((project, index) => (
+                    <ProjectCard key={project._id} project={project} index={index} />
                 ))}
-            </div>
+            </StaggerChildren>
         );
     }
 
     return (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <StaggerChildren className="grid gap-6 md:grid-cols-2">
             {projects.map((project, index) => (
                 <ProjectCard key={project._id} project={project} index={index} />
             ))}
-        </div>
+        </StaggerChildren>
     );
 }
 
 // Featured Posts Component
 async function FeaturedPosts() {
     let posts: BlogPost[] = [];
+    const locale = await getLocale();
 
     try {
         posts = await getFeaturedPosts(3);
@@ -64,46 +105,94 @@ async function FeaturedPosts() {
         console.error('Error fetching featured posts:', error);
     }
 
-    // Fallback demo data if no posts from Sanity
     if (!posts || posts.length === 0) {
+        // Demo Posts for Initial State
+        const demoPosts: BlogPost[] = locale === 'tr' ? [
+            {
+                _id: 'demo-post-1',
+                title: 'LLM Fine-Tuning Rehberi',
+                slug: { current: 'llm-fine-tuning-guide' },
+                excerpt: 'Açık kaynaklı modelleri kendi verilerinizle nasıl eğitebilirsiniz? Adım adım rehber.',
+                mainImage: { asset: { url: '', _ref: '' } },
+                categories: [{ title: 'Yapay Zeka', slug: { current: 'ai' } }],
+                author: { name: 'Buğra Akın', image: '' },
+                publishedAt: new Date().toISOString(),
+                _createdAt: new Date().toISOString(),
+                _updatedAt: new Date().toISOString(),
+                _rev: '1',
+                _type: 'post',
+                body: []
+            },
+            {
+                _id: 'demo-post-2',
+                title: 'Modern Web Güvenliği',
+                slug: { current: 'modern-web-security' },
+                excerpt: 'Next.js uygulamalarında güvenlik en iyi pratikleri ve yaygın açıklardan korunma yöntemleri.',
+                mainImage: { asset: { url: '', _ref: '' } },
+                categories: [{ title: 'Siber Güvenlik', slug: { current: 'security' } }],
+                author: { name: 'Buğra Akın', image: '' },
+                publishedAt: new Date().toISOString(),
+                _createdAt: new Date().toISOString(),
+                _updatedAt: new Date().toISOString(),
+                _rev: '1',
+                _type: 'post',
+                body: []
+            }
+        ] : [
+            {
+                _id: 'demo-post-1',
+                title: 'LLM Fine-Tuning Guide',
+                slug: { current: 'llm-fine-tuning-guide' },
+                excerpt: 'How to train open-source models with your own data? Step-by-step guide.',
+                mainImage: { asset: { url: '', _ref: '' } },
+                categories: [{ title: 'Artificial Intelligence', slug: { current: 'ai' } }],
+                author: { name: 'Buğra Akın', image: '' },
+                publishedAt: new Date().toISOString(),
+                _createdAt: new Date().toISOString(),
+                _updatedAt: new Date().toISOString(),
+                _rev: '1',
+                _type: 'post',
+                body: []
+            },
+            {
+                _id: 'demo-post-2',
+                title: 'Modern Web Security',
+                slug: { current: 'modern-web-security' },
+                excerpt: 'Security best practices and prevention methods for common vulnerabilities in Next.js apps.',
+                mainImage: { asset: { url: '', _ref: '' } },
+                categories: [{ title: 'Cybersecurity', slug: { current: 'security' } }],
+                author: { name: 'Buğra Akın', image: '' },
+                publishedAt: new Date().toISOString(),
+                _createdAt: new Date().toISOString(),
+                _updatedAt: new Date().toISOString(),
+                _rev: '1',
+                _type: 'post',
+                body: []
+            }
+        ];
+
         return (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {[1, 2, 3].map((i) => (
-                    <article key={i} className="card">
-                        <div className="mb-4 aspect-video rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
-                            <span className="text-neutral-400">Demo Yazı {i}</span>
-                        </div>
-                        <span className="text-xs font-medium uppercase tracking-wide text-primary-600 dark:text-primary-400">
-                            Kategori
-                        </span>
-                        <h3 className="heading-3 mt-2">Örnek Blog Yazısı {i}</h3>
-                        <p className="mt-2 text-neutral-600 dark:text-neutral-400">
-                            Sanity CMS&apos;den gerçek blog yazıları yüklenecek.
-                        </p>
-                        <div className="mt-4 flex items-center gap-4 text-sm text-neutral-500">
-                            <span>Yazar Adı</span>
-                            <time>1 Ocak 2025</time>
-                        </div>
-                    </article>
+            <StaggerChildren className="space-y-6">
+                {demoPosts.map((post, index) => (
+                    <BlogCard key={post._id} post={post} index={index} />
                 ))}
-            </div>
+            </StaggerChildren>
         );
     }
 
     return (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <StaggerChildren className="space-y-6">
             {posts.map((post, index) => (
                 <BlogCard key={post._id} post={post} index={index} />
             ))}
-        </div>
+        </StaggerChildren>
     );
 }
 
-// Loading Skeletons
 function ProjectsSkeleton() {
     return (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3].map((i) => (
+        <div className="grid gap-6 md:grid-cols-2">
+            {[1, 2, 3, 4].map((i) => (
                 <ProjectCardSkeleton key={i} />
             ))}
         </div>
@@ -112,7 +201,7 @@ function ProjectsSkeleton() {
 
 function PostsSkeleton() {
     return (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="space-y-6">
             {[1, 2, 3].map((i) => (
                 <BlogCardSkeleton key={i} />
             ))}
@@ -120,181 +209,128 @@ function PostsSkeleton() {
     );
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+    const t = await getTranslations('home');
+    const tCommon = await getTranslations('common');
+
     return (
         <>
-            {/* Hero Section */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-neutral-50 via-white to-primary-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-primary-950">
-                <div className="container-custom section relative z-10">
-                    <div className="mx-auto max-w-4xl text-center">
-                        {/* Badge */}
-                        <div className="animate-fade-in mb-6 inline-flex items-center gap-2 rounded-full border border-primary-200 bg-primary-50 px-4 py-1.5 text-sm font-medium text-primary-700 dark:border-primary-800 dark:bg-primary-950 dark:text-primary-300">
-                            <span className="relative flex h-2 w-2">
-                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-75"></span>
-                                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary-500"></span>
-                            </span>
-                            Yapay Zeka & Siber Güvenlik Araştırmacısı
-                        </div>
+            {/* Background Effects */}
+            <div className="fixed inset-0 -z-50 bg-[#030014]">
+                <div className="absolute top-0 right-0 -mr-20 -mt-20 h-[500px] w-[500px] rounded-full bg-primary-500/10 blur-[100px]" />
+                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 h-[500px] w-[500px] rounded-full bg-secondary-500/10 blur-[100px]" />
+                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+            </div>
 
-                        {/* Heading */}
-                        <h1 className="animate-fade-up heading-display text-balance mb-6">
-                            Geleceğin Teknolojilerini{' '}
-                            <span className="gradient-text">Güvenle</span>{' '}
-                            İnşa Ediyorum
-                        </h1>
+            <div className="container-custom pt-28 pb-24 md:pt-32 md:pb-32">
+                <div className="grid gap-8 lg:grid-cols-12">
+                    {/* Left Column: Profile & Stats (Dashboard Side) */}
+                    <div className="lg:col-span-4 lg:sticky lg:top-24 lg:h-fit">
+                        <FadeInUp className="space-y-6">
+                            {/* Profile Card */}
+                            <div className="glass-panel p-8 text-center relative overflow-hidden group">
+                                <div className="absolute inset-0 bg-gradient-to-b from-primary-500/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
 
-                        {/* Description */}
-                        <p className="animate-fade-up animate-delay-100 mx-auto mb-8 max-w-2xl text-lg text-neutral-600 md:text-xl dark:text-neutral-400">
-                            Yapay zeka sistemleri, LLM mimarileri ve siber güvenlik operasyonları üzerine
-                            çalışan bir Elektrik-Elektronik Mühendisliği öğrencisiyim.
-                        </p>
+                                <div className="relative mb-6 inline-block">
+                                    <div className="absolute inset-0 animate-pulse rounded-full bg-primary-500/20 blur-xl" />
+                                    <div className="relative h-32 w-32 overflow-hidden rounded-full border-2 border-primary-500/30 p-1">
+                                        {/* Placeholder for Profile Image if not available */}
+                                        <div className="h-full w-full rounded-full bg-neutral-800 flex items-center justify-center text-3xl font-bold text-neutral-500">
+                                            MA
+                                        </div>
+                                    </div>
+                                    <div className="absolute bottom-2 right-2 h-4 w-4 rounded-full border-2 border-[#030014] bg-accent-500" />
+                                </div>
 
-                        {/* CTA Buttons */}
-                        <div className="animate-fade-up animate-delay-200 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                            <Link href="/projects" className="btn-primary px-8 py-3 text-base">
-                                Projelerimi Gör
-                            </Link>
-                            <Link href="/contact" className="btn-outline px-8 py-3 text-base">
-                                İletişime Geç
-                            </Link>
-                        </div>
-                    </div>
-                </div>
+                                <h1 className="heading-2 mb-2">Muhammed Buğra Akın</h1>
+                                <p className="text-sm font-medium text-primary-400 mb-6">
+                                    AI & Cybersecurity Engineer
+                                </p>
 
-                {/* Background decoration */}
-                <div className="absolute inset-0 -z-10 overflow-hidden">
-                    <div className="absolute -left-1/4 -top-1/4 h-1/2 w-1/2 rounded-full bg-primary-200/30 blur-3xl dark:bg-primary-900/20" />
-                    <div className="absolute -bottom-1/4 -right-1/4 h-1/2 w-1/2 rounded-full bg-accent-200/30 blur-3xl dark:bg-accent-900/20" />
-                </div>
-            </section>
+                                <div className="grid grid-cols-2 gap-4 border-t border-white/5 pt-6">
+                                    <div className="text-center">
+                                        <div className="text-2xl font-bold text-white">3+</div>
+                                        <div className="text-xs text-neutral-500">{tCommon('yearsExp')}</div>
+                                    </div>
+                                    <div className="text-center">
+                                        <div className="text-2xl font-bold text-white">20+</div>
+                                        <div className="text-xs text-neutral-500">{tCommon('projects')}</div>
+                                    </div>
+                                </div>
 
-            {/* Featured Projects Section */}
-            <section className="section bg-white dark:bg-neutral-950">
-                <div className="container-custom">
-                    <div className="mb-12 flex items-end justify-between">
-                        <div>
-                            <h2 className="heading-2">Öne Çıkan Projeler</h2>
-                            <p className="mt-2 text-neutral-600 dark:text-neutral-400">
-                                Yapay zeka ve güvenlik odaklı projelerim
-                            </p>
-                        </div>
-                        <Link
-                            href="/projects"
-                            className="hidden items-center gap-2 text-primary-600 hover:text-primary-700 sm:inline-flex dark:text-primary-400 dark:hover:text-primary-300"
-                        >
-                            Tümünü Gör
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                        </Link>
-                    </div>
-
-                    <Suspense fallback={<ProjectsSkeleton />}>
-                        <FeaturedProjects />
-                    </Suspense>
-                </div>
-            </section>
-
-            {/* Latest Blog Posts Section */}
-            <section className="section bg-neutral-50 dark:bg-neutral-900">
-                <div className="container-custom">
-                    <div className="mb-12 flex items-end justify-between">
-                        <div>
-                            <h2 className="heading-2">Son Yazılar</h2>
-                            <p className="mt-2 text-neutral-600 dark:text-neutral-400">
-                                Yapay zeka, siber güvenlik ve teknoloji üzerine düşüncelerim
-                            </p>
-                        </div>
-                        <Link
-                            href="/blog"
-                            className="hidden items-center gap-2 text-primary-600 hover:text-primary-700 sm:inline-flex dark:text-primary-400 dark:hover:text-primary-300"
-                        >
-                            Tüm Yazılar
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                        </Link>
-                    </div>
-
-                    <Suspense fallback={<PostsSkeleton />}>
-                        <FeaturedPosts />
-                    </Suspense>
-                </div>
-            </section>
-
-            {/* Skills Section */}
-            <section className="section bg-white dark:bg-neutral-950">
-                <div className="container-custom">
-                    <div className="mx-auto max-w-3xl text-center">
-                        <h2 className="heading-2">Uzmanlık Alanlarım</h2>
-                        <p className="mt-4 text-neutral-600 dark:text-neutral-400">
-                            Yapay Zeka, Siber Güvenlik ve Web Teknolojilerinde uzmanlaşıyorum.
-                        </p>
-                    </div>
-
-                    <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                        {/* AI & LLM */}
-                        <div className="rounded-2xl border border-neutral-200 p-6 transition-shadow hover:shadow-lg dark:border-neutral-800">
-                            <div className="mb-4 inline-flex rounded-xl bg-primary-100 p-3 dark:bg-primary-900">
-                                <svg className="h-6 w-6 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                </svg>
+                                <div className="mt-8 flex justify-center gap-4">
+                                    <Link href="/contact" className="btn-primary flex-1">
+                                        {t('hero.cta.secondary')}
+                                    </Link>
+                                    <Link href="/about" className="btn-secondary flex-1">
+                                        {tCommon('profile')}
+                                    </Link>
+                                </div>
                             </div>
-                            <h3 className="heading-3">Yapay Zeka & LLM</h3>
-                            <p className="mt-2 text-neutral-600 dark:text-neutral-400">
-                                RAG mimarisi, fine-tuning, prompt mühendisliği ve vektör veritabanları.
-                            </p>
-                        </div>
 
-                        {/* Cybersecurity */}
-                        <div className="rounded-2xl border border-neutral-200 p-6 transition-shadow hover:shadow-lg dark:border-neutral-800">
-                            <div className="mb-4 inline-flex rounded-xl bg-accent-100 p-3 dark:bg-accent-900">
-                                <svg className="h-6 w-6 text-accent-600 dark:text-accent-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                </svg>
+                            {/* Skills Mini-Card */}
+                            <div className="glass-panel p-6">
+                                <h3 className="mb-4 text-sm font-semibold text-neutral-400 uppercase tracking-wider">
+                                    {t('skills.title')}
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {['Python', 'RAG', 'Next.js', 'CyberSec', 'LLM', 'React', 'Tailwind'].map((skill) => (
+                                        <span key={skill} className="rounded bg-white/5 px-2 py-1 text-xs text-neutral-300 hover:bg-white/10 hover:text-white transition-colors cursor-default">
+                                            {skill}
+                                        </span>
+                                    ))}
+                                </div>
                             </div>
-                            <h3 className="heading-3">Siber Güvenlik</h3>
-                            <p className="mt-2 text-neutral-600 dark:text-neutral-400">
-                                SOC operasyonları, penetrasyon testleri, Fortigate ve SIEM sistemleri.
-                            </p>
-                        </div>
+                        </FadeInUp>
+                    </div>
 
-                        {/* Web Development */}
-                        <div className="rounded-2xl border border-neutral-200 p-6 transition-shadow hover:shadow-lg dark:border-neutral-800">
-                            <div className="mb-4 inline-flex rounded-xl bg-green-100 p-3 dark:bg-green-900">
-                                <svg className="h-6 w-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                                </svg>
-                            </div>
-                            <h3 className="heading-3">Yazılım & Web</h3>
-                            <p className="mt-2 text-neutral-600 dark:text-neutral-400">
-                                Python, JavaScript, Next.js, Supabase ve REST API entegrasyonları.
+                    {/* Right Column: Content Feed */}
+                    <div className="lg:col-span-8 space-y-12">
+                        {/* Hero / Intro Text */}
+                        <FadeInUp delay={0.2} className="glass-panel p-8 relative overflow-hidden">
+                            <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary-500 to-secondary-500" />
+                            <h2 className="heading-1 mb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-secondary-400">
+                                &lt;System.Initialize /&gt;
+                            </h2>
+                            <p className="text-lg text-neutral-300 leading-relaxed">
+                                {t('hero.description')}
                             </p>
-                        </div>
+                        </FadeInUp>
+
+                        {/* Projects Section */}
+                        <section>
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="heading-2 flex items-center gap-2">
+                                    <span className="h-2 w-2 rounded-full bg-primary-500" />
+                                    {t('featuredProjects.title')}
+                                </h2>
+                                <Link href="/projects" className="text-sm text-primary-400 hover:text-primary-300 transition-colors">
+                                    {t('featuredProjects.viewAll')} &rarr;
+                                </Link>
+                            </div>
+                            <Suspense fallback={<ProjectsSkeleton />}>
+                                <FeaturedProjects />
+                            </Suspense>
+                        </section>
+
+                        {/* Blog/Articles Section */}
+                        <section>
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="heading-2 flex items-center gap-2">
+                                    <span className="h-2 w-2 rounded-full bg-secondary-500" />
+                                    {t('featuredPosts.title')}
+                                </h2>
+                                <Link href="/blog" className="text-sm text-secondary-400 hover:text-secondary-300 transition-colors">
+                                    {t('featuredPosts.viewAll')} &rarr;
+                                </Link>
+                            </div>
+                            <Suspense fallback={<PostsSkeleton />}>
+                                <FeaturedPosts />
+                            </Suspense>
+                        </section>
                     </div>
                 </div>
-            </section>
-
-            {/* CTA Section */}
-            <section className="section bg-gradient-to-r from-primary-600 to-primary-700 dark:from-primary-800 dark:to-primary-900">
-                <div className="container-custom text-center">
-                    <h2 className="heading-2 text-white">Birlikte Çalışalım</h2>
-                    <p className="mx-auto mt-4 max-w-2xl text-lg text-primary-100">
-                        Yapay zeka, siber güvenlik veya web projeleri için bana ulaşın. Fikirlerinizi hayata geçirmek için buradayım.
-                    </p>
-                    <div className="mt-8">
-                        <Link
-                            href="/contact"
-                            className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3 font-medium text-primary-700 shadow-lg transition-all hover:bg-neutral-100 hover:shadow-xl"
-                        >
-                            İletişime Geç
-                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                        </Link>
-                    </div>
-                </div>
-            </section>
+            </div>
         </>
     );
 }

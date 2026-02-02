@@ -69,23 +69,19 @@ export function LanguageToggle({
     const switchLocale = (newLocale: Locale) => {
         if (newLocale === currentLocale) return;
 
-        // 1. localStorage'a kaydet (persistent - birincil)
-        localStorage.setItem('preferredLocale', newLocale);
-
-        // 2. Cookie'ye de kaydet (1 yıl geçerlilik)
+        // 1. Cookie'ye kaydet (Server tarafında okumak için birincil yöntem)
         document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
 
-        // 3. State'i güncelle (session içinde anlık toggle için)
+        // 2. localStorage'a kaydet (Client tarafında yedek)
+        localStorage.setItem('preferredLocale', newLocale);
+
+        // 3. State'i güncelle
         setCurrentLocale(newLocale);
         setIsOpen(false);
 
-        // 4. URL'yi güncelle
-        const pathWithoutLocale = pathname.replace(/^\/(en|tr)/, '') || '/';
-        const newPath = newLocale === 'tr' ? pathWithoutLocale : `/${newLocale}${pathWithoutLocale}`;
-
-        startTransition(() => {
-            router.push(newPath);
-        });
+        // 4. Sayfayı tam yenile (Hard reload)
+        // Next.js router cache bazen cookie değişimini hemen algılamıyor, bu yüzden tam yenileme yapıyoruz.
+        window.location.reload();
     };
 
     // Hydration mismatch'i önle

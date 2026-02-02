@@ -75,9 +75,7 @@ export const metadata: Metadata = {
     manifest: '/manifest.json',
     icons: {
         icon: [
-            { url: '/favicon.ico', sizes: 'any' },
-            { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-            { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+            { url: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23030014%22/><path d=%22M30 70 L60 50 L30 30%22 fill=%22none%22 stroke=%22%2300F0FF%22 stroke-width=%228%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/><path d=%22M65 70 L90 70%22 fill=%22none%22 stroke=%22%2300F0FF%22 stroke-width=%228%22 stroke-linecap=%22round%22/></svg>', sizes: 'any', type: 'image/svg+xml' },
         ],
         apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
     },
@@ -87,7 +85,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
     themeColor: [
         { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-        { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+        { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
     ],
     width: 'device-width',
     initialScale: 1,

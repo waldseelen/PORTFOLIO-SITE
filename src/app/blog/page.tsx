@@ -2,6 +2,7 @@ import { BlogCard, BlogCardSkeleton } from '@/components/blog/BlogCard';
 import { getAllPosts } from '@/lib/data';
 import type { BlogPost } from '@/types';
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
 export const metadata: Metadata = {
     title: 'Blog',
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 export const revalidate = 21600;
 
 export default async function BlogPage() {
+    const t = await getTranslations('blog');
     let posts: BlogPost[] = [];
 
     try {
@@ -54,14 +56,40 @@ export default async function BlogPage() {
     const displayPosts = posts.length > 0 ? posts : demoPosts;
 
     return (
-        <div className="section">
+        <div className="pt-28 pb-16">
             <div className="container-custom">
                 {/* Page Header */}
                 <div className="mb-12 max-w-2xl">
-                    <h1 className="heading-1">Blog</h1>
-                    <p className="mt-4 text-lg text-neutral-600 dark:text-neutral-400">
-                        Teknoloji, yazılım geliştirme ve web üzerine düşüncelerim ve deneyimlerim.
+                    <h1 className="heading-1">{t('title')}</h1>
+                    <p className="mt-4 text-lg text-neutral-300">
+                        {t('subtitle')}
                     </p>
+                    <div className="mt-6 grid gap-4 rounded-2xl glass-panel p-4 text-left sm:grid-cols-3">
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-secondary-400">
+                                {t('focus')}
+                            </p>
+                            <p className="mt-1 text-sm text-neutral-300">
+                                {t('focusDesc')}
+                            </p>
+                        </div>
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-secondary-400">
+                                {t('format')}
+                            </p>
+                            <p className="mt-1 text-sm text-neutral-300">
+                                {t('formatDesc')}
+                            </p>
+                        </div>
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-secondary-400">
+                                {t('goal')}
+                            </p>
+                            <p className="mt-1 text-sm text-neutral-300">
+                                {t('goalDesc')}
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Blog Posts Grid */}

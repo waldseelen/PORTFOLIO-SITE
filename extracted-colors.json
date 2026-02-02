@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-02-02T20:52:21.659Z",
+  "source": "Portfolio PDF (Professional Standard)",
+  "description": "Mühendis portföyü için standart renk sistemi - Cyan/Gri teması",
+  "palette": {
+    "primary": "#0ea5e9",
+    "primary_dark": "#0284c7",
+    "secondary": "#64748b",
+    "accent": "#06b6d4",
+    "success": "#10b981",
+    "warning": "#f59e0b",
+    "error": "#ef4444",
+    "background_light": "#ffffff",
+    "background_dark": "#0f172a",
+    "text_light": "#1e293b",
+    "text_dark": "#f1f5f9",
+    "border": "#e2e8f0",
+    "border_dark": "#334155"
+  },
+  "usage": {
+    "primary": "Ana butonlar, başlıklar, vurgular",
+    "secondary": "Metinler, subtitles, neutral öğeler",
+    "accent": "Linkler, hover durumları, interaktif öğeler",
+    "success": "Başarı mesajları, onay butonları",
+    "warning": "Uyarılar, attention grabbers",
+    "error": "Hatalar, delete butonları",
+    "background": "Sayfa arkaplanı",
+    "text": "Metin renkleri",
+    "border": "Border ve dividers"
+  }
+}

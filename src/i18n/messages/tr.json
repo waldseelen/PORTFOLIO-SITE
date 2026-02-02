@@ -11,7 +11,10 @@
         "searchPlaceholder": "Blog yazıları ve projeler arasında ara...",
         "noResults": "Sonuç bulunamadı",
         "close": "Kapat",
-        "or": "veya"
+        "or": "veya",
+        "yearsExp": "Yıl Deneyim",
+        "projects": "Proje",
+        "profile": "Profil"
     },
     "navigation": {
         "home": "Ana Sayfa",
@@ -51,7 +54,13 @@
     },
     "blog": {
         "title": "Blog",
-        "subtitle": "Yapay zeka, siber güvenlik, teknoloji trendleri ve kişisel deneyimlerim hakkında yazılar",
+        "subtitle": "Teknoloji, yazılım geliştirme ve web üzerine düşüncelerim ve deneyimlerim.",
+        "focus": "Odak",
+        "focusDesc": "Yapay zeka, siber güvenlik, ürün geliştirme",
+        "format": "Format",
+        "formatDesc": "Notlar, rehberler, vaka çalışmaları",
+        "goal": "Hedef",
+        "goalDesc": "Bilgiyi net ve uygulanabilir kılmak",
         "categories": "Kategoriler",
         "allCategories": "Tümü",
         "publishedAt": "Yayınlanma Tarihi",
@@ -70,7 +79,13 @@
     },
     "projects": {
         "title": "Projeler",
-        "subtitle": "Yapay zeka, güvenlik ve web teknolojileri alanında geliştirdiğim projeler",
+        "subtitle": "Geliştirdiğim projeler ve çalışmalarım. Her proje farklı teknolojiler ve çözümler içermektedir.",
+        "focus": "Odak",
+        "focusDesc": "Uygulamalı çözümler ve prototipler",
+        "tech": "Teknoloji",
+        "techDesc": "Next.js, Python, LLM araçları",
+        "output": "Çıktı",
+        "outputDesc": "Ölçeklenebilir ve güvenli ürünler",
         "technologies": "Teknolojiler",
         "viewProject": "Projeyi Gör",
         "viewCode": "Kodu Gör",
@@ -81,29 +96,46 @@
     "about": {
         "title": "Hakkımda",
         "subtitle": "Yapay Zeka ve Siber Güvenlik Araştırmacısı",
-        "bio": "Kısa Biyografi",
+        "intro": "Merhaba! Ben {name}. Elektrik-Elektronik Mühendisliği formasyonumu modern yazılım dünyasının dinamikleriyle birleştiriyorum. Özellikle Yapay Zeka ve Siber Güvenlik kesişimindeki teknolojilere odaklanıyorum.",
+        "bio": "Geleceğin teknolojilerini sadece kullanmak değil, onları güvenli ve etkili bir şekilde inşa etmek için çalışıyorum. RAG mimarileri, LLM fine-tuning süreçleri ve siber güvenlik operasyonları ana ilgi alanlarım.",
+        "focus": "Odak",
+        "focusDesc": "Yapay zeka, siber güvenlik, ürün geliştirme",
+        "approach": "Yaklaşım",
+        "approachDesc": "Analitik düşünce, hızlı prototipleme",
+        "target": "Hedef",
+        "targetDesc": "Güvenli ve ölçeklenebilir sistemler",
+        "aiLlm": "Yapay Zeka & LLM",
+        "cybersecurity": "Siber Güvenlik",
+        "software": "Yazılım & Web",
+        "tools": "Araçlar",
         "experience": "Deneyim",
-        "education": "Eğitim",
-        "skills": "Yetenekler",
-        "interests": "İlgi Alanları",
-        "downloadCV": "CV İndir"
+        "githubProfile": "GitHub Profilim",
+        "linkedIn": "LinkedIn"
     },
     "contact": {
         "title": "İletişim",
-        "subtitle": "Benimle iletişime geçin",
+        "subtitle": "Bir proje veya iş birliği için benimle iletişime geçebilirsiniz.",
         "form": {
-            "name": "Adınız",
-            "namePlaceholder": "Adınızı girin",
+            "name": "İsim",
+            "namePlaceholder": "Adınız Soyadınız",
             "email": "E-posta",
             "emailPlaceholder": "ornek@email.com",
             "subject": "Konu",
-            "subjectPlaceholder": "Mesajınızın konusu",
+            "subjectPlaceholder": "Konu Seçin",
+            "subjectOptions": {
+                "project": "Proje Teklifi",
+                "collaboration": "İş Birliği",
+                "question": "Soru",
+                "other": "Diğer"
+            },
             "message": "Mesaj",
             "messagePlaceholder": "Mesajınızı buraya yazın...",
-            "submit": "Gönder",
+            "submit": "Mesaj Gönder",
             "sending": "Gönderiliyor...",
-            "success": "Mesajınız başarıyla gönderildi!",
-            "error": "Mesaj gönderilirken bir hata oluştu.",
+            "success": "Mesajınız Gönderildi!",
+            "successDesc": "En kısa sürede size geri dönüş yapacağım.",
+            "newMessage": "Yeni Mesaj Gönder",
+            "error": "Bir hata oluştu. Lütfen tekrar deneyin.",
             "validation": {
                 "nameRequired": "Ad alanı zorunludur",
                 "emailRequired": "E-posta alanı zorunludur",
@@ -117,6 +149,7 @@
             "title": "İletişim Bilgileri",
             "email": "E-posta",
             "location": "Konum",
+            "locationValue": "Gaziantep, Türkiye",
             "social": "Sosyal Medya"
         }
     },
@@ -134,7 +167,8 @@
         "copyright": "© {year} {name}. Tüm hakları saklıdır.",
         "builtWith": "{framework} ile geliştirildi",
         "privacyPolicy": "Gizlilik Politikası",
-        "termsOfService": "Kullanım Koşulları"
+        "termsOfService": "Kullanım Koşulları",
+        "navigation": "Navigasyon"
     },
     "theme": {
         "toggle": "Tema değiştir",
