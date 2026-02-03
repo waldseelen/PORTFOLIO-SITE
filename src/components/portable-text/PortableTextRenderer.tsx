@@ -1,13 +1,57 @@
 import { PortableText, PortableTextComponents } from '@portabletext/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
+
+// Type definitions for Sanity Portable Text blocks
+interface ImageValue {
+    asset: {
+        _id: string;
+        url: string;
+    };
+    alt?: string;
+    caption?: string;
+}
+
+interface CodeBlockValue {
+    code: string;
+    language?: string;
+    filename?: string;
+}
+
+interface YoutubeValue {
+    url?: string;
+}
+
+interface CalloutValue {
+    text: string;
+    type?: 'info' | 'warning' | 'success' | 'error' | 'tip';
+}
+
+interface LinkValue {
+    href?: string;
+}
+
+interface InternalLinkValue {
+    reference?: {
+        _type: string;
+        slug?: {
+            current: string;
+        };
+    };
+}
+
+interface PullQuoteValue {
+    quote?: string;
+    attribution?: string;
+}
 
 /**
  * Custom PortableText components for rendering Sanity block content
  */
 export const portableTextComponents: PortableTextComponents = {
     types: {
-        image: ({ value }) => {
+        image: ({ value }: { value: ImageValue }) => {
             if (!value?.asset?.url) return null;
 
             return (
@@ -30,8 +74,8 @@ export const portableTextComponents: PortableTextComponents = {
                     )}
                 </figure>
             );
-        }
-        codeBlock: ({ value }) => {
+        },
+        codeBlock: ({ value }: { value: CodeBlockValue }) => {
             return (
                 <div className="my-6 overflow-hidden rounded-lg bg-neutral-950 ring-1 ring-neutral-800">
                     {value.filename && (
@@ -46,8 +90,8 @@ export const portableTextComponents: PortableTextComponents = {
                     </pre>
                 </div>
             );
-        }
-        youtube: ({ value }) => {
+        },
+        youtube: ({ value }: { value: YoutubeValue }) => {
             const videoId = value.url?.match(
                 /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
             )?.[1];
@@ -66,7 +110,19 @@ export const portableTextComponents: PortableTextComponents = {
                 </div>
             );
         },
-        callout: ({ value }) => {
+        pullQuote: ({ value }: { value: PullQuoteValue }) => {
+            return (
+                <blockquote className="my-8 border-l-4 border-primary-500 bg-primary-500/10 pl-6 py-4 italic text-lg text-neutral-700 dark:text-neutral-300">
+                    <p className="mb-3">{value.quote}</p>
+                    {value.attribution && (
+                        <footer className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                            — {value.attribution}
+                        </footer>
+                    )}
+                </blockquote>
+            );
+        },
+        callout: ({ value }: { value: CalloutValue }) => {
             const styles = {
                 info: 'border-blue-500 bg-blue-50 dark:bg-blue-950',
                 warning: 'border-yellow-500 bg-yellow-50 dark:bg-yellow-950',
@@ -96,7 +152,7 @@ export const portableTextComponents: PortableTextComponents = {
         },
     },
     marks: {
-        link: ({ children, value }) => {
+        link: ({ children, value }: { children?: ReactNode; value?: LinkValue }) => {
             const href = value?.href || '';
             const isExternal = href.startsWith('http');
 
@@ -122,7 +178,7 @@ export const portableTextComponents: PortableTextComponents = {
                 </Link>
             );
         },
-        internalLink: ({ children, value }) => {
+        internalLink: ({ children, value }: { children?: ReactNode; value?: InternalLinkValue }) => {
             const ref = value?.reference;
             if (!ref) return <>{children}</>;
 
@@ -142,56 +198,56 @@ export const portableTextComponents: PortableTextComponents = {
                 </Link>
             );
         },
-        code: ({ children }) => (
+        code: ({ children }: { children?: ReactNode }) => (
             <code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-sm text-primary-700 dark:bg-neutral-800 dark:text-primary-300">
                 {children}
             </code>
         ),
     },
     block: {
-        h1: ({ children }) => (
+        h1: ({ children }: { children?: ReactNode }) => (
             <h1 className="mt-12 mb-4 text-4xl font-bold text-neutral-900 dark:text-white scroll-mt-20">
                 {children}
             </h1>
         ),
-        h2: ({ children }) => (
+        h2: ({ children }: { children?: ReactNode }) => (
             <h2 className="mt-10 mb-4 text-3xl font-bold text-neutral-900 dark:text-white scroll-mt-20">
                 {children}
             </h2>
         ),
-        h3: ({ children }) => (
+        h3: ({ children }: { children?: ReactNode }) => (
             <h3 className="mt-8 mb-3 text-2xl font-bold text-neutral-900 dark:text-white scroll-mt-20">
                 {children}
             </h3>
         ),
-        h4: ({ children }) => (
+        h4: ({ children }: { children?: ReactNode }) => (
             <h4 className="mt-6 mb-2 text-lg font-bold text-neutral-900 dark:text-white scroll-mt-20">
                 {children}
             </h4>
-        )
-        blockquote: ({ children }) => (
+        ),
+        blockquote: ({ children }: { children?: ReactNode }) => (
             <blockquote className="my-6 border-l-4 border-primary-500/50 bg-primary-500/5 pl-4 italic text-neutral-600 dark:text-neutral-400 py-3">
                 {children}
             </blockquote>
         ),
-        normal: ({ children }) => (
+        normal: ({ children }: { children?: ReactNode }) => (
             <p className="my-4 leading-relaxed text-neutral-700 dark:text-neutral-300 max-w-none">
                 {children}
             </p>
         ),
     },
     list: {
-        bullet: ({ children }) => (
+        bullet: ({ children }: { children?: ReactNode }) => (
             <ul className="my-4 ml-6 list-disc space-y-2 text-neutral-700 dark:text-neutral-300">
                 {children}
             </ul>
         ),
-        number: ({ children }) => (
+        number: ({ children }: { children?: ReactNode }) => (
             <ol className="my-4 ml-6 list-decimal space-y-2 text-neutral-700 dark:text-neutral-300">
                 {children}
             </ol>
         ),
-    }
+    },
 };
 
 interface PortableTextRendererProps {
