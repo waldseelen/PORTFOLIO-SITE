@@ -28,11 +28,15 @@ export const project = defineType({
             options: {
                 hotspot: true,
             },
+            description: 'Recommended size: 1200x630px (16:9 aspect ratio)',
+            validation: (Rule) => Rule.required(),
             fields: [
                 {
                     name: 'alt',
                     type: 'string',
                     title: 'Alternative Text',
+                    description: 'REQUIRED for SEO and accessibility. Describe the image.',
+                    validation: (Rule: any) => Rule.required().min(10).max(200),
                 },
             ],
         }),

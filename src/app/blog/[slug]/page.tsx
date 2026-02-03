@@ -1,11 +1,11 @@
 import { FadeInUp } from '@/components/animations';
 import { BlogComments } from '@/components/comments';
 import { SmartScrollOutline } from '@/components/navigation';
+import { PortableTextRenderer } from '@/components/portable-text/PortableTextRenderer';
+import { getAllPostSlugs, getPostBySlug } from '@/lib/data';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-// import { sanityFetch } from '@/sanity/client';
-// import { postBySlugQuery, postSlugsQuery } from '@/sanity/queries';
 
 interface BlogPostPageProps {
     params: Promise<{ slug: string }>;
@@ -13,45 +13,44 @@ interface BlogPostPageProps {
 
 // Generate static params for all blog posts
 export async function generateStaticParams() {
-    // TODO: Sanity entegrasyonunda bu kısım aktif edilecek
-    // const slugs = await sanityFetch<string[]>({
-    //   query: postSlugsQuery,
-    //   tags: [cacheTags.blog],
-    // });
-    // return slugs.map((slug) => ({ slug }));
-
-    return [
-        { slug: 'nextjs-15-modern-web' },
-        { slug: 'typescript-best-practices' },
-        { slug: 'sanity-cms-headless' },
-    ];
+    try {
+        const slugs = await getAllPostSlugs();
+        return slugs.map((slug) => ({ slug }));
+    } catch (error) {
+        console.error('Error generating static params:', error);
+        return [];
+    }
 }
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
     const { slug } = await params;
 
-    // TODO: Sanity'den post verisi çekilecek
-    const post = {
-        title: `Blog Post: ${slug}`,
-        excerpt: 'Bu bir blog yazısı açıklamasıdır.',
-    };
+    try {
+        const post = await getPostBySlug(slug);
 
-    if (!post) {
+        if (!post) {
+            return {
+                title: 'Yazı Bulunamadı',
+            };
+        }
+
+        return {
+            title: post.title,
+            description: post.excerpt || '',
+            openGraph: {
+                title: post.title,
+                description: post.excerpt || '',
+                type: 'article',
+                images: post.mainImage?.asset?.url ? [post.mainImage.asset.url] : [],
+            },
+        };
+    } catch (error) {
+        console.error('Error generating metadata:', error);
         return {
             title: 'Yazı Bulunamadı',
         };
     }
-
-    return {
-        title: post.title,
-        description: post.excerpt,
-        openGraph: {
-            title: post.title,
-            description: post.excerpt,
-            type: 'article',
-        },
-    };
 }
 
 // ISR with long revalidation (24 hours)
@@ -60,24 +59,13 @@ export const revalidate = 86400; // 24 hours
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
     const { slug } = await params;
 
-    // TODO: Sanity entegrasyonunda bu kısım aktif edilecek
-    // const post = await sanityFetch({
-    //   query: postBySlugQuery,
-    //   params: { slug },
-    //   tags: [cacheTags.blogPost(slug)],
-    // });
-
-    // Placeholder post for initial setup
-    const post = {
-        _id: '1',
-        title: `Blog Post: ${slug}`,
-        slug: { current: slug },
-        excerpt: 'Bu bir blog yazısı açıklamasıdır.',
-        body: 'Bu alan Sanity PortableText ile doldurulacak.',
-        publishedAt: '2024-01-15',
-        author: { name: 'Admin', bio: 'Full-Stack Developer', image: null },
-        categories: [{ title: 'Web Development', slug: { current: 'web-development' } }],
-    };
+    let post;
+    try {
+        post = await getPostBySlug(slug);
+    } catch (error) {
+        console.error('Error fetching post:', error);
+        notFound();
+    }
 
     if (!post) {
         notFound();
@@ -138,21 +126,22 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     </div>
                 </header>
 
-                {/* Featured Image Placeholder */}
-                <div className="mx-auto mt-10 max-w-4xl">
-                    <div className="aspect-video rounded-2xl bg-neutral-100 dark:bg-neutral-800" />
-                </div>
+                {/* Featured Image */}
+                {post.mainImage?.asset?.url && (
+                    <div className="mx-auto mt-10 max-w-4xl overflow-hidden rounded-2xl bg-neutral-900/50 ring-1 ring-white/10">
+                        <img
+                            src={post.mainImage.asset.url}
+                            alt={post.mainImage.alt || post.title}\n                            className="aspect-video w-full h-auto object-cover\"\n                            loading=\"lazy\"\n                        />\n                    </div>\n                )}
 
                 {/* Article Content */}
                 <div className="prose-custom mx-auto mt-12 max-w-3xl">
-                    {/* TODO: PortableText ile içerik render edilecek */}
-                    <p className="text-lg leading-relaxed">
-                        {post.excerpt}
-                    </p>
-                    <p className="mt-6 text-neutral-600 dark:text-neutral-400">
-                        Bu alan Sanity CMS entegrasyonu tamamlandığında PortableText komponenti ile
-                        zengin içerik olarak render edilecektir.
-                    </p>
+                    {post.body && Array.isArray(post.body) && post.body.length > 0 ? (
+                        <PortableTextRenderer value={post.body} />
+                    ) : (
+                        <p className="text-lg leading-relaxed text-neutral-600 dark:text-neutral-400">
+                            {post.excerpt}
+                        </p>
+                    )}
                 </div>
 
                 {/* Article Footer */}

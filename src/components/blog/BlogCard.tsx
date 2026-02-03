@@ -30,28 +30,34 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
                 <div className={cn(
                     'glass-panel relative h-full overflow-hidden p-4',
                     'hover:shadow-[0_0_30px_rgba(0,240,255,0.15)]',
-                    'border border-white/5 hover:border-primary-500/30'
+                    'border border-white/5 hover:border-primary-500/30',
+                    'isolate'
                 )}>
                     {/* Hover Glow Effect */}
-                    <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-primary-500/20 to-secondary-500/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
+                    <div className="absolute -inset-1 -z-10 rounded-2xl bg-gradient-to-r from-primary-500/20 to-secondary-500/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
 
                     {/* Image Container */}
-                    <div className="relative mb-4 aspect-video overflow-hidden rounded-lg bg-neutral-900/50">
+                    <div className="relative mb-4 aspect-video overflow-hidden rounded-lg bg-neutral-900/50 flex-shrink-0">
                         {post.mainImage?.asset?.url ? (
                             <Image
                                 src={post.mainImage.asset.url}
                                 alt={post.mainImage.alt || post.title}
                                 fill
-                                className="object-cover transition-transform duration-500 group-hover:scale-110"
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, (max-width: 1280px) 45vw, 33vw"
+                                quality={75}
+                                loading="lazy"
+                                placeholder="blur"
+                                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzBBMEEwQSIvPjwvc3ZnPg=="
                             />
                         ) : (
-                            <div className="flex h-full items-center justify-center border border-white/5 bg-[#0A0A0A]">
+                            <div className="flex h-full w-full items-center justify-center border border-white/5 bg-[#0A0A0A]">
                                 <svg
                                     className="h-12 w-12 text-neutral-700"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
+                                    aria-hidden="true"
                                 >
                                     <path
                                         strokeLinecap="round"
@@ -68,7 +74,7 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
                     </div>
 
                     {/* Content */}
-                    <div className="relative z-10 flex flex-col h-[calc(100%-aspect-video-1rem)]">
+                    <div className="relative z-10 flex flex-col flex-grow min-h-0">
                         {/* Categories */}
                         {post.categories && post.categories.length > 0 && (
                             <div className="mb-3 flex flex-wrap gap-2">

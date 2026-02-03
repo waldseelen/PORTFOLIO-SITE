@@ -26,28 +26,34 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                 <div className={cn(
                     'glass-panel relative h-full overflow-hidden p-4',
                     'hover:shadow-[0_0_30px_rgba(112,0,255,0.15)]',
-                    'border border-white/5 hover:border-secondary-500/30'
+                    'border border-white/5 hover:border-secondary-500/30',
+                    'isolate'
                 )}>
                     {/* Hover Glow Effect */}
-                    <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-secondary-500/20 to-primary-500/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
+                    <div className="absolute -inset-1 -z-10 rounded-2xl bg-gradient-to-r from-secondary-500/20 to-primary-500/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
 
                     {/* Image Container */}
-                    <div className="relative mb-4 aspect-video overflow-hidden rounded-lg bg-neutral-900/50">
+                    <div className="relative mb-4 aspect-video overflow-hidden rounded-lg bg-neutral-900/50 flex-shrink-0">
                         {project.mainImage?.asset?.url ? (
                             <Image
                                 src={project.mainImage.asset.url}
                                 alt={project.mainImage.alt || project.title}
                                 fill
-                                className="object-cover transition-transform duration-500 group-hover:scale-110"
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, (max-width: 1280px) 45vw, 33vw"
+                                quality={75}
+                                loading="lazy"
+                                placeholder="blur"
+                                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzBBMEEwQSIvPjwvc3ZnPg=="
                             />
                         ) : (
-                            <div className="flex h-full items-center justify-center border border-white/5 bg-[#0A0A0A]">
+                            <div className="flex h-full w-full items-center justify-center border border-white/5 bg-[#0A0A0A]">
                                 <svg
                                     className="h-12 w-12 text-neutral-700"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
+                                    aria-hidden="true"
                                 >
                                     <path
                                         strokeLinecap="round"
@@ -64,8 +70,8 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                     </div>
 
                     {/* Content */}
-                    <div className="relative z-10 flex flex-col h-[calc(100%-aspect-video-1rem)]">
-                        <h3 className="heading-3 mb-2 text-xl font-bold text-white transition-colors group-hover:text-secondary-400">
+                    <div className="relative z-10 flex flex-col flex-grow min-h-0">
+                        <h3 className="heading-3 mb-2 text-xl font-bold text-white transition-colors group-hover:text-secondary-400 line-clamp-2">
                             {project.title}
                         </h3>
 

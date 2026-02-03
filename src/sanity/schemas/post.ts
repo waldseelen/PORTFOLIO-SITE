@@ -59,22 +59,27 @@ export const post = defineType({
             options: {
                 hotspot: true,
             },
+            description: 'Önerilen boyut: 1200x630px (16:9 aspect ratio)',
+            validation: (Rule) => Rule.required(),
             fields: [
                 {
                     name: 'alt',
                     type: 'string',
                     title: 'Alt Metin',
-                    description: 'SEO ve erişilebilirlik için önemli',
+                    description: 'SEO ve erişilebilirlik için ZORUNLU. Görseli açıklayın.',
+                    validation: (Rule: any) => Rule.required().min(10).max(200),
                 },
                 {
                     name: 'caption',
                     type: 'string',
                     title: 'Görsel Açıklaması',
+                    validation: (Rule: any) => Rule.max(300),
                 },
                 {
                     name: 'credit',
                     type: 'string',
                     title: 'Fotoğrafçı/Kaynak',
+                    validation: (Rule: any) => Rule.max(200),
                 },
             ],
         }),

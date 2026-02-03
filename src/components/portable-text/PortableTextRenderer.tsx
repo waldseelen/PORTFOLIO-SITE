@@ -11,40 +11,42 @@ export const portableTextComponents: PortableTextComponents = {
             if (!value?.asset?.url) return null;
 
             return (
-                <figure className="my-8">
-                    <div className="relative aspect-video overflow-hidden rounded-lg">
+                <figure className="my-8 w-full">
+                    <div className="relative w-full overflow-hidden rounded-lg bg-neutral-200 dark:bg-neutral-800" style={{ aspectRatio: '16/9' }}>
                         <Image
                             src={value.asset.url}
-                            alt={value.alt || ''}
+                            alt={value.alt || 'İçerik görseli'}
                             fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, 800px"
+                            className="object-contain"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 800px"
+                            quality={85}
+                            loading="lazy"
                         />
                     </div>
                     {value.caption && (
-                        <figcaption className="mt-2 text-center text-sm text-neutral-500 dark:text-neutral-400">
+                        <figcaption className="mt-3 text-center text-sm text-neutral-600 dark:text-neutral-400">
                             {value.caption}
                         </figcaption>
                     )}
                 </figure>
             );
-        },
+        }
         codeBlock: ({ value }) => {
             return (
-                <div className="my-6 overflow-hidden rounded-lg bg-neutral-900 dark:bg-neutral-950">
+                <div className="my-6 overflow-hidden rounded-lg bg-neutral-950 ring-1 ring-neutral-800">
                     {value.filename && (
-                        <div className="border-b border-neutral-700 px-4 py-2 text-sm text-neutral-400">
-                            {value.filename}
+                        <div className="border-b border-neutral-800 bg-neutral-900 px-4 py-2 text-sm font-medium text-neutral-400">
+                            <code>{value.filename}</code>
                         </div>
                     )}
                     <pre className="overflow-x-auto p-4">
-                        <code className={`language-${value.language || 'text'}`}>
+                        <code className={`language-${value.language || 'text'} text-neutral-300`}>
                             {value.code}
                         </code>
                     </pre>
                 </div>
             );
-        },
+        }
         youtube: ({ value }) => {
             const videoId = value.url?.match(
                 /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
@@ -148,32 +150,32 @@ export const portableTextComponents: PortableTextComponents = {
     },
     block: {
         h1: ({ children }) => (
-            <h1 className="mt-12 mb-4 text-3xl font-bold text-neutral-900 dark:text-white">
+            <h1 className="mt-12 mb-4 text-4xl font-bold text-neutral-900 dark:text-white scroll-mt-20">
                 {children}
             </h1>
         ),
         h2: ({ children }) => (
-            <h2 className="mt-10 mb-4 text-2xl font-bold text-neutral-900 dark:text-white">
+            <h2 className="mt-10 mb-4 text-3xl font-bold text-neutral-900 dark:text-white scroll-mt-20">
                 {children}
             </h2>
         ),
         h3: ({ children }) => (
-            <h3 className="mt-8 mb-3 text-xl font-bold text-neutral-900 dark:text-white">
+            <h3 className="mt-8 mb-3 text-2xl font-bold text-neutral-900 dark:text-white scroll-mt-20">
                 {children}
             </h3>
         ),
         h4: ({ children }) => (
-            <h4 className="mt-6 mb-2 text-lg font-bold text-neutral-900 dark:text-white">
+            <h4 className="mt-6 mb-2 text-lg font-bold text-neutral-900 dark:text-white scroll-mt-20">
                 {children}
             </h4>
-        ),
+        )
         blockquote: ({ children }) => (
-            <blockquote className="my-6 border-l-4 border-primary-500 pl-4 italic text-neutral-600 dark:text-neutral-400">
+            <blockquote className="my-6 border-l-4 border-primary-500/50 bg-primary-500/5 pl-4 italic text-neutral-600 dark:text-neutral-400 py-3">
                 {children}
             </blockquote>
         ),
         normal: ({ children }) => (
-            <p className="my-4 leading-relaxed text-neutral-700 dark:text-neutral-300">
+            <p className="my-4 leading-relaxed text-neutral-700 dark:text-neutral-300 max-w-none">
                 {children}
             </p>
         ),
@@ -189,7 +191,7 @@ export const portableTextComponents: PortableTextComponents = {
                 {children}
             </ol>
         ),
-    },
+    }
 };
 
 interface PortableTextRendererProps {

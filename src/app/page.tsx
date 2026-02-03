@@ -3,7 +3,7 @@ import { BlogCard, BlogCardSkeleton } from '@/components/blog/BlogCard';
 import { ProjectCard, ProjectCardSkeleton } from '@/components/projects/ProjectCard';
 import { getFeaturedPosts, getFeaturedProjects } from '@/lib/data';
 import type { BlogPost, Project } from '@/types';
-import { getLocale, getTranslations } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
@@ -13,7 +13,6 @@ export const revalidate = 21600;
 // Featured Projects Component
 async function FeaturedProjects() {
     let projects: Project[] = [];
-    const locale = await getLocale();
 
     try {
         projects = await getFeaturedProjects(4);
@@ -21,50 +20,12 @@ async function FeaturedProjects() {
         console.error('Error fetching featured projects:', error);
     }
 
+    // Show placeholder only if no projects are available
     if (!projects || projects.length === 0) {
-        // Demo Projects for Initial State
-        const demoProjects: Project[] = locale === 'tr' ? [
-            {
-                _id: 'demo-1',
-                title: 'RAG Tabanlı AI Asistanı',
-                slug: { current: 'rag-ai-assistant' },
-                excerpt: 'Kurumsal dokümanlar üzerinde soru-cevap yapabilen, LLM destekli akıllı asistan.',
-                mainImage: { asset: { _id: '', url: '' } },
-                technologies: ['Python', 'LangChain', 'OpenAI', 'Next.js'],
-            },
-            {
-                _id: 'demo-2',
-                title: 'Siber Güvenlik Dashboard',
-                slug: { current: 'cybersec-dashboard' },
-                excerpt: 'Gerçek zamanlı tehdit izleme ve analiz platformu. SOC operasyonları için tasarlandı.',
-                mainImage: { asset: { _id: '', url: '' } },
-                technologies: ['React', 'D3.js', 'Socket.io', 'Node.js'],
-            }
-        ] : [
-            {
-                _id: 'demo-1',
-                title: 'RAG Based AI Assistant',
-                slug: { current: 'rag-ai-assistant' },
-                excerpt: 'LLM-powered smart assistant capable of Q&A on corporate documents.',
-                mainImage: { asset: { _id: '', url: '' } },
-                technologies: ['Python', 'LangChain', 'OpenAI', 'Next.js'],
-            },
-            {
-                _id: 'demo-2',
-                title: 'Cybersecurity Dashboard',
-                slug: { current: 'cybersec-dashboard' },
-                excerpt: 'Real-time threat monitoring and analysis platform. Designed for SOC operations.',
-                mainImage: { asset: { _id: '', url: '' } },
-                technologies: ['React', 'D3.js', 'Socket.io', 'Node.js'],
-            }
-        ];
-
         return (
-            <StaggerChildren className="grid gap-6 md:grid-cols-2">
-                {demoProjects.map((project, index) => (
-                    <ProjectCard key={project._id} project={project} index={index} />
-                ))}
-            </StaggerChildren>
+            <div className="glass-panel p-8 text-center">
+                <p className="text-neutral-400">Henüz proje eklenmedi.</p>
+            </div>
         );
     }
 
@@ -80,7 +41,6 @@ async function FeaturedProjects() {
 // Featured Posts Component
 async function FeaturedPosts() {
     let posts: BlogPost[] = [];
-    const locale = await getLocale();
 
     try {
         posts = await getFeaturedPosts(3);
@@ -88,62 +48,12 @@ async function FeaturedPosts() {
         console.error('Error fetching featured posts:', error);
     }
 
+    // Show placeholder only if no posts are available
     if (!posts || posts.length === 0) {
-        // Demo Posts for Initial State
-        const demoPosts: BlogPost[] = locale === 'tr' ? [
-            {
-                _id: 'demo-post-1',
-                title: 'LLM Fine-Tuning Rehberi',
-                slug: { current: 'llm-fine-tuning-guide' },
-                excerpt: 'Açık kaynaklı modelleri kendi verilerinizle nasıl eğitebilirsiniz? Adım adım rehber.',
-                mainImage: { asset: { _id: '', url: '' } },
-                categories: [{ title: 'Yapay Zeka', slug: { current: 'ai' } }],
-                author: { name: 'Buğra Akın', image: '' },
-                publishedAt: new Date().toISOString(),
-                body: []
-            },
-            {
-                _id: 'demo-post-2',
-                title: 'Modern Web Güvenliği',
-                slug: { current: 'modern-web-security' },
-                excerpt: 'Next.js uygulamalarında güvenlik en iyi pratikleri ve yaygın açıklardan korunma yöntemleri.',
-                mainImage: { asset: { _id: '', url: '' } },
-                categories: [{ title: 'Siber Güvenlik', slug: { current: 'security' } }],
-                author: { name: 'Buğra Akın', image: '' },
-                publishedAt: new Date().toISOString(),
-                body: []
-            }
-        ] : [
-            {
-                _id: 'demo-post-1',
-                title: 'LLM Fine-Tuning Guide',
-                slug: { current: 'llm-fine-tuning-guide' },
-                excerpt: 'How to train open-source models with your own data? Step-by-step guide.',
-                mainImage: { asset: { _id: '', url: '' } },
-                categories: [{ title: 'Artificial Intelligence', slug: { current: 'ai' } }],
-                author: { name: 'Buğra Akın', image: '' },
-                publishedAt: new Date().toISOString(),
-                body: []
-            },
-            {
-                _id: 'demo-post-2',
-                title: 'Modern Web Security',
-                slug: { current: 'modern-web-security' },
-                excerpt: 'Security best practices and prevention methods for common vulnerabilities in Next.js apps.',
-                mainImage: { asset: { _id: '', url: '' } },
-                categories: [{ title: 'Cybersecurity', slug: { current: 'security' } }],
-                author: { name: 'Buğra Akın', image: '' },
-                publishedAt: new Date().toISOString(),
-                body: []
-            }
-        ];
-
         return (
-            <StaggerChildren className="space-y-6">
-                {demoPosts.map((post, index) => (
-                    <BlogCard key={post._id} post={post} index={index} />
-                ))}
-            </StaggerChildren>
+            <div className="glass-panel p-8 text-center">
+                <p className="text-neutral-400">Henüz blog yazısı eklenmedi.</p>
+            </div>
         );
     }
 
@@ -183,10 +93,10 @@ export default async function HomePage() {
     return (
         <>
             {/* Background Effects */}
-            <div className="fixed inset-0 -z-50 bg-[#030014]">
-                <div className="absolute top-0 right-0 -mr-20 -mt-20 h-[500px] w-[500px] rounded-full bg-primary-500/10 blur-[100px]" />
-                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 h-[500px] w-[500px] rounded-full bg-secondary-500/10 blur-[100px]" />
-                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+            <div className="fixed inset-0 -z-50 bg-[#030014] pointer-events-none">
+                <div className="absolute top-0 right-0 -mr-20 -mt-20 h-[500px] w-[500px] rounded-full bg-primary-500/10 blur-[100px] will-change-transform" />
+                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 h-[500px] w-[500px] rounded-full bg-secondary-500/10 blur-[100px] will-change-transform" />
+                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-30" />
             </div>
 
             <div className="container-custom pt-28 pb-24 md:pt-32 md:pb-32">
@@ -241,7 +151,7 @@ export default async function HomePage() {
                                     {t('skills.title')}
                                 </h3>
                                 <div className="flex flex-wrap gap-2">
-                                    {['Python', 'RAG', 'Next.js', 'CyberSec', 'LLM', 'React', 'Tailwind'].map((skill) => (
+                                    {['Python', 'RAG', 'Next.js', 'CyberSec', 'LLM', 'React', 'Tailwind', 'Felsefe', 'Sosyoloji', 'Tarih', 'Müzik'].map((skill) => (
                                         <span key={skill} className="rounded bg-white/5 px-2 py-1 text-xs text-neutral-300 hover:bg-white/10 hover:text-white transition-colors cursor-default">
                                             {skill}
                                         </span>

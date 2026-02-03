@@ -39,16 +39,16 @@ export function Header() {
     return (
         <header className={cn(
             "fixed top-0 z-50 w-full transition-all duration-300",
-            scrolled ? "pt-4" : "pt-0"
+            scrolled ? "pt-2" : "pt-0"
         )}>
             <div className="container-custom">
                 <motion.nav
                     initial={{ y: -100, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     className={cn(
-                        "relative mx-auto flex h-16 items-center justify-between rounded-full px-6 transition-all duration-300",
+                        "relative mx-auto flex h-14 items-center justify-between rounded-full px-6 transition-all duration-300",
                         scrolled
-                            ? "glass-panel bg-[#030014]/80 shadow-[0_0_20px_rgba(0,0,0,0.5)] max-w-5xl mt-4"
+                            ? "glass-panel bg-[#030014]/80 shadow-[0_0_20px_rgba(0,0,0,0.5)] max-w-5xl mt-2"
                             : "bg-transparent max-w-full mt-0"
                     )}
                 >
