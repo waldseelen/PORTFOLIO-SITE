@@ -1,8 +1,9 @@
+import { PortableTextRenderer } from '@/components/portable-text/PortableTextRenderer';
+import { getAllProjectSlugs, getProjectBySlug } from '@/lib/data';
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-// import { sanityFetch } from '@/sanity/client';
-// import { projectBySlugQuery, projectSlugsQuery } from '@/sanity/queries';
 
 interface ProjectDetailPageProps {
     params: Promise<{ slug: string }>;
@@ -10,19 +11,13 @@ interface ProjectDetailPageProps {
 
 // Generate static params for all projects
 export async function generateStaticParams() {
-    // TODO: Sanity entegrasyonunda bu kısım aktif edilecek
-    // const slugs = await sanityFetch<string[]>({
-    //   query: projectSlugsQuery,
-    //   tags: [cacheTags.projects],
-    // });
-    // return slugs.map((slug) => ({ slug }));
-
-    return [
-        { slug: 'e-commerce-platform' },
-        { slug: 'task-management-app' },
-        { slug: 'ai-content-generator' },
-        { slug: 'portfolio-website' },
-    ];
+    try {
+        const slugs = await getAllProjectSlugs();
+        return slugs.map((slug) => ({ slug }));
+    } catch (error) {
+        console.error('Error generating static params:', error);
+        return [];
+    }
 }
 
 // Generate metadata for SEO
@@ -58,25 +53,13 @@ export const revalidate = 86400; // 24 hours
 export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
     const { slug } = await params;
 
-    // TODO: Sanity entegrasyonunda bu kısım aktif edilecek
-    // const project = await sanityFetch({
-    //   query: projectBySlugQuery,
-    //   params: { slug },
-    //   tags: [cacheTags.project(slug)],
-    // });
-
-    // Placeholder project for initial setup
-    const project = {
-        _id: '1',
-        title: `Project: ${slug}`,
-        slug: { current: slug },
-        excerpt: 'Bu bir proje açıklamasıdır.',
-        body: 'Bu alan Sanity PortableText ile doldurulacak.',
-        technologies: ['Next.js', 'TypeScript', 'Tailwind CSS'],
-        githubUrl: 'https://github.com/username/project',
-        liveUrl: 'https://project.example.com',
-        featured: true,
-    };
+    let project;
+    try {
+        project = await getProjectBySlug(slug);
+    } catch (error) {
+        console.error('Error fetching project:', error);
+        notFound();
+    }
 
     if (!project) {
         notFound();
@@ -164,20 +147,42 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                 </header>
 
                 {/* Project Image */}
-                <div className="mb-12">
-                    <div className="aspect-video overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800" />
-                </div>
+                {project.mainImage?.asset?.url ? (
+                    <div className="mb-12">
+                        <div className="aspect-video overflow-hidden rounded-2xl bg-neutral-900/50 ring-1 ring-white/10">
+                            <Image
+                                src={project.mainImage.asset.url}
+                                alt={project.mainImage.alt || project.title}
+                                width={1200}
+                                height={675}
+                                className="w-full h-full object-cover"
+                                quality={90}
+                                priority
+                            />
+                        </div>
+                    </div>
+                ) : (
+                    <div className="mb-12">
+                        <div className="aspect-video overflow-hidden rounded-2xl bg-neutral-900/50 ring-1 ring-white/10 flex items-center justify-center">
+                            <svg className="h-24 w-24 text-neutral-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V9a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                    </div>
+                )}
 
                 {/* Project Content */}
                 <div className="grid gap-12 lg:grid-cols-3">
                     {/* Main Content */}
                     <div className="prose-custom lg:col-span-2">
                         <h2>Proje Hakkında</h2>
-                        <p>{project.body}</p>
-                        <p className="text-neutral-600 dark:text-neutral-400">
-                            Bu alan Sanity CMS entegrasyonu tamamlandığında PortableText komponenti ile
-                            zengin içerik olarak render edilecektir.
-                        </p>
+                        {project.body && Array.isArray(project.body) && project.body.length > 0 ? (
+                            <PortableTextRenderer value={project.body} />
+                        ) : (
+                            <p className="text-neutral-600 dark:text-neutral-400">
+                                {project.excerpt || 'Proje açıklaması henüz eklenmedi.'}
+                            </p>
+                        )}
                     </div>
 
                     {/* Sidebar */}
@@ -185,18 +190,49 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                         <div className="card">
                             <h3 className="mb-4 text-lg font-semibold">Proje Detayları</h3>
                             <dl className="space-y-4">
-                                <div>
-                                    <dt className="text-sm font-medium text-neutral-500">Durum</dt>
-                                    <dd className="mt-1 text-neutral-900 dark:text-neutral-50">Tamamlandı</dd>
-                                </div>
-                                <div>
-                                    <dt className="text-sm font-medium text-neutral-500">Kategori</dt>
-                                    <dd className="mt-1 text-neutral-900 dark:text-neutral-50">Web Uygulaması</dd>
-                                </div>
-                                <div>
-                                    <dt className="text-sm font-medium text-neutral-500">Tarih</dt>
-                                    <dd className="mt-1 text-neutral-900 dark:text-neutral-50">Ocak 2024</dd>
-                                </div>
+                                {project.status && (
+                                    <div>
+                                        <dt className="text-sm font-medium text-neutral-500">Durum</dt>
+                                        <dd className="mt-1 text-neutral-900 dark:text-neutral-50">
+                                            {project.status === 'completed' && 'Tamamlandı'}
+                                            {project.status === 'in-progress' && 'Devam Ediyor'}
+                                            {project.status === 'archived' && 'Arşivlendi'}
+                                        </dd>
+                                    </div>
+                                )}
+                                {project.categories && project.categories.length > 0 && (
+                                    <div>
+                                        <dt className="text-sm font-medium text-neutral-500">Kategori</dt>
+                                        <dd className="mt-1 text-neutral-900 dark:text-neutral-50">
+                                            {project.categories.map(cat => cat.title).join(', ')}
+                                        </dd>
+                                    </div>
+                                )}
+                                {(project.startDate || project.endDate) && (
+                                    <div>
+                                        <dt className="text-sm font-medium text-neutral-500">Tarih</dt>
+                                        <dd className="mt-1 text-neutral-900 dark:text-neutral-50">
+                                            {project.startDate && new Date(project.startDate).toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' })}
+                                            {project.startDate && project.endDate && ' - '}
+                                            {project.endDate && new Date(project.endDate).toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' })}
+                                        </dd>
+                                    </div>
+                                )}
+                                {project.technologies && project.technologies.length > 0 && (
+                                    <div>
+                                        <dt className="text-sm font-medium text-neutral-500">Teknolojiler</dt>
+                                        <dd className="mt-2 flex flex-wrap gap-2">
+                                            {project.technologies.map((tech) => (
+                                                <span
+                                                    key={tech}
+                                                    className="inline-flex items-center rounded border border-white/10 bg-white/5 px-2 py-1 text-xs font-mono text-neutral-300"
+                                                >
+                                                    {tech}
+                                                </span>
+                                            ))}
+                                        </dd>
+                                    </div>
+                                )}
                             </dl>
                         </div>
                     </div>

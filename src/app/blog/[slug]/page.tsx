@@ -4,6 +4,7 @@ import { SmartScrollOutline } from '@/components/navigation';
 import { PortableTextRenderer } from '@/components/portable-text/PortableTextRenderer';
 import { getAllPostSlugs, getPostBySlug } from '@/lib/data';
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -129,9 +130,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 {/* Featured Image */}
                 {post.mainImage?.asset?.url && (
                     <div className="mx-auto mt-10 max-w-4xl overflow-hidden rounded-2xl bg-neutral-900/50 ring-1 ring-white/10">
-                        <img
+                        <Image
                             src={post.mainImage.asset.url}
-                            alt={post.mainImage.alt || post.title}\n                            className="aspect-video w-full h-auto object-cover\"\n                            loading=\"lazy\"\n                        />\n                    </div>\n                )}
+                            alt={post.mainImage.alt || post.title}
+                            width={1200}
+                            height={675}
+                            className="aspect-video w-full h-auto object-cover"
+                            loading="lazy"
+                            quality={85}
+                        />
+                    </div>
+                )}
 
                 {/* Article Content */}
                 <div className="prose-custom mx-auto mt-12 max-w-3xl">
