@@ -43,7 +43,7 @@ export default function Error({
                     </p>
                 )}
                 <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-                    <button onClick={reset} className="btn-primary">
+                    <button type="button" onClick={reset} className="btn-primary">
                         Tekrar Dene
                     </button>
                     <Link href="/" className="btn-outline">

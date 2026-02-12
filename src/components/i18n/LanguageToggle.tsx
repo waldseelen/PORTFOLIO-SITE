@@ -2,6 +2,7 @@
 
 import { localeFlags, localeNames, locales, type Locale } from '@/i18n/config';
 import { cn } from '@/lib/utils';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
 
 interface LanguageToggleProps {
@@ -18,6 +19,8 @@ export function LanguageToggle({
     variant = 'button',
 }: LanguageToggleProps) {
     const [isPending] = useTransition();
+    const router = useRouter();
+    const pathname = usePathname();
     const [currentLocale, setCurrentLocale] = useState<Locale>('tr');
     const [isOpen, setIsOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
@@ -76,9 +79,8 @@ export function LanguageToggle({
         setCurrentLocale(newLocale);
         setIsOpen(false);
 
-        // 4. Sayfayı tam yenile (Hard reload)
-        // Next.js router cache bazen cookie değişimini hemen algılamıyor, bu yüzden tam yenileme yapıyoruz.
-        window.location.reload();
+        router.replace(pathname);
+        router.refresh();
     };
 
     // Hydration mismatch'i önle
@@ -91,6 +93,7 @@ export function LanguageToggle({
     if (variant === 'minimal') {
         return (
             <button
+                type="button"
                 onClick={() => switchLocale(otherLocale)}
                 disabled={isPending}
                 className={cn(
@@ -108,6 +111,7 @@ export function LanguageToggle({
     if (variant === 'button') {
         return (
             <button
+                type="button"
                 onClick={() => switchLocale(otherLocale)}
                 disabled={isPending}
                 className={cn(
@@ -134,6 +138,7 @@ export function LanguageToggle({
     return (
         <div className={cn('relative', className)}>
             <button
+                type="button"
                 onClick={() => setIsOpen(!isOpen)}
                 disabled={isPending}
                 className={cn(
@@ -181,6 +186,7 @@ export function LanguageToggle({
                     >
                         {locales.map((locale) => (
                             <button
+                                type="button"
                                 key={locale}
                                 onClick={() => switchLocale(locale)}
                                 className={cn(

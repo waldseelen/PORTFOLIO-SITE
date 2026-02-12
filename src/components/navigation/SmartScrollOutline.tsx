@@ -187,6 +187,7 @@ export function SmartScrollOutline({
 
                             {/* Tick mark */}
                             <button
+                                type="button"
                                 onClick={() => scrollToHeading(heading.id)}
                                 className={cn(
                                     'group relative h-2 transition-all duration-300 ease-in-out',

@@ -68,6 +68,17 @@ export function PWAUpdatePrompt({ className }: PWAUpdatePromptProps) {
         setShowUpdate(false);
     };
 
+    useEffect(() => {
+        if (!showUpdate) return;
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setShowUpdate(false);
+            }
+        };
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+    }, [showUpdate]);
+
     if (!showUpdate) return null;
 
     return (
@@ -77,7 +88,8 @@ export function PWAUpdatePrompt({ className }: PWAUpdatePromptProps) {
                 'animate-in slide-in-from-bottom-4 duration-300',
                 className
             )}
-            role="alert"
+            role="dialog"
+            aria-modal="true"
             aria-live="polite"
         >
             <div
@@ -116,6 +128,7 @@ export function PWAUpdatePrompt({ className }: PWAUpdatePromptProps) {
 
                 <div className="mt-4 flex gap-3">
                     <button
+                        type="button"
                         onClick={handleDismiss}
                         className={cn(
                             'flex-1 rounded-lg border border-neutral-200 px-3 py-1.5 text-sm font-medium',
@@ -127,6 +140,7 @@ export function PWAUpdatePrompt({ className }: PWAUpdatePromptProps) {
                         Sonra
                     </button>
                     <button
+                        type="button"
                         onClick={handleUpdate}
                         className={cn(
                             'flex-1 rounded-lg bg-green-600 px-3 py-1.5 text-sm font-medium text-white',

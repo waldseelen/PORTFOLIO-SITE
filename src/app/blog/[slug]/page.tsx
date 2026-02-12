@@ -136,7 +136,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                             width={1200}
                             height={675}
                             className="aspect-video w-full h-auto object-cover"
-                            loading="lazy"
+                            priority
                             quality={85}
                         />
                     </div>

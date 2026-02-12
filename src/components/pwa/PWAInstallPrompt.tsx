@@ -79,6 +79,18 @@ export function PWAInstallPrompt({ className }: PWAInstallPromptProps) {
         localStorage.setItem('pwa-prompt-dismissed', Date.now().toString());
     };
 
+    useEffect(() => {
+        if (!isVisible) return;
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setIsVisible(false);
+                localStorage.setItem('pwa-prompt-dismissed', Date.now().toString());
+            }
+        };
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+    }, [isVisible]);
+
     if (!isVisible || isInstalled) return null;
 
     return (
@@ -89,6 +101,7 @@ export function PWAInstallPrompt({ className }: PWAInstallPromptProps) {
                 className
             )}
             role="dialog"
+            aria-modal="true"
             aria-labelledby="pwa-prompt-title"
             aria-describedby="pwa-prompt-description"
         >
@@ -133,6 +146,7 @@ export function PWAInstallPrompt({ className }: PWAInstallPromptProps) {
 
                     {/* Close button */}
                     <button
+                        type="button"
                         onClick={handleDismiss}
                         className="rounded-lg p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
                         aria-label="Kapat"
@@ -150,6 +164,7 @@ export function PWAInstallPrompt({ className }: PWAInstallPromptProps) {
 
                 <div className="mt-4 flex gap-3">
                     <button
+                        type="button"
                         onClick={handleDismiss}
                         className={cn(
                             'flex-1 rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium',
@@ -161,6 +176,7 @@ export function PWAInstallPrompt({ className }: PWAInstallPromptProps) {
                         Daha Sonra
                     </button>
                     <button
+                        type="button"
                         onClick={handleInstall}
                         className={cn(
                             'flex-1 rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white',

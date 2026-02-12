@@ -23,6 +23,8 @@ interface SearchResult {
     }>;
 }
 
+const OPEN_SEARCH_COMMAND_EVENT = 'open-search-command';
+
 export function SearchCommand() {
     const router = useRouter();
     const [open, setOpen] = useState(false);
@@ -39,9 +41,18 @@ export function SearchCommand() {
                 e.preventDefault();
                 setOpen((open) => !open);
             }
+            if (e.key === 'Escape') {
+                setOpen(false);
+            }
         };
         document.addEventListener('keydown', down);
         return () => document.removeEventListener('keydown', down);
+    }, []);
+
+    useEffect(() => {
+        const handleOpen = () => setOpen(true);
+        window.addEventListener(OPEN_SEARCH_COMMAND_EVENT, handleOpen);
+        return () => window.removeEventListener(OPEN_SEARCH_COMMAND_EVENT, handleOpen);
     }, []);
 
     // Fetch results
@@ -80,7 +91,12 @@ export function SearchCommand() {
     if (!open) return null;
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-[20vh] backdrop-blur-sm transition-all bg-black/50">
+        <div
+            className="fixed inset-0 z-[9999] flex items-start justify-center bg-black/50 pt-[20vh] backdrop-blur-sm transition-all"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site içi arama"
+        >
             <Command
                 className="w-full max-w-lg overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-2xl dark:border-neutral-800 dark:bg-neutral-900"
                 shouldFilter={false} // We sort/filter on server
@@ -95,6 +111,7 @@ export function SearchCommand() {
                     />
                     {loading && <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />}
                     <button
+                        type="button"
                         className="ml-2 rounded-md bg-neutral-100 p-1 text-xs text-neutral-500 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-400"
                         onClick={() => setOpen(false)}
                     >
@@ -102,7 +119,7 @@ export function SearchCommand() {
                     </button>
                 </div>
 
-                <Command.List className="max-h-[300px] overflow-y-auto overflow-x-hidden p-2">
+                <Command.List className="max-h-[300px] overflow-y-auto overflow-x-hidden p-2" aria-busy={loading}>
                     {!loading && results.posts.length === 0 && results.projects.length === 0 && search.length > 0 && (
                         <Command.Empty className="py-6 text-center text-sm">Sonuç bulunamadı.</Command.Empty>
                     )}
@@ -184,14 +201,9 @@ export function SearchButton() {
 
     return (
         <button
+            type="button"
             onClick={() => {
-                // We need to access setOpen from SearchCommand.
-                // Since they are sibling/unrelated, we rely on the event listener or a global state.
-                // The event listener approach above dispatching 'keydown' might be trusted if secure.
-                // But browser security might block synthetic key events from triggering some behaviors.
-                // Better approach: Shared Context or Custom Event.
-                // For simplicity: Custom Event
-                window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }));
+                window.dispatchEvent(new CustomEvent(OPEN_SEARCH_COMMAND_EVENT));
             }}
             className="flex items-center gap-2 rounded-md border border-neutral-200 bg-neutral-50 px-3 py-1.5 text-sm text-neutral-500 transition-colors hover:border-neutral-300 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-200"
         >

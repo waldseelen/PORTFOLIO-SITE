@@ -95,8 +95,7 @@ export default async function HomePage() {
             {/* Background Effects */}
             <div className="fixed inset-0 -z-50 bg-[#030014] pointer-events-none">
                 <div className="absolute top-0 right-0 -mr-20 -mt-20 h-[500px] w-[500px] rounded-full bg-primary-500/10 blur-[100px] will-change-transform" />
-                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 h-[500px] w-[500px] rounded-full bg-secondary-500/10 blur-[100px] will-change-transform" />
-                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-30" />
+                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-20" />
             </div>
 
             <div className="container-custom pt-28 pb-24 md:pt-32 md:pb-32">
@@ -127,11 +126,11 @@ export default async function HomePage() {
                                 <div className="grid grid-cols-2 gap-4 border-t border-white/5 pt-6">
                                     <div className="text-center">
                                         <div className="text-2xl font-bold text-white">3+</div>
-                                        <div className="text-xs text-neutral-500">{tCommon('yearsExp')}</div>
+                                        <div className="text-xs text-neutral-400">{tCommon('yearsExp')}</div>
                                     </div>
                                     <div className="text-center">
                                         <div className="text-2xl font-bold text-white">20+</div>
-                                        <div className="text-xs text-neutral-500">{tCommon('projects')}</div>
+                                        <div className="text-xs text-neutral-400">{tCommon('projects')}</div>
                                     </div>
                                 </div>
 

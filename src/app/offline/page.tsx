@@ -27,6 +27,7 @@ export default function OfflinePage() {
                 </p>
                 <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
                     <button
+                        type="button"
                         onClick={() => window.location.reload()}
                         className="btn-primary"
                     >

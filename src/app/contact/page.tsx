@@ -59,7 +59,7 @@ export default function ContactPage() {
                     {/* Contact Form */}
                     <div className="glass-panel p-6 md:p-8">
                         {status === 'success' ? (
-                            <div className="py-8 text-center">
+                            <div className="py-8 text-center" aria-live="polite">
                                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent-500/20 border border-accent-500/30">
                                     <svg className="h-8 w-8 text-accent-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -70,6 +70,7 @@ export default function ContactPage() {
                                     {t('form.successDesc')}
                                 </p>
                                 <button
+                                    type="button"
                                     onClick={() => setStatus('idle')}
                                     className="btn-primary mt-6"
                                 >
@@ -152,7 +153,7 @@ export default function ContactPage() {
 
                                 {/* Error message */}
                                 {status === 'error' && (
-                                    <div className="rounded-lg bg-red-500/10 border border-red-500/30 p-4 text-red-400">
+                                    <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-red-300" aria-live="polite">
                                         {t('form.error')}
                                     </div>
                                 )}
