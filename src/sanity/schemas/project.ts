@@ -36,7 +36,7 @@ export const project = defineType({
                     type: 'string',
                     title: 'Alternative Text',
                     description: 'REQUIRED for SEO and accessibility. Describe the image.',
-                    validation: (Rule: any) => Rule.required().min(10).max(200),
+                    validation: (Rule) => Rule.required().min(10).max(200),
                 },
             ],
         }),

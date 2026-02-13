@@ -116,7 +116,6 @@ self.addEventListener('notificationclick', ((event: Event & { notification: Noti
  */
 self.addEventListener('notificationclose', ((event: Event & { notification: Notification }) => {
     // Analytics tracking could be added here
-    // eslint-disable-next-line no-console
     console.warn('Notification closed:', event.notification.tag);
 }) as EventListener);
 

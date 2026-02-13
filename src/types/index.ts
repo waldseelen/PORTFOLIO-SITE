@@ -57,6 +57,9 @@ export interface Project {
     liveUrl?: string;
     featured?: boolean;
     order?: number;
+    status?: 'in-progress' | 'completed' | 'archived';
+    startDate?: string;
+    endDate?: string;
     seo?: SEO;
 }
 

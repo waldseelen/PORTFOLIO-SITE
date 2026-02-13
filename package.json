@@ -7,8 +7,8 @@
         "build": "next build",
         "start": "next start",
         "postinstall": "next telemetry disable",
-        "lint": "next lint",
-        "lint:fix": "next lint --fix",
+        "lint": "eslint . --max-warnings=0",
+        "lint:fix": "eslint . --fix",
         "type-check": "tsc --noEmit",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
@@ -17,7 +17,7 @@
         "test:headed": "playwright test --headed",
         "lighthouse": "lhci autorun",
         "analyze": "ANALYZE=true next build",
-        "clean": "rd /s /q .next 2>nul || exit 0 && rd /s /q out 2>nul || exit 0 && rd /s /q node_modules\\.cache 2>nul || exit 0"
+        "clean": "node -e \"const fs=require('fs');['.next','out','node_modules/.cache'].forEach((p)=>fs.rmSync(p,{recursive:true,force:true}))\""
     },
     "dependencies": {
         "@giscus/react": "^3.1.0",
@@ -25,17 +25,17 @@
         "@sanity/client": "^7.12.0",
         "@sanity/image-url": "^1.2.0",
         "@sanity/vision": "^4.15.0",
-        "@serwist/next": "^9.0.10",
+        "@serwist/next": "^9.5.5",
         "@tailwindcss/typography": "^0.5.19",
         "@vercel/analytics": "^1.4.0",
         "@vercel/speed-insights": "^1.1.0",
         "clsx": "^2.1.1",
         "cmdk": "^1.1.1",
         "framer-motion": "^12.26.2",
-        "next": "^15.5.11",
+        "next": "^15.5.12",
         "next-auth": "^4.24.13",
         "next-intl": "^4.7.0",
-        "next-sanity": "^10.1.4",
+        "next-sanity": "^11.6.12",
         "next-themes": "^0.4.6",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
@@ -43,13 +43,13 @@
         "react-is": "^19.2.3",
         "resend": "^6.7.0",
         "sanity": "^4.15.0",
-        "serwist": "^9.0.10",
+        "serwist": "^9.5.5",
         "styled-components": "^6.3.8",
         "tailwind-merge": "^2.6.0",
         "web-push": "^3.6.7"
     },
     "devDependencies": {
-        "@lhci/cli": "^0.14.0",
+        "@lhci/cli": "^0.15.1",
         "@playwright/test": "^1.49.0",
         "@types/estree": "^1.0.8",
         "@types/hast": "^3.0.4",
@@ -64,8 +64,7 @@
         "canvas": "^3.2.1",
         "colorthief": "^2.6.0",
         "eslint": "^9.17.0",
-        "eslint-config-next": "^15.1.0",
-        "pdf-image": "^2.0.0",
+        "eslint-config-next": "^15.5.12",
         "pdfjs-dist": "^5.4.624",
         "postcss": "^8.4.49",
         "prettier": "^3.4.2",
@@ -75,7 +74,7 @@
         "typescript": "^5.7.0"
     },
     "engines": {
-        "node": "20.x",
+        "node": "24.x",
         "npm": ">=10.0.0"
     },
     "overrides": {
